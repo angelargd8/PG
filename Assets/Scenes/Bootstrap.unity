@@ -637,6 +637,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::AppStateMachine
   sceneFlowManager: {fileID: 1101344458}
   startExperienceRequested: {fileID: 11400000, guid: b3ab9c8fcfd74314eb6a6b7f8b68a2a0, type: 2}
+  mainMenuEntered: {fileID: 11400000, guid: 73e469e2fa118f34fba2072a9fe03733, type: 2}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

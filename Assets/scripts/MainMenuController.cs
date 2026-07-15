@@ -7,6 +7,8 @@ public sealed class MainMenuController : MonoBehaviour
     [SerializeField]
     private VoidEventChannelSO startExperienceRequested;
 
+
+
     public void RequestedStartExperience()
     {
         if (startExperienceRequested == null)
