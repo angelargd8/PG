@@ -77,7 +77,7 @@ public sealed class AppStateMachine : MonoBehaviour
             $"AppStateMachine publica '{mainMenuEntered.name}'.",
             this);
 
-        mainMenuEntered.Raise();
+        mainMenuEntered.RaiseEvent();
 
 
     }

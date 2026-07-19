@@ -18,7 +18,7 @@ public sealed class MainMenuController : MonoBehaviour
             return;
         }
 
-        startExperienceRequested.Raise();
+        startExperienceRequested.RaiseEvent();
     }
 
 }
