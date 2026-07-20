@@ -430,7 +430,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4941219564456579801, guid: 40af19270c08c1846a1d7b0d0e1a1e55, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -17.094
+      value: -17.1
       objectReference: {fileID: 0}
     - target: {fileID: 4941219564456579801, guid: 40af19270c08c1846a1d7b0d0e1a1e55, type: 3}
       propertyPath: m_LocalRotation.w
@@ -450,11 +450,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4941219564456579801, guid: 40af19270c08c1846a1d7b0d0e1a1e55, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 1.29
       objectReference: {fileID: 0}
     - target: {fileID: 4941219564456579801, guid: 40af19270c08c1846a1d7b0d0e1a1e55, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: 0.97
       objectReference: {fileID: 0}
     - target: {fileID: 4941219564456579801, guid: 40af19270c08c1846a1d7b0d0e1a1e55, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -1063,7 +1063,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6262935102763893786, guid: 3405290cc9a00c34bbd425b05c494f62, type: 3}
       propertyPath: m_text
-      value: Normal
+      value: Option A
       objectReference: {fileID: 0}
     - target: {fileID: 6262935102763893786, guid: 3405290cc9a00c34bbd425b05c494f62, type: 3}
       propertyPath: 'm_ActiveFontFeatures.Array.data[0]'
