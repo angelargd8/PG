@@ -68,7 +68,7 @@ public sealed class AppStateMachine : MonoBehaviour
         yield return sceneFlowManager.LoadInitialMenu();
 
         // Permite que todos los objetos del MainMenu completen
-        // Awake y OnEnable antes de publicar el evento.
+        // Awake y OnEnable antes de publicar el evento
         yield return null;
 
         CurrentState = AppState.MainMenu;
@@ -98,21 +98,36 @@ public sealed class AppStateMachine : MonoBehaviour
         isTransitioning = true;
         CurrentState = AppState.Loading;
 
-        //publish event
-        if (experienceTransitionStarted!= null)
+        if (experienceTransitionStarted != null)
         {
+            Debug.Log(
+                "AppStateMachine publica ExperienceTransitionStarted",
+                this);
+
             experienceTransitionStarted.RaiseEvent();
         }
 
         yield return sceneFlowManager.TransitionToPrototype();
 
+        // ExperienceCore ya debe estar cargada y suscrita
+        yield return null;
+
         CurrentState = AppState.Experience;
 
         if (experienceReady != null)
         {
+            Debug.Log(
+                "AppStateMachine publica ExperienceReady",
+                this);
+
             experienceReady.RaiseEvent();
         }
-
+        else
+        {
+            Debug.LogError(
+                "ExperienceReady no está asignado",
+                this);
+        }
 
         isTransitioning = false;
     }

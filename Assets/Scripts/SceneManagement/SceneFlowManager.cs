@@ -11,9 +11,12 @@ public class SceneFlowManager : MonoBehaviour
     [SerializeField]
     private string loadingScene = "LoadingScene";
 
+    [SerializeField]
+    private string experienceCoreScene = "ExperienceCore";
 
     [SerializeField]
     private string prototypeScene = "SampleScene";
+
 
     //TODO: put the real scenes later
 
@@ -26,24 +29,26 @@ public class SceneFlowManager : MonoBehaviour
 
     public IEnumerator TransitionToPrototype()
     {
-        // 1. Mostrar Loading.
+        // 1. Mostrar Loading
         yield return LoadAdditive(loadingScene);
         SetActiveScene(loadingScene);
 
-        // Espera un frame para que Loading pueda renderizarse.
         yield return null;
 
-        // 2. Retirar el menú.
+        // 2. Descargar el menu
         yield return UnloadIfLoaded(mainMenuScene);
 
-        // 3. Cargar la escena de prueba.
+        // 3. Cargar los sistemas de la experiencia
+        yield return LoadAdditive(experienceCoreScene);
+
+        // 4. Cargar el contenido visual del prototipo
         yield return LoadAdditive(prototypeScene);
         SetActiveScene(prototypeScene);
 
-        // Espera un frame para que la nueva escena se inicialice.
+        // Permitir que los componentes completen OnEnable
         yield return null;
 
-        // 4. Retirar Loading.
+        // 5. Retirar Loading
         yield return UnloadIfLoaded(loadingScene);
     }
 

@@ -47,12 +47,27 @@ public sealed class AudioManager : MonoBehaviour
         defaultMusicVolume = musicSource.volume;
     }
 
+    private void HandleExperienceTransitionStarted()
+    {
+        Debug.Log(
+        "AudioManager recibio ExperienceTransitionStarted ",
+        this);
+        FadeOutMenuMusic();
+    }
+
     // suscribe
     private void OnEnable()
     {
         if (mainMenuEntered != null)
         {
             mainMenuEntered.Raised += HandleMainMenuEntered;
+        }
+
+        if (experienceTransitionStarted != null)
+        {
+            experienceTransitionStarted.Raised +=
+                HandleExperienceTransitionStarted;
+
         }
     }
 
@@ -64,18 +79,23 @@ public sealed class AudioManager : MonoBehaviour
         {
             mainMenuEntered.Raised -= HandleMainMenuEntered;
         }
+
+        if (experienceTransitionStarted != null)
+        {
+            experienceTransitionStarted.Raised -=
+                HandleExperienceTransitionStarted;
+
+        }
+
     }
 
     private void HandleMainMenuEntered()
     {
+        Debug.Log("AudioManager recibio MainMenuEntered ", this);
         PlayMenuMusic();
 
     }
 
-    private void HandleExperienceTransitionStarted()
-    {
-        FadeOutMenuMusic();
-    }
 
     
     private void PlayMenuMusic()
@@ -126,7 +146,7 @@ public sealed class AudioManager : MonoBehaviour
                 FadeMusicRoutine(
                     0f,
                     musicFadeDuration,
-                    false
+                    true
                     )
                     );
 

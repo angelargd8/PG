@@ -15,7 +15,7 @@ EditorBuildSettings:
     path: Assets/Scenes/Menus/LoadingScene.unity
     guid: 9d976ddc1e822474fbbeedcfd36278d8
   - enabled: 1
-    path: Assets/Scenes/Experience/SampleScene.unity
+    path: Assets/Scenes/Template/SampleScene.unity
     guid: 55daccc09a3b69647bbab145b54a3ab3
   - enabled: 1
     path: Assets/Scenes/BasicScene.unity
