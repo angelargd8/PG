@@ -5,17 +5,24 @@ public sealed class AppStateMachine : MonoBehaviour
 {
     [Header("Dependencies")]
 
-
     [SerializeField]
     private SceneFlowManager sceneFlowManager;
+
 
     [Header("Event Channels")]
     [SerializeField]
     private VoidEventChannelSO startExperienceRequested;
 
+    [SerializeField]
+    private VoidEventChannelSO experienceTransitionStarted;
+
+    [SerializeField]
+    private VoidEventChannelSO experienceReady;
 
     [SerializeField] 
     private VoidEventChannelSO mainMenuEntered;
+
+
 
     public AppState CurrentState { get; private set; }
 
@@ -45,6 +52,8 @@ public sealed class AppStateMachine : MonoBehaviour
 
     private void HandleStartExperienceRequested()
     {
+
+        
         if (CurrentState != AppState.MainMenu || isTransitioning)
         {
             return;
@@ -89,9 +98,21 @@ public sealed class AppStateMachine : MonoBehaviour
         isTransitioning = true;
         CurrentState = AppState.Loading;
 
+        //publish event
+        if (experienceTransitionStarted!= null)
+        {
+            experienceTransitionStarted.RaiseEvent();
+        }
+
         yield return sceneFlowManager.TransitionToPrototype();
 
         CurrentState = AppState.Experience;
+
+        if (experienceReady != null)
+        {
+            experienceReady.RaiseEvent();
+        }
+
 
         isTransitioning = false;
     }

@@ -1,0 +1,19 @@
+fileFormatVersion: 2
+guid: 65ba827aab08c3140bbfad9c4fce89a1
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - audioMixer: {instanceID: 0}
+  - musicSource: {instanceID: 0}
+  - ambienceSource: {instanceID: 0}
+  - sfxSource: {instanceID: 0}
+  - loopSFXSource: {instanceID: 0}
+  - mainMenuMusic: {instanceID: 0}
+  - mainMenuEntered: {instanceID: 0}
+  - experienceTransitionStarted: {instanceID: 0}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
