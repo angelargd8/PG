@@ -14,8 +14,11 @@ public class SceneFlowManager : MonoBehaviour
     [SerializeField]
     private string experienceCoreScene = "ExperienceCore";
 
+    //[SerializeField]
+    //private string prototypeScene = "SampleScene";
+
     [SerializeField]
-    private string prototypeScene = "SampleScene";
+    private string DannielScene = "Danniel";
 
 
     //TODO: put the real scenes later
@@ -42,8 +45,8 @@ public class SceneFlowManager : MonoBehaviour
         yield return LoadAdditive(experienceCoreScene);
 
         // 4. Cargar el contenido visual del prototipo
-        yield return LoadAdditive(prototypeScene);
-        SetActiveScene(prototypeScene);
+        yield return LoadAdditive(DannielScene);
+        SetActiveScene(DannielScene);
 
         // Permitir que los componentes completen OnEnable
         yield return null;
