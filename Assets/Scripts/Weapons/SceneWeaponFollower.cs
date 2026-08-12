@@ -4,34 +4,49 @@ using UnityEngine;
 public sealed class SceneWeaponFollower : MonoBehaviour
 {
     [Header("Weapon Offset")]
+
     [SerializeField]
     private Vector3 positionOffset;
 
     [SerializeField]
     private Vector3 rotationOffset;
 
-    private RightWeaponAnchor weaponAnchor;
+    private Transform weaponAnchor;
 
-    private void Start()
+
+    public void Bind(Transform anchor)
     {
-        weaponAnchor = FindFirstObjectByType<RightWeaponAnchor>();
-
-        if (weaponAnchor == null)
+        if (anchor == null)
         {
             Debug.LogError(
-                "[SceneWeaponFollower] No se encontro RightWeaponAnchor en las escenas cargadas",
+                "[SceneWeaponFollower] Se intentó asignar un anchor nulo.",
                 this
             );
 
-            enabled = false;
             return;
         }
 
+        weaponAnchor = anchor;
+
+        ApplyPose();
+
         Debug.Log(
-            $"[SceneWeaponFollower] {name} conectado a RightWeaponAnchor",
+            $"[SceneWeaponFollower] {name} conectado a {anchor.name}.",
             this
         );
     }
+
+
+    public void Unbind()
+    {
+        weaponAnchor = null;
+
+        Debug.Log(
+            $"[SceneWeaponFollower] {name} desconectado del Weapon Anchor.",
+            this
+        );
+    }
+
 
     private void LateUpdate()
     {
@@ -40,13 +55,22 @@ public sealed class SceneWeaponFollower : MonoBehaviour
             return;
         }
 
-        Transform anchorTransform = weaponAnchor.transform;
+        ApplyPose();
+    }
 
-        transform.position =
-            anchorTransform.TransformPoint(positionOffset);
 
-        transform.rotation =
-            anchorTransform.rotation *
+    private void ApplyPose()
+    {
+        Vector3 targetPosition =
+            weaponAnchor.TransformPoint(positionOffset);
+
+        Quaternion targetRotation =
+            weaponAnchor.rotation *
             Quaternion.Euler(rotationOffset);
+
+        transform.SetPositionAndRotation(
+            targetPosition,
+            targetRotation
+        );
     }
 }
