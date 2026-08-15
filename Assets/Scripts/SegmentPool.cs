@@ -13,7 +13,7 @@ public class SegmentPool : MonoBehaviour
 
     private Queue<GameObject> activeSegments = new Queue<GameObject>();
 
-    private float segmentLength = 100f;
+    private float segmentLength = 40f;
 
     private float spawnZ = 0;
 
