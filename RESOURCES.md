@@ -14,3 +14,11 @@
 - https://youtu.be/J01z1F-du-E?si=ueEOmLxFLV3cCRlg 
 
 ----------
+
+
+# ASSETS: 
+- https://assetstore.unity.com/packages/3d/vegetation/trees/low-poly-tree-pack-57866
+- https://assetstore.unity.com/packages/vfx/particles/fog-particles-351840
+- https://assetstore.unity.com/packages/3d/vehicles/land/abandoned-rusty-vehicles-and-props-3d-game-ready-mini-set-364602
+- https://assetstore.unity.com/packages/3d/environments/urban/city-voxel-pack-136141
+- https://atomicrealm.itch.io/post-apocalyptic-interiors
