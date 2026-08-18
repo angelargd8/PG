@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 7149625129032959414}
   - component: {fileID: 8041508465936880332}
   - component: {fileID: 3852982711194317488}
+  - component: {fileID: 7253620871741362280}
   m_Layer: 0
   m_Name: EnemyDanniel
   m_TagString: Untagged
@@ -114,3 +115,16 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &7253620871741362280
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4713494131514942183}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1614f21b7725d8a44ba081e03c5c5706, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyDanniel
+  maxHealth: 1
