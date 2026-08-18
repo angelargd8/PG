@@ -9,6 +9,11 @@ public class SegmentPool : MonoBehaviour
     [SerializeField] float speed;
     [SerializeField] int maxActiveSegments;
 
+    [Header("Enemies")]
+    [SerializeField] private EnemySpawnDirector enemySpawnDirector;
+    [SerializeField] private EnemyPool enemyPool;
+
+
     private ObjectPool<GameObject> pool;
 
     private Queue<GameObject> activeSegments = new Queue<GameObject>();
@@ -45,15 +50,26 @@ public class SegmentPool : MonoBehaviour
     {
         seg.SetActive(true);
 
-        seg.transform.position = new Vector3(
-            0,
-            0,
-            spawnZ
-        );
+        seg.transform.position =
+            new Vector3(0, 0, spawnZ);
 
         spawnZ += segmentLength;
 
         activeSegments.Enqueue(seg);
+
+
+        // Spawn de enemigos
+        SegmentEnemySpawns enemySpawns =
+            seg.GetComponent<SegmentEnemySpawns>();
+
+        if (enemySpawns != null &&
+            enemySpawnDirector != null)
+        {
+            enemySpawnDirector.SpawnEnemiesOnSegment(
+                enemySpawns
+            );
+        }
+
 
         return seg;
     }
@@ -85,32 +101,56 @@ public class SegmentPool : MonoBehaviour
 
 
         if (activeSegments.Count > 0 &&
-            activeSegments.Peek().transform.position.z <
-            -segmentLength * 2f)
+    activeSegments.Peek().transform.position.z <
+    -segmentLength * 2f)
         {
-            GameObject seg = activeSegments.Dequeue();
+            var seg = activeSegments.Dequeue();
+
+
+            // DEVOLVER ENEMIGOS ANTERIORES
+            SegmentContent content =
+                seg.GetComponent<SegmentContent>();
+
+            if (content != null)
+            {
+                content.ClearEnemies(enemyPool);
+            }
+
+
+            // BUSCAR ÚLTIMO SEGMENTO
 
             GameObject lastSegment = null;
 
             foreach (var s in activeSegments)
             {
-                if (s != null)
-                {
-                    lastSegment = s;
-                }
+                lastSegment = s;
             }
 
 
-            if (seg != null && lastSegment != null)
+            float newZ =
+                lastSegment.transform.position.z
+                + segmentLength;
+
+
+
+            // RECICLAR SEGMENTO
+            seg.transform.position =
+                new Vector3(0, 0, newZ);
+
+            activeSegments.Enqueue(seg);
+
+
+
+            // GENERAR NUEVOS ENEMIGOS
+            SegmentEnemySpawns spawns =
+                seg.GetComponent<SegmentEnemySpawns>();
+
+            if (spawns != null &&
+                enemySpawnDirector != null)
             {
-                float newZ =
-                    lastSegment.transform.position.z +
-                    segmentLength;
-
-                seg.transform.position =
-                    new Vector3(0, 0, newZ);
-
-                activeSegments.Enqueue(seg);
+                enemySpawnDirector.SpawnEnemiesOnSegment(
+                    spawns
+                );
             }
         }
     }
