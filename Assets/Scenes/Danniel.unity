@@ -292,7 +292,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: '::'
   segmentPrefab: {fileID: 5365282979208878644, guid: 6ea3c9dad596d78469cbdf1754cc4aed, type: 3}
   speed: 1.5
-  maxActiveSegments: 10
+  maxActiveSegments: 5
   enemySpawnDirector: {fileID: 1413581909}
   enemyPool: {fileID: 613208085}
 --- !u!1 &613208084
