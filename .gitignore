@@ -107,3 +107,6 @@ InitTestScene*.unity*
 /[Aa]ssets/[Ii]nit[Tt]est[Ss]cene*.unity*
 /DEMO
 DEMO.zip
+
+# Visual Studio Code
+.vscode/*
