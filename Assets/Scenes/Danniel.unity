@@ -154,7 +154,7 @@ Light:
   m_InnerSpotAngle: 21.80208
   m_CookieSize2D: {x: 10, y: 10}
   m_Shadows:
-    m_Type: 2
+    m_Type: 0
     m_Resolution: -1
     m_CustomResolution: -1
     m_Strength: 1
@@ -291,8 +291,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: '::'
   segmentPrefab: {fileID: 5365282979208878644, guid: 6ea3c9dad596d78469cbdf1754cc4aed, type: 3}
-  speed: 1.5
-  maxActiveSegments: 5
+  speed: 1
+  maxActiveSegments: 3
   enemySpawnDirector: {fileID: 1413581909}
   enemyPool: {fileID: 613208085}
 --- !u!1 &613208084

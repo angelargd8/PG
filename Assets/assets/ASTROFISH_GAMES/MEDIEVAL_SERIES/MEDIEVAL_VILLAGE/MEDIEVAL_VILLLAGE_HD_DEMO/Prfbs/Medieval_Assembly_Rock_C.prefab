@@ -153,7 +153,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 9221551935384528149}
-  - component: {fileID: 4384627020422230515}
   m_Layer: 0
   m_Name: Medieval_Assembly_Rock_C
   m_TagString: Untagged
@@ -179,29 +178,6 @@ Transform:
   - {fileID: 8250756932102713696}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!205 &4384627020422230515
-LODGroup:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6175502181469211763}
-  serializedVersion: 2
-  m_LocalReferencePoint: {x: -0.0022076368, y: 0.015039265, z: -0.00060749054}
-  m_Size: 1.6157686
-  m_FadeMode: 0
-  m_AnimateCrossFading: 0
-  m_LastLODIsBillboard: 0
-  m_LODs:
-  - screenRelativeHeight: 0.08335608
-    fadeTransitionWidth: 0
-    renderers:
-    - renderer: {fileID: 4384627020437612471}
-  - screenRelativeHeight: 0.01
-    fadeTransitionWidth: 0
-    renderers:
-    - renderer: {fileID: 4734528641418745992}
-  m_Enabled: 1
 --- !u!1 &8596512388768797811
 GameObject:
   m_ObjectHideFlags: 0
