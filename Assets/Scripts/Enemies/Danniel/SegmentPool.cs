@@ -1,7 +1,8 @@
 using UnityEngine;
 using Unity.Profiling;
+using System.Collections;
 
-public class SegmentPool : MonoBehaviour
+public class SegmentPool : MonoBehaviour, IExperiencePreloadable
 {
     // =========================
     // PROFILER
@@ -43,69 +44,121 @@ public class SegmentPool : MonoBehaviour
 
     [Header("Enemies")]
     [SerializeField] private EnemySpawnDirector enemySpawnDirector;
+
     [SerializeField] private EnemyPool enemyPool;
 
 
     private SegmentData[] segments;
 
-    // Índice del segmento que está más atrás
     private int oldestIndex;
+
+    private bool isInitialized;
 
 
     private class SegmentData
     {
         public GameObject GameObject;
         public Transform Transform;
+
         public SegmentEnemySpawns EnemySpawns;
+
         public SegmentContent Content;
     }
 
 
-    private void Start()
-    {
-        CreateSegments();
-    }
-
-
     // =========================
-    // CREAR SEGMENTOS
+    // PRELOAD
     // =========================
 
-    private void CreateSegments()
+    public IEnumerator Preload()
     {
-        segments = new SegmentData[maxActiveSegments];
-
-        float currentZ = firstSpawnZ;
-
-        for (int i = 0; i < maxActiveSegments; i++)
+        if (isInitialized)
         {
-            GameObject segmentObject = Instantiate(
-                segmentPrefab,
-                new Vector3(0f, 0f, currentZ),
-                Quaternion.identity,
-                transform
-            );
-
-            SegmentData data = new SegmentData
-            {
-                GameObject = segmentObject,
-                Transform = segmentObject.transform,
-
-                EnemySpawns =
-                    segmentObject.GetComponent<SegmentEnemySpawns>(),
-
-                Content =
-                    segmentObject.GetComponent<SegmentContent>()
-            };
-
-            segments[i] = data;
-
-            SpawnEnemies(data);
-
-            currentZ += segmentLength;
+            yield break;
         }
 
+
+        Debug.Log(
+            "SegmentPool comienza Preload.",
+            this
+        );
+
+
+        segments =
+            new SegmentData[maxActiveSegments];
+
+
+        float currentZ =
+            firstSpawnZ;
+
+
+        for (int i = 0;
+             i < maxActiveSegments;
+             i++)
+        {
+            GameObject segmentObject =
+                Instantiate(
+                    segmentPrefab,
+                    new Vector3(
+                        0f,
+                        0f,
+                        currentZ
+                    ),
+                    Quaternion.identity,
+                    transform
+                );
+
+
+            SegmentData data =
+                new SegmentData
+                {
+                    GameObject =
+                        segmentObject,
+
+                    Transform =
+                        segmentObject.transform,
+
+                    EnemySpawns =
+                        segmentObject
+                            .GetComponent<
+                                SegmentEnemySpawns>(),
+
+                    Content =
+                        segmentObject
+                            .GetComponent<
+                                SegmentContent>()
+                };
+
+
+            segments[i] =
+                data;
+
+
+            SpawnEnemies(
+                data
+            );
+
+
+            currentZ +=
+                segmentLength;
+
+
+            // Un segmento por frame
+            yield return null;
+        }
+
+
         oldestIndex = 0;
+
+        isInitialized = true;
+
+
+        Debug.Log(
+            $"SegmentPool preparado con " +
+            $"{maxActiveSegments} segmentos. " +
+            $"isInitialized = {isInitialized}",
+            this
+        );
     }
 
 
@@ -115,15 +168,23 @@ public class SegmentPool : MonoBehaviour
 
     private void Update()
     {
+        if (!isInitialized)
+        {
+            return;
+        }
+
+
         MoveSegments();
 
-        // Normalmente solo se reciclará uno.
-        // Este while también cubre un frame con deltaTime muy grande.
-        int safety = segments.Length;
+
+        int safety =
+            segments.Length;
+
 
         while (
             safety-- > 0 &&
-            segments[oldestIndex].Transform.position.z < recycleZ
+            segments[oldestIndex]
+                .Transform.position.z < recycleZ
         )
         {
             RecycleOldestSegment();
@@ -132,7 +193,7 @@ public class SegmentPool : MonoBehaviour
 
 
     // =========================
-    // MOVER SEGMENTOS
+    // MOVEMENT
     // =========================
 
     private void MoveSegments()
@@ -144,19 +205,26 @@ public class SegmentPool : MonoBehaviour
                 speedMultiplier *
                 Time.deltaTime;
 
-            Vector3 offset =
-                Vector3.back * movement;
 
-            for (int i = 0; i < segments.Length; i++)
+            Vector3 offset =
+                Vector3.back *
+                movement;
+
+
+            for (int i = 0;
+                 i < segments.Length;
+                 i++)
             {
-                segments[i].Transform.position += offset;
+                segments[i]
+                    .Transform
+                    .position += offset;
             }
         }
     }
 
 
     // =========================
-    // RECICLAR SEGMENTO
+    // RECYCLE
     // =========================
 
     private void RecycleOldestSegment()
@@ -167,39 +235,47 @@ public class SegmentPool : MonoBehaviour
                 segments[oldestIndex];
 
 
-            // =========================
-            // LIMPIAR ENEMIGOS
-            // =========================
+            // -------------------------
+            // CLEAR ENEMIES
+            // -------------------------
 
             if (segment.Content != null &&
                 enemyPool != null)
             {
                 using (ClearEnemiesMarker.Auto())
                 {
-                    segment.Content.ClearEnemies(enemyPool);
+                    segment.Content
+                        .ClearEnemies(
+                            enemyPool
+                        );
                 }
             }
 
 
-            // =========================
-            // BUSCAR POSICIÓN NUEVA
-            // =========================
+            // -------------------------
+            // FIND LAST SEGMENT
+            // -------------------------
 
-            // El segmento anterior a oldestIndex
-            // siempre es el segmento que está más adelante.
             int lastIndex =
-                (oldestIndex - 1 + segments.Length)
+                (
+                    oldestIndex -
+                    1 +
+                    segments.Length
+                )
                 % segments.Length;
 
 
             float newZ =
-                segments[lastIndex].Transform.position.z
-                + segmentLength;
+                segments[lastIndex]
+                    .Transform
+                    .position.z
+                +
+                segmentLength;
 
 
-            // =========================
-            // MOVER SEGMENTO
-            // =========================
+            // -------------------------
+            // MOVE RECYCLED SEGMENT
+            // -------------------------
 
             segment.Transform.position =
                 new Vector3(
@@ -209,29 +285,35 @@ public class SegmentPool : MonoBehaviour
                 );
 
 
-            // =========================
-            // GENERAR ENEMIGOS
-            // =========================
+            // -------------------------
+            // NEW ENEMIES
+            // -------------------------
 
-            SpawnEnemies(segment);
+            SpawnEnemies(
+                segment
+            );
 
 
-            // =========================
-            // ACTUALIZAR ÍNDICE
-            // =========================
+            // -------------------------
+            // NEXT OLDEST
+            // -------------------------
 
             oldestIndex =
-                (oldestIndex + 1)
+                (
+                    oldestIndex + 1
+                )
                 % segments.Length;
         }
     }
 
 
     // =========================
-    // SPAWN ENEMIGOS
+    // SPAWN ENEMIES
     // =========================
 
-    private void SpawnEnemies(SegmentData segment)
+    private void SpawnEnemies(
+        SegmentData segment
+    )
     {
         if (segment.EnemySpawns == null ||
             enemySpawnDirector == null)
@@ -239,11 +321,13 @@ public class SegmentPool : MonoBehaviour
             return;
         }
 
+
         using (SpawnEnemiesMarker.Auto())
         {
-            enemySpawnDirector.SpawnEnemiesOnSegment(
-                segment.EnemySpawns
-            );
+            enemySpawnDirector
+                .SpawnEnemiesOnSegment(
+                    segment.EnemySpawns
+                );
         }
     }
 }

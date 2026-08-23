@@ -1,8 +1,9 @@
 using UnityEngine;
 using UnityEngine.Pool;
 using Unity.Profiling;
+using System.Collections;
 
-public class EnemyPool : MonoBehaviour
+public class EnemyPool : MonoBehaviour, IExperiencePreloadable
 {
     private static readonly ProfilerMarker GetMarker =
         new ProfilerMarker("EnemyPool.Get");
@@ -26,6 +27,66 @@ public class EnemyPool : MonoBehaviour
 
     private ObjectPool<GameObject> pool;
 
+    private bool isPrewarmed;
+
+
+    public IEnumerator Preload()
+    {
+        if (isPrewarmed)
+        {
+            yield break;
+        }
+
+
+        int amount =
+            Mathf.Clamp(
+                prewarmCount,
+                0,
+                maxSize
+            );
+
+
+        GameObject[] enemies =
+            new GameObject[amount];
+
+
+        // Crear progresivamente.
+        //
+        // No hacemos los 12 en el mismo frame.
+        for (int i = 0; i < amount; i++)
+        {
+            enemies[i] =
+                pool.Get();
+
+
+            // Cada 2 enemigos:
+            // permitir renderizar otro frame.
+            if ((i + 1) % 2 == 0)
+            {
+                yield return null;
+            }
+        }
+
+
+        // Devolverlos al pool.
+        for (int i = 0; i < amount; i++)
+        {
+            pool.Release(
+                enemies[i]
+            );
+        }
+
+
+        isPrewarmed = true;
+
+
+        Debug.Log(
+            $"EnemyPool precalentado: " +
+            $"{amount} enemigos.",
+            this
+        );
+    }
+
 
     private void Awake()
     {
@@ -39,39 +100,10 @@ public class EnemyPool : MonoBehaviour
             maxSize: maxSize
         );
 
-        PrewarmPool();
     }
 
 
-    // =========================
-    // PREWARM
-    // =========================
-
-    private void PrewarmPool()
-    {
-        int amount =
-            Mathf.Clamp(
-                prewarmCount,
-                0,
-                maxSize
-            );
-
-        GameObject[] enemies =
-            new GameObject[amount];
-
-        // Crear todos los enemigos
-        for (int i = 0; i < amount; i++)
-        {
-            enemies[i] = pool.Get();
-        }
-
-        // Devolverlos al pool
-        for (int i = 0; i < amount; i++)
-        {
-            pool.Release(enemies[i]);
-        }
-    }
-
+    
 
     // =========================
     // CREATE

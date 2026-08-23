@@ -5,20 +5,17 @@ public sealed class MainMenuController : MonoBehaviour
     [Header("Event Channels")]
 
     [SerializeField]
-    private VoidEventChannelSO startExperienceRequested;
-
+    private ExperienceEventChannelSO ExperienceRequested;
+    private ExperienceDefinitionSO experience;
 
 
     public void RequestedStartExperience()
     {
-        if (startExperienceRequested == null)
-        {
-            Debug.LogError("no se asigno StartExperienceRequested ", this);
-
-            return;
-        }
-
-        startExperienceRequested.RaiseEvent();
+        // Aqui despues poner:
+        // - Abrir panel principal
+        // - Abrir configuración
+        // - Abrir selección de escenas
+        // - Cerrar paneles
     }
 
 }

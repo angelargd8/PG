@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 716e796c64d816b459d86e3ffc0085ce, type: 3}
+  m_Name: EXP_Punko
+  m_EditorClassIdentifier: Assembly-CSharp::ExperienceDefinitionSO
+  experienceId: punko
+  displayName: PUNKO
+  scenes:
+  - {fileID: 11400000, guid: 07b22d0059d107b4393cc082b9d8157d, type: 2}
+  - {fileID: 11400000, guid: 302f0ff70018b014ca70342dc5193736, type: 2}

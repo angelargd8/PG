@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 162047fb2ffa5ed4c9bc3b6fa1e47585
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - experience: {fileID: 11400000, guid: 569d21766ca89ad46bb7162af23fe040, type: 2}
+  - startScene: {fileID: 11400000, guid: 07b22d0059d107b4393cc082b9d8157d, type: 2}
+  - experienceRequested: {fileID: 11400000, guid: 353f6e446ad125a4db12bb8da6eebe5c, type: 2}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

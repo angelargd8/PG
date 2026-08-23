@@ -4,14 +4,14 @@ using UnityEngine;
 public sealed class AppStateMachine : MonoBehaviour
 {
     [Header("Dependencies")]
-
     [SerializeField]
     private SceneFlowManager sceneFlowManager;
 
 
     [Header("Event Channels")]
+
     [SerializeField]
-    private VoidEventChannelSO startExperienceRequested;
+    private ExperienceEventChannelSO experienceRequested;
 
     [SerializeField]
     private VoidEventChannelSO experienceTransitionStarted;
@@ -19,119 +19,194 @@ public sealed class AppStateMachine : MonoBehaviour
     [SerializeField]
     private VoidEventChannelSO experienceReady;
 
-    [SerializeField] 
+    [SerializeField]
     private VoidEventChannelSO mainMenuEntered;
 
 
+    public AppState CurrentState
+    {
+        get;
+        private set;
+    }
 
-    public AppState CurrentState { get; private set; }
+
+    public ExperienceDefinitionSO CurrentExperience
+    {
+        get;
+        private set;
+    }
+
 
     private bool isTransitioning;
 
 
-    // suscribe
+    // =========================
+    // SUBSCRIPTIONS
+    // =========================
+
     private void OnEnable()
     {
-        if (startExperienceRequested != null)
+        if (experienceRequested != null)
         {
-            startExperienceRequested.Raised += HandleStartExperienceRequested;
-
+            experienceRequested.Raised +=
+                HandleExperienceRequested;
         }
     }
 
-    // unsuscribe
+
     private void OnDisable()
     {
-        if (startExperienceRequested != null)
+        if (experienceRequested != null)
         {
-            startExperienceRequested.Raised -= HandleStartExperienceRequested;
-
+            experienceRequested.Raised -=
+                HandleExperienceRequested;
         }
     }
 
 
-    private void HandleStartExperienceRequested()
-    {
-
-        
-        if (CurrentState != AppState.MainMenu || isTransitioning)
-        {
-            return;
-        }
-
-        StartCoroutine(StartExperienceRoutine());
-    }
+    // =========================
+    // INITIAL MENU
+    // =========================
 
     private IEnumerator Start()
     {
-        CurrentState = AppState.Booting;
-        yield return sceneFlowManager.LoadInitialMenu();
+        CurrentState =
+            AppState.Booting;
 
-        // Permite que todos los objetos del MainMenu completen
-        // Awake y OnEnable antes de publicar el evento
+
+        yield return
+            sceneFlowManager.LoadInitialMenu();
+
+
+        // Permitir Awake / OnEnable
         yield return null;
 
-        CurrentState = AppState.MainMenu;
 
-        if (mainMenuEntered == null)
-        {
-            Debug.LogError(
-                "MainMenuEntered no está asignado en AppStateMachine.",
-                this);
-
-            yield break;
-        }
-
-        Debug.Log(
-            $"AppStateMachine publica '{mainMenuEntered.name}'.",
-            this);
-
-        mainMenuEntered.RaiseEvent();
+        CurrentState =
+            AppState.MainMenu;
 
 
-    }
-
-
-
-    private IEnumerator StartExperienceRoutine()
-    {
-        isTransitioning = true;
-        CurrentState = AppState.Loading;
-
-        if (experienceTransitionStarted != null)
+        if (mainMenuEntered != null)
         {
             Debug.Log(
-                "AppStateMachine publica ExperienceTransitionStarted",
-                this);
+                "AppStateMachine publica MainMenuEntered",
+                this
+            );
 
-            experienceTransitionStarted.RaiseEvent();
-        }
-
-        yield return sceneFlowManager.TransitionToPrototype();
-
-        // ExperienceCore ya debe estar cargada y suscrita
-        yield return null;
-
-        CurrentState = AppState.Experience;
-
-        if (experienceReady != null)
-        {
-            Debug.Log(
-                "AppStateMachine publica ExperienceReady",
-                this);
-
-            experienceReady.RaiseEvent();
+            mainMenuEntered.RaiseEvent();
         }
         else
         {
             Debug.LogError(
-                "ExperienceReady no está asignado",
-                this);
+                "MainMenuEntered no está asignado.",
+                this
+            );
         }
-
-        isTransitioning = false;
     }
 
 
+    // =========================
+    // EXPERIENCE REQUEST
+    // =========================
 
+    private void HandleExperienceRequested(
+        ExperienceRequest request
+    )
+    {
+        Debug.Log(
+            $"AppStateMachine recibió experiencia: " +
+            $"{request.Experience.DisplayName}, " +
+            $"StartIndex: {request.StartSceneIndex}, " +
+            $"Full: {request.PlayFullSequence}",
+            this
+        );
+
+
+        if (CurrentState != AppState.MainMenu)
+        {
+            Debug.LogWarning(
+                $"No se puede iniciar experiencia. " +
+                $"Estado actual: {CurrentState}",
+                this
+            );
+
+            return;
+        }
+
+
+        if (isTransitioning)
+        {
+            return;
+        }
+
+
+        StartCoroutine(
+            StartExperienceRoutine(request)
+        );
+    }
+
+
+    // =========================
+    // START EXPERIENCE
+    // =========================
+
+    private IEnumerator StartExperienceRoutine(
+        ExperienceRequest request
+    )
+    {
+        isTransitioning = true;
+
+        CurrentState =
+            AppState.Loading;
+
+
+        CurrentExperience =
+            request.Experience;
+
+
+        // =========================
+        // TRANSITION STARTED
+        // =========================
+
+        if (experienceTransitionStarted != null)
+        {
+            experienceTransitionStarted.RaiseEvent();
+        }
+
+
+        // =========================
+        // LOAD EXPERIENCE
+        // =========================
+
+        yield return
+            sceneFlowManager.TransitionToExperience(
+                request
+            );
+
+
+        yield return null;
+
+
+        // =========================
+        // EXPERIENCE READY
+        // =========================
+
+        CurrentState =
+            AppState.Experience;
+
+
+        if (experienceReady != null)
+        {
+            Debug.Log(
+                $"ExperienceReady: " +
+                $"{request.Experience.DisplayName}",
+                this
+            );
+
+            experienceReady.RaiseEvent();
+        }
+
+
+        isTransitioning = false;
+    }
 }
