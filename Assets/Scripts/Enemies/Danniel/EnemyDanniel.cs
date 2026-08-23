@@ -8,15 +8,41 @@ public class EnemyDanniel : MonoBehaviour
 
     private EnemyPool enemyPool;
 
+    private SegmentContent segmentContent;
+
+
     private void OnEnable()
     {
         currentHealth = maxHealth;
     }
 
+
     public void SetPool(EnemyPool pool)
     {
         enemyPool = pool;
     }
+
+
+    public void SetSegmentContent(
+        SegmentContent content
+    )
+    {
+        segmentContent = content;
+    }
+
+
+    public void ClearSegmentContent(
+        SegmentContent content
+    )
+    {
+        // Solo limpiar si realmente seguimos
+        // perteneciendo a ese segmento
+        if (segmentContent == content)
+        {
+            segmentContent = null;
+        }
+    }
+
 
     public void TakeDamage(int damage)
     {
@@ -28,8 +54,30 @@ public class EnemyDanniel : MonoBehaviour
         }
     }
 
+
     private void Die()
     {
-        enemyPool.ReleaseEnemy(gameObject);
+        // Guardar referencia temporal
+        SegmentContent previousSegment =
+            segmentContent;
+
+        segmentContent = null;
+
+
+        // Quitarnos inmediatamente del segmento
+        if (previousSegment != null)
+        {
+            previousSegment.UnregisterEnemy(
+                gameObject
+            );
+        }
+
+
+        if (enemyPool != null)
+        {
+            enemyPool.ReleaseEnemy(
+                gameObject
+            );
+        }
     }
 }

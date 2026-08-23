@@ -1,66 +1,106 @@
 using UnityEngine;
+using Unity.Profiling;
 using System.Collections.Generic;
 
 public class EnemySpawnDirector : MonoBehaviour
 {
-    [SerializeField] private EnemyPool enemyPool;
+    private static readonly ProfilerMarker SpawnMarker =
+        new ProfilerMarker("EnemySpawnDirector.Spawn");
 
-    [SerializeField] private int enemiesPerSegment = 3;
+
+    [SerializeField]
+    private EnemyPool enemyPool;
+
+    [SerializeField]
+    private int enemiesPerSegment = 3;
 
 
-    public void SpawnEnemiesOnSegment(SegmentEnemySpawns segmentSpawns)
+    private readonly List<Transform> availablePoints =
+        new List<Transform>(16);
+
+
+    public void SpawnEnemiesOnSegment(
+        SegmentEnemySpawns segmentSpawns
+    )
     {
-        if (segmentSpawns == null)
-            return;
-
-        Transform[] spawnPoints = segmentSpawns.SpawnPoints;
-
-        if (spawnPoints == null || spawnPoints.Length == 0)
-            return;
-
-
-        SegmentContent segmentContent =
-            segmentSpawns.GetComponent<SegmentContent>();
-
-
-        List<Transform> availablePoints =
-            new List<Transform>(spawnPoints);
-
-
-        int amount = Mathf.Min(
-            enemiesPerSegment,
-            availablePoints.Count
-        );
-
-
-        for (int i = 0; i < amount; i++)
+        using (SpawnMarker.Auto())
         {
-            int randomIndex =
-                Random.Range(0, availablePoints.Count);
-
-            Transform spawnPoint =
-                availablePoints[randomIndex];
-
-            availablePoints.RemoveAt(randomIndex);
-
-
-            GameObject enemy =
-                enemyPool.GetEnemy();
-
-
-            enemy.transform.SetParent(
-                segmentSpawns.transform
-            );
-
-            enemy.transform.SetPositionAndRotation(
-                spawnPoint.position,
-                spawnPoint.rotation
-            );
-
-
-            if (segmentContent != null)
+            if (segmentSpawns == null ||
+                enemyPool == null)
             {
-                segmentContent.RegisterEnemy(enemy);
+                return;
+            }
+
+
+            Transform[] spawnPoints =
+                segmentSpawns.SpawnPoints;
+
+
+            if (spawnPoints == null ||
+                spawnPoints.Length == 0)
+            {
+                return;
+            }
+
+
+            // Ya no usamos GetComponent
+            SegmentContent segmentContent = segmentSpawns.Content;
+
+
+            // Reutilizamos la misma lista
+            availablePoints.Clear();
+
+            availablePoints.AddRange(
+                spawnPoints
+            );
+
+
+            int amount =
+                Mathf.Min(
+                    enemiesPerSegment,
+                    availablePoints.Count
+                );
+
+
+            for (int i = 0; i < amount; i++)
+            {
+                int randomIndex =
+                    Random.Range(
+                        0,
+                        availablePoints.Count
+                    );
+
+
+                Transform spawnPoint =
+                    availablePoints[randomIndex];
+
+
+                // Remove rápido
+                int lastIndex =
+                    availablePoints.Count - 1;
+
+                availablePoints[randomIndex] =
+                    availablePoints[lastIndex];
+
+                availablePoints.RemoveAt(
+                    lastIndex
+                );
+
+
+                GameObject enemy =
+                    enemyPool.GetEnemy(
+                        segmentSpawns.transform,
+                        spawnPoint.position,
+                        spawnPoint.rotation
+                    );
+
+
+                if (segmentContent != null)
+                {
+                    segmentContent.RegisterEnemy(
+                        enemy
+                    );
+                }
             }
         }
     }
