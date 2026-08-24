@@ -290,13 +290,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f14fbde9fbf5bbf44b8c4e425dddab0a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
-  segmentPrefab: {fileID: 5365282979208878644, guid: 6ea3c9dad596d78469cbdf1754cc4aed, type: 3}
+  normalSegmentPrefab: {fileID: 5365282979208878644, guid: 306623e4efc40054ebed74812d7d1981, type: 3}
+  rotatedSegmentPrefab: {fileID: 5365282979208878644, guid: ed61f97475dbf7f4f991ba1eb5f30f72, type: 3}
   speed: 1
   speedMultiplier: 2
-  maxActiveSegments: 3
-  segmentLength: 80
-  firstSpawnZ: -160
-  recycleZ: -160
+  maxActiveSegments: 4
+  firstSpawnZ: 0
+  secondSegmentDelay: 1
+  recycleZ: -80
   enemySpawnDirector: {fileID: 1413581909}
   enemyPool: {fileID: 613208085}
 --- !u!1 &613208084
