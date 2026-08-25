@@ -1065,6 +1065,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: startScene
       objectReference: {fileID: 0}
+    - target: {fileID: 6262935102642714554, guid: 3405290cc9a00c34bbd425b05c494f62, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6262935102642714554, guid: 3405290cc9a00c34bbd425b05c494f62, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6262935102642714554, guid: 3405290cc9a00c34bbd425b05c494f62, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: -17
+      objectReference: {fileID: 0}
     - target: {fileID: 6262935102763893786, guid: 3405290cc9a00c34bbd425b05c494f62, type: 3}
       propertyPath: m_text
       value: Full Exp
@@ -1073,8 +1085,32 @@ PrefabInstance:
       propertyPath: 'm_ActiveFontFeatures.Array.data[0]'
       value: 1801810542
       objectReference: {fileID: 0}
+    - target: {fileID: 6262935103029644402, guid: 3405290cc9a00c34bbd425b05c494f62, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6262935103029644402, guid: 3405290cc9a00c34bbd425b05c494f62, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6262935103526533789, guid: 3405290cc9a00c34bbd425b05c494f62, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6262935103526533793, guid: 3405290cc9a00c34bbd425b05c494f62, type: 3}
+      propertyPath: m_CullTransparentMesh
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6262935103999308454, guid: 3405290cc9a00c34bbd425b05c494f62, type: 3}
       propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6262935103999308456, guid: 3405290cc9a00c34bbd425b05c494f62, type: 3}
+      propertyPath: m_VerticalScrollbar
+      value: 
+      objectReference: {fileID: 460924500}
+    - target: {fileID: 6262935103999308456, guid: 3405290cc9a00c34bbd425b05c494f62, type: 3}
+      propertyPath: m_VerticalScrollbarVisibility
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6283110561029435272, guid: 3405290cc9a00c34bbd425b05c494f62, type: 3}
@@ -1217,6 +1253,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 6262935102578480880, guid: 3405290cc9a00c34bbd425b05c494f62, type: 3}
   m_PrefabInstance: {fileID: 460924498}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &460924500 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6262935103526533791, guid: 3405290cc9a00c34bbd425b05c494f62, type: 3}
+  m_PrefabInstance: {fileID: 460924498}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2a4db7a114972834c8e4117be1d82ba3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &498695123
 PrefabInstance:
   m_ObjectHideFlags: 0
