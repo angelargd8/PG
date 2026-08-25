@@ -11,7 +11,7 @@ public sealed class ExperienceLaunchButton : MonoBehaviour
     [Header("Start Scene")]
 
     [Tooltip(
-        "vacio para comenzar desde " +
+        "Vacio para comenzar desde " +
         "la primera escena."
     )]
     [SerializeField]
@@ -22,11 +22,17 @@ public sealed class ExperienceLaunchButton : MonoBehaviour
 
     [Tooltip(
         "Si esta activo continua con las " +
-        "siguientes escenas. Si est· desactivado " +
+        "siguientes escenas. Si est√° desactivado " +
         "solo reproduce la escena seleccionada."
     )]
     [SerializeField]
     private bool playFullSequence = true;
+
+
+    [Header("Development")]
+
+    [SerializeField]
+    private ExperienceSceneSelector experienceSceneSelector;
 
 
     [Header("Event")]
@@ -59,21 +65,42 @@ public sealed class ExperienceLaunchButton : MonoBehaviour
         }
 
 
+        ExperienceSceneDefinitionSO requestedStartScene =
+            startScene;
+
+        bool requestedFullSequence =
+            playFullSequence;
+
+
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+
+        if (experienceSceneSelector != null)
+        {
+            requestedStartScene =
+                experienceSceneSelector.SelectedScene;
+
+            requestedFullSequence =
+                experienceSceneSelector.PlayFullSequence;
+        }
+
+#endif
+
+
         int startIndex = 0;
 
 
-        if (startScene != null)
+        if (requestedStartScene != null)
         {
             startIndex =
                 experience.GetSceneIndex(
-                    startScene
+                    requestedStartScene
                 );
 
 
             if (startIndex < 0)
             {
                 Debug.LogError(
-                    $"La escena '{startScene.name}' " +
+                    $"La escena '{requestedStartScene.name}' " +
                     $"no pertenece a la experiencia " +
                     $"'{experience.name}'.",
                     this
@@ -84,11 +111,19 @@ public sealed class ExperienceLaunchButton : MonoBehaviour
         }
 
 
+        Debug.Log(
+            $"Request Experience - StartIndex: {startIndex}, " +
+            $"Full: {requestedFullSequence}, " +
+            $"Scene: {(requestedStartScene != null ? requestedStartScene.DisplayName : "None")}",
+            this
+        );
+
+
         ExperienceRequest request =
             new ExperienceRequest(
                 experience,
                 startIndex,
-                playFullSequence
+                requestedFullSequence
             );
 
 

@@ -16,4 +16,8 @@ MonoBehaviour:
   displayName: PUNKO
   scenes:
   - {fileID: 11400000, guid: 07b22d0059d107b4393cc082b9d8157d, type: 2}
+  - {fileID: 11400000, guid: fbb0b77b4c00a8f439856313f0632f8c, type: 2}
+  - {fileID: 11400000, guid: a75851789c6ce2f49b917156020afd6b, type: 2}
   - {fileID: 11400000, guid: 302f0ff70018b014ca70342dc5193736, type: 2}
+  - {fileID: 11400000, guid: 5f404783ddaa915438a34c9912bf5064, type: 2}
+  - {fileID: 11400000, guid: 3b988eed9380762408821fddd601db22, type: 2}

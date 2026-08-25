@@ -2,20 +2,39 @@ using UnityEngine;
 
 public sealed class MainMenuController : MonoBehaviour
 {
-    [Header("Event Channels")]
+    [Header("Panels")]
 
     [SerializeField]
-    private ExperienceEventChannelSO ExperienceRequested;
-    private ExperienceDefinitionSO experience;
+    private GameObject mainPanel;
+
+    [SerializeField]
+    private GameObject startScenePanel;
 
 
-    public void RequestedStartExperience()
+    public void OpenStartScenePanel()
     {
-        // Aqui despues poner:
-        // - Abrir panel principal
-        // - Abrir configuración
-        // - Abrir selección de escenas
-        // - Cerrar paneles
+        if (mainPanel != null)
+        {
+            mainPanel.SetActive(false);
+        }
+
+        if (startScenePanel != null)
+        {
+            startScenePanel.SetActive(true);
+        }
     }
 
+
+    public void CloseStartScenePanel()
+    {
+        if (startScenePanel != null)
+        {
+            startScenePanel.SetActive(false);
+        }
+
+        if (mainPanel != null)
+        {
+            mainPanel.SetActive(true);
+        }
+    }
 }
