@@ -7,7 +7,7 @@ public class BulletDamage : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         EnemyDanniel enemy =
-            other.GetComponent<EnemyDanniel>();
+            other.GetComponentInParent<EnemyDanniel>();
 
         if (enemy != null)
         {

@@ -1,0 +1,86 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &9013951874459806508
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 1640702396619821393, guid: 4d8de6316d12ef54698481aa31098f7e, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1943063951211878719, guid: 4d8de6316d12ef54698481aa31098f7e, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4752311941042380876, guid: 4d8de6316d12ef54698481aa31098f7e, type: 3}
+      propertyPath: bulletPool
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 4752311941042380876, guid: 4d8de6316d12ef54698481aa31098f7e, type: 3}
+      propertyPath: muzzleSpeed
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 4752311941042380876, guid: 4d8de6316d12ef54698481aa31098f7e, type: 3}
+      propertyPath: fireCooldown
+      value: 0.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 7142637515923658082, guid: 4d8de6316d12ef54698481aa31098f7e, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 1.5055101
+      objectReference: {fileID: 0}
+    - target: {fileID: 7142637515923658082, guid: 4d8de6316d12ef54698481aa31098f7e, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.696
+      objectReference: {fileID: 0}
+    - target: {fileID: 7142637515923658082, guid: 4d8de6316d12ef54698481aa31098f7e, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0.29059002
+      objectReference: {fileID: 0}
+    - target: {fileID: 7142637515923658082, guid: 4d8de6316d12ef54698481aa31098f7e, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 7142637515923658082, guid: 4d8de6316d12ef54698481aa31098f7e, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7142637515923658082, guid: 4d8de6316d12ef54698481aa31098f7e, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 7142637515923658082, guid: 4d8de6316d12ef54698481aa31098f7e, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7142637515923658082, guid: 4d8de6316d12ef54698481aa31098f7e, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7142637515923658082, guid: 4d8de6316d12ef54698481aa31098f7e, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: -90
+      objectReference: {fileID: 0}
+    - target: {fileID: 7142637515923658082, guid: 4d8de6316d12ef54698481aa31098f7e, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7517754996364038104, guid: 4d8de6316d12ef54698481aa31098f7e, type: 3}
+      propertyPath: m_Name
+      value: GunEnemyDanniel Variant
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 1517914027283820250, guid: 4d8de6316d12ef54698481aa31098f7e, type: 3}
+    - {fileID: 2751502501105510331, guid: 4d8de6316d12ef54698481aa31098f7e, type: 3}
+    - {fileID: 5244482214434824308, guid: 4d8de6316d12ef54698481aa31098f7e, type: 3}
+    - {fileID: 5671670221365227389, guid: 4d8de6316d12ef54698481aa31098f7e, type: 3}
+    - {fileID: 7597052898900032274, guid: 4d8de6316d12ef54698481aa31098f7e, type: 3}
+    m_RemovedGameObjects:
+    - {fileID: 3412556787680771901, guid: 4d8de6316d12ef54698481aa31098f7e, type: 3}
+    - {fileID: 4767455606355477404, guid: 4d8de6316d12ef54698481aa31098f7e, type: 3}
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 4d8de6316d12ef54698481aa31098f7e, type: 3}

@@ -3,8 +3,14 @@ using UnityEngine.Pool;
 using Unity.Profiling;
 using System.Collections;
 
-public class EnemyPool : MonoBehaviour, IExperiencePreloadable
+public class EnemyPool :
+    MonoBehaviour,
+    IExperiencePreloadable
 {
+    // =========================
+    // PROFILER
+    // =========================
+
     private static readonly ProfilerMarker GetMarker =
         new ProfilerMarker("EnemyPool.Get");
 
@@ -15,20 +21,110 @@ public class EnemyPool : MonoBehaviour, IExperiencePreloadable
         new ProfilerMarker("EnemyPool.Instantiate");
 
 
+    // =========================
+    // POOL
+    // =========================
+
     [Header("Pool")]
-    [SerializeField] private GameObject enemyPrefab;
 
-    [SerializeField] private int defaultCapacity = 12;
-    [SerializeField] private int maxSize = 30;
+    [SerializeField]
+    private GameObject enemyPrefab;
 
-    [Tooltip("Cantidad de enemigos que se crearan al iniciar")]
-    [SerializeField] private int prewarmCount = 12;
+    [SerializeField]
+    private int defaultCapacity = 12;
 
+    [SerializeField]
+    private int maxSize = 30;
+
+    [Tooltip(
+        "Cantidad de enemigos que se crearán al iniciar."
+    )]
+    [SerializeField]
+    private int prewarmCount = 12;
+
+
+    // =========================
+    // COMBAT
+    // =========================
+
+    [Header("Enemy Combat")]
+
+    [SerializeField]
+    private BulletPool enemyBulletPool;
+
+
+    private Transform playerTarget;
+
+
+    // =========================
+    // RUNTIME
+    // =========================
 
     private ObjectPool<GameObject> pool;
 
     private bool isPrewarmed;
 
+
+    // =========================
+    // UNITY
+    // =========================
+
+    private void Awake()
+    {
+        ResolveCombatReferences();
+
+
+        pool = new ObjectPool<GameObject>(
+            CreateEnemy,
+            OnGetEnemy,
+            OnReleaseEnemy,
+            OnDestroyEnemy,
+            collectionCheck: false,
+            defaultCapacity: defaultCapacity,
+            maxSize: maxSize
+        );
+    }
+
+
+    // =========================
+    // REFERENCES
+    // =========================
+
+    private void ResolveCombatReferences()
+    {
+        PlayerTargetProvider provider =
+            PlayerTargetProvider.Instance;
+
+
+        if (provider != null)
+        {
+            playerTarget =
+                provider.EnemyTarget;
+        }
+        else
+        {
+            Debug.LogWarning(
+                "[EnemyPool] No se encontró " +
+                "PlayerTargetProvider.",
+                this
+            );
+        }
+
+
+        if (enemyBulletPool == null)
+        {
+            Debug.LogError(
+                "[EnemyPool] No se asignó " +
+                "Enemy Bullet Pool.",
+                this
+            );
+        }
+    }
+
+
+    // =========================
+    // PRELOAD
+    // =========================
 
     public IEnumerator Preload()
     {
@@ -50,17 +146,14 @@ public class EnemyPool : MonoBehaviour, IExperiencePreloadable
             new GameObject[amount];
 
 
-        // Crear progresivamente.
-        //
-        // No hacemos los 12 en el mismo frame.
         for (int i = 0; i < amount; i++)
         {
             enemies[i] =
                 pool.Get();
 
 
-            // Cada 2 enemigos:
-            // permitir renderizar otro frame.
+            // Cada 2 enemigos dejamos
+            // pasar un frame.
             if ((i + 1) % 2 == 0)
             {
                 yield return null;
@@ -68,7 +161,6 @@ public class EnemyPool : MonoBehaviour, IExperiencePreloadable
         }
 
 
-        // Devolverlos al pool.
         for (int i = 0; i < amount; i++)
         {
             pool.Release(
@@ -88,23 +180,6 @@ public class EnemyPool : MonoBehaviour, IExperiencePreloadable
     }
 
 
-    private void Awake()
-    {
-        pool = new ObjectPool<GameObject>(
-            CreateEnemy,
-            OnGetEnemy,
-            OnReleaseEnemy,
-            OnDestroyEnemy,
-            collectionCheck: false,
-            defaultCapacity: defaultCapacity,
-            maxSize: maxSize
-        );
-
-    }
-
-
-    
-
     // =========================
     // CREATE
     // =========================
@@ -114,20 +189,29 @@ public class EnemyPool : MonoBehaviour, IExperiencePreloadable
         using (CreateMarker.Auto())
         {
             GameObject enemy =
-                Instantiate(
-                    enemyPrefab,
-                    transform
-                );
+                Instantiate(enemyPrefab);
 
-            EnemyDanniel enemyScript =
+
+            EnemyDanniel enemyDanniel =
                 enemy.GetComponent<EnemyDanniel>();
 
-            if (enemyScript != null)
+            if (enemyDanniel != null)
             {
-                enemyScript.SetPool(this);
+                enemyDanniel.SetPool(this);
             }
 
-            enemy.SetActive(false);
+
+            EnemyShooter shooter =
+                enemy.GetComponent<EnemyShooter>();
+
+            if (shooter != null)
+            {
+                shooter.Configure(
+                    playerTarget,
+                    enemyBulletPool
+                );
+            }
+
 
             return enemy;
         }
@@ -138,15 +222,19 @@ public class EnemyPool : MonoBehaviour, IExperiencePreloadable
     // GET
     // =========================
 
-    private void OnGetEnemy(GameObject enemy)
+    private void OnGetEnemy(
+        GameObject enemy
+    )
     {
         /*
-         * Primero se configura:
+         * No activamos aquí.
+         *
+         * GetEnemy configura primero:
          * - Parent
          * - Position
          * - Rotation
          *
-         * y despues hacemos SetActive(true) 
+         * y después activa.
          */
     }
 
@@ -162,22 +250,25 @@ public class EnemyPool : MonoBehaviour, IExperiencePreloadable
             GameObject enemy =
                 pool.Get();
 
+
             Transform enemyTransform =
                 enemy.transform;
+
 
             enemyTransform.SetParent(
                 parent,
                 false
             );
 
+
             enemyTransform.SetPositionAndRotation(
                 position,
                 rotation
             );
 
-            // Activar solamente cuando
-            // ya esta completamente configurado
+
             enemy.SetActive(true);
+
 
             return enemy;
         }
@@ -188,9 +279,12 @@ public class EnemyPool : MonoBehaviour, IExperiencePreloadable
     // RELEASE
     // =========================
 
-    private void OnReleaseEnemy(GameObject enemy)
+    private void OnReleaseEnemy(
+        GameObject enemy
+    )
     {
         enemy.SetActive(false);
+
 
         enemy.transform.SetParent(
             transform,
@@ -199,10 +293,15 @@ public class EnemyPool : MonoBehaviour, IExperiencePreloadable
     }
 
 
-    public void ReleaseEnemy(GameObject enemy)
+    public void ReleaseEnemy(
+        GameObject enemy
+    )
     {
         if (enemy == null)
+        {
             return;
+        }
+
 
         using (ReleaseMarker.Auto())
         {
@@ -215,7 +314,9 @@ public class EnemyPool : MonoBehaviour, IExperiencePreloadable
     // DESTROY
     // =========================
 
-    private void OnDestroyEnemy(GameObject enemy)
+    private void OnDestroyEnemy(
+        GameObject enemy
+    )
     {
         Destroy(enemy);
     }

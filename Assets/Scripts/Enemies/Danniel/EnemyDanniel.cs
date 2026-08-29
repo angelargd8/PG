@@ -1,27 +1,49 @@
 using UnityEngine;
 
+
+[DisallowMultipleComponent]
 public class EnemyDanniel : MonoBehaviour
 {
-    [SerializeField] private int maxHealth = 1;
+    [SerializeField]
+    private int maxHealth = 1;
+
 
     private int currentHealth;
+
+    private bool isDead;
 
     private EnemyPool enemyPool;
 
     private SegmentContent segmentContent;
 
 
+    // =========================
+    // UNITY
+    // =========================
+
     private void OnEnable()
     {
         currentHealth = maxHealth;
+
+        isDead = false;
     }
 
 
-    public void SetPool(EnemyPool pool)
+    // =========================
+    // POOL
+    // =========================
+
+    public void SetPool(
+        EnemyPool pool
+    )
     {
         enemyPool = pool;
     }
 
+
+    // =========================
+    // SEGMENT
+    // =========================
 
     public void SetSegmentContent(
         SegmentContent content
@@ -35,8 +57,6 @@ public class EnemyDanniel : MonoBehaviour
         SegmentContent content
     )
     {
-        // Solo limpiar si realmente seguimos
-        // perteneciendo a ese segmento
         if (segmentContent == content)
         {
             segmentContent = null;
@@ -44,9 +64,23 @@ public class EnemyDanniel : MonoBehaviour
     }
 
 
-    public void TakeDamage(int damage)
+    // =========================
+    // DAMAGE
+    // =========================
+
+    public void TakeDamage(
+        int damage
+    )
     {
+        if (isDead ||
+            damage <= 0)
+        {
+            return;
+        }
+
+
         currentHealth -= damage;
+
 
         if (currentHealth <= 0)
         {
@@ -55,16 +89,28 @@ public class EnemyDanniel : MonoBehaviour
     }
 
 
+    // =========================
+    // DEATH
+    // =========================
+
     private void Die()
     {
-        // Guardar referencia temporal
+        if (isDead)
+        {
+            return;
+        }
+
+
+        isDead = true;
+
+
         SegmentContent previousSegment =
             segmentContent;
+
 
         segmentContent = null;
 
 
-        // Quitarnos inmediatamente del segmento
         if (previousSegment != null)
         {
             previousSegment.UnregisterEnemy(
@@ -77,6 +123,13 @@ public class EnemyDanniel : MonoBehaviour
         {
             enemyPool.ReleaseEnemy(
                 gameObject
+            );
+        }
+        else
+        {
+            Debug.LogWarning(
+                "[EnemyDanniel] No tiene EnemyPool asignado.",
+                this
             );
         }
     }
