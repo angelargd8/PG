@@ -94,9 +94,14 @@ public sealed class PooledBullet : MonoBehaviour
         bulletRigidbody.Sleep();
     }
 
+    public void Despawn()
+    {
+        ReturnToPool();
+    }
+
+
     private void ReturnToPool()
     {
-        // Evita devolver dos veces la misma bala.
         if (!isInUse)
         {
             return;

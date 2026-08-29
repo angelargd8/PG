@@ -1,11 +1,9 @@
 using UnityEngine;
 
 [DisallowMultipleComponent]
-public sealed class BulletDamage : MonoBehaviour
+public sealed class EnemyBulletCollision : MonoBehaviour
 {
-    [SerializeField]
-    private int damage = 1;
-
+    private int playerProjectileLayer;
 
     private PooledBullet pooledBullet;
 
@@ -14,6 +12,11 @@ public sealed class BulletDamage : MonoBehaviour
     {
         pooledBullet =
             GetComponent<PooledBullet>();
+
+        playerProjectileLayer =
+            LayerMask.NameToLayer(
+                "Projectile"
+            );
     }
 
 
@@ -21,19 +24,11 @@ public sealed class BulletDamage : MonoBehaviour
         Collider other
     )
     {
-        EnemyDanniel enemy =
-            other.GetComponentInParent<EnemyDanniel>();
-
-
-        if (enemy == null)
+        if (other.gameObject.layer !=
+            playerProjectileLayer)
         {
             return;
         }
-
-
-        enemy.TakeDamage(
-            damage
-        );
 
 
         pooledBullet.Despawn();

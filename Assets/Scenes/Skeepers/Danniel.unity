@@ -163,7 +163,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e692a127c92adf0419d93b5547073ad2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BulletPool
-  bulletPrefab: {fileID: 691408402104948516, guid: 8e5612f232fe79b47bee845fcdcb5785, type: 3}
+  bulletPrefab: {fileID: 691408402104948516, guid: dd24d96d4d2e09a42950d089be56afb0, type: 3}
   poolRoot: {fileID: 0}
   prewarmCount: 12
   defaultCapacity: 16
