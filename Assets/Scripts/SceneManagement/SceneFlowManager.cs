@@ -68,7 +68,7 @@ public class SceneFlowManager : MonoBehaviour
         if (sceneDefinition == null)
         {
             Debug.LogError(
-                $"No existe la escena índice " +
+                $"No existe la escena ï¿½ndice " +
                 $"{request.StartSceneIndex} en " +
                 $"'{experience.DisplayName}'.",
                 this
@@ -83,7 +83,7 @@ public class SceneFlowManager : MonoBehaviour
 
 
         Debug.Log(
-            $"SceneFlowManager cargará '{targetScene}'. " +
+            $"SceneFlowManager cargarï¿½ '{targetScene}'. " +
             $"FullSequence: {request.PlayFullSequence}",
             this
         );
@@ -171,7 +171,7 @@ public class SceneFlowManager : MonoBehaviour
         yield return bootstrap.Prepare();
 
 
-        // Un frame después del prewarm
+        // Un frame despuï¿½s del prewarm
         yield return null;
 
 
@@ -184,7 +184,6 @@ public class SceneFlowManager : MonoBehaviour
             loadingScene
         );
     }
-
 
     // =========================
     // LOAD
@@ -213,7 +212,7 @@ public class SceneFlowManager : MonoBehaviour
         {
             Debug.LogError(
                 $"La escena '{sceneName}' " +
-                $"NO está agregada al Build."
+                $"NO estï¿½ agregada al Build."
             );
 
             yield break;
@@ -315,9 +314,41 @@ public class SceneFlowManager : MonoBehaviour
         );
     }
 
+    // =========================
+    // RETURN TO MAIN MENU
+    // =========================
+
+    public IEnumerator TransitionToMainMenu()
+    {
+        yield return LoadAdditive(loadingScene);
+
+        SetActiveScene(loadingScene);
+
+        yield return null;
+
+
+        if (!string.IsNullOrEmpty(currentExperienceScene))
+        {
+            yield return UnloadIfLoaded(currentExperienceScene);
+        }
+
+        yield return UnloadIfLoaded(experienceCoreScene);
+
+
+        yield return LoadAdditive(mainMenuScene);
+
+        SetActiveScene(mainMenuScene);
+
+        currentExperienceScene = null;
+
+
+        yield return UnloadIfLoaded(loadingScene);
+    }
+
+
     private ExperienceSceneBootstrap FindExperienceBootstrap(
-    Scene scene
-)
+        Scene scene
+    )
     {
         GameObject[] roots =
             scene.GetRootGameObjects();

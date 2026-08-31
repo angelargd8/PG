@@ -5,58 +5,86 @@ using UnityEngine.InputSystem;
 public sealed class WeaponInputController : MonoBehaviour
 {
     [Header("Input")]
-    [SerializeField]
-    private InputActionReference fireAction;
+    [SerializeField] private InputActionReference _fireAction;
 
     [Header("Dependencies")]
-    [SerializeField]
-    private GunShooter gunShooter;
+    [SerializeField] private GunShooter _gunShooter;
+
+    [Header("Events")]
+    [SerializeField] private BoolEventChannelSO _gameplayPauseChanged;
+
+
+    private bool _isPaused;
+
 
     private void OnEnable()
     {
-        if (fireAction == null)
+        if (_fireAction == null)
         {
             Debug.LogError(
-                "[WeaponInputController] No se asignó Fire Action",
+                "[WeaponInputController] No se asignÃ³ Fire Action",
                 this
             );
 
             return;
         }
 
-        if (gunShooter == null)
+        if (_gunShooter == null)
         {
             Debug.LogError(
-                "[WeaponInputController] No se asignó Gun Shooter",
+                "[WeaponInputController] No se asignÃ³ Gun Shooter",
                 this
             );
 
             return;
         }
 
-        fireAction.action.performed += HandleFirePerformed;
+        _fireAction.action.performed += HandleFirePerformed;
+
+        if (_gameplayPauseChanged != null)
+        {
+            _gameplayPauseChanged.Raised += HandlePauseChanged;
+        }
 
         Debug.Log(
-            $"[WeaponInputController] Escuchando input: {fireAction.action.name}",
+            $"[WeaponInputController] Escuchando input: {_fireAction.action.name}",
             this
         );
     }
 
+
     private void OnDisable()
     {
-        if (fireAction != null)
+        if (_fireAction != null)
         {
-            fireAction.action.performed -= HandleFirePerformed;
+            _fireAction.action.performed -= HandleFirePerformed;
+        }
+
+        if (_gameplayPauseChanged != null)
+        {
+            _gameplayPauseChanged.Raised -= HandlePauseChanged;
         }
     }
 
+
     private void HandleFirePerformed(InputAction.CallbackContext context)
     {
+        if (_isPaused)
+        {
+            return;
+        }
+
         Debug.Log(
             "[WeaponInputController] Input de disparo recibido",
             this
         );
 
-        gunShooter.Fire();
+        _gunShooter.Fire();
+    }
+
+
+    private void HandlePauseChanged(bool isPaused)
+    {
+        _isPaused = isPaused;
     }
 }

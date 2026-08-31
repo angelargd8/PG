@@ -5,7 +5,7 @@ public sealed class AppStateMachine : MonoBehaviour
 {
     [Header("Dependencies")]
     [SerializeField]
-    private SceneFlowManager sceneFlowManager;
+    private SceneFlowManager _sceneFlowManager;
 
 
     [Header("Event Channels")]
@@ -20,7 +20,9 @@ public sealed class AppStateMachine : MonoBehaviour
     private VoidEventChannelSO experienceReady;
 
     [SerializeField]
-    private VoidEventChannelSO mainMenuEntered;
+    private VoidEventChannelSO _mainMenuEntered;
+
+    [SerializeField] private VoidEventChannelSO _mainMenuRequested;
 
 
     public AppState CurrentState
@@ -37,7 +39,7 @@ public sealed class AppStateMachine : MonoBehaviour
     }
 
 
-    private bool isTransitioning;
+    private bool _isTransitioning;
 
 
     // =========================
@@ -51,6 +53,11 @@ public sealed class AppStateMachine : MonoBehaviour
             experienceRequested.Raised +=
                 HandleExperienceRequested;
         }
+
+        if (_mainMenuRequested != null)
+        {
+            _mainMenuRequested.Raised += HandleMainMenuRequested;
+        }
     }
 
 
@@ -60,6 +67,11 @@ public sealed class AppStateMachine : MonoBehaviour
         {
             experienceRequested.Raised -=
                 HandleExperienceRequested;
+        }
+
+        if (_mainMenuRequested != null)
+        {
+            _mainMenuRequested.Raised -= HandleMainMenuRequested;
         }
     }
 
@@ -75,7 +87,7 @@ public sealed class AppStateMachine : MonoBehaviour
 
 
         yield return
-            sceneFlowManager.LoadInitialMenu();
+            _sceneFlowManager.LoadInitialMenu();
 
 
         // Permitir Awake / OnEnable
@@ -86,19 +98,19 @@ public sealed class AppStateMachine : MonoBehaviour
             AppState.MainMenu;
 
 
-        if (mainMenuEntered != null)
+        if (_mainMenuEntered != null)
         {
             Debug.Log(
                 "AppStateMachine publica MainMenuEntered",
                 this
             );
 
-            mainMenuEntered.RaiseEvent();
+            _mainMenuEntered.RaiseEvent();
         }
         else
         {
             Debug.LogError(
-                "MainMenuEntered no está asignado.",
+                "MainMenuEntered no estÃ¡ asignado.",
                 this
             );
         }
@@ -114,7 +126,7 @@ public sealed class AppStateMachine : MonoBehaviour
     )
     {
         Debug.Log(
-            $"AppStateMachine recibió experiencia: " +
+            $"AppStateMachine recibiï¿½ experiencia: " +
             $"{request.Experience.DisplayName}, " +
             $"StartIndex: {request.StartSceneIndex}, " +
             $"Full: {request.PlayFullSequence}",
@@ -134,7 +146,7 @@ public sealed class AppStateMachine : MonoBehaviour
         }
 
 
-        if (isTransitioning)
+        if (_isTransitioning)
         {
             return;
         }
@@ -154,7 +166,7 @@ public sealed class AppStateMachine : MonoBehaviour
         ExperienceRequest request
     )
     {
-        isTransitioning = true;
+        _isTransitioning = true;
 
         CurrentState =
             AppState.Loading;
@@ -179,7 +191,7 @@ public sealed class AppStateMachine : MonoBehaviour
         // =========================
 
         yield return
-            sceneFlowManager.TransitionToExperience(
+            _sceneFlowManager.TransitionToExperience(
                 request
             );
 
@@ -207,6 +219,46 @@ public sealed class AppStateMachine : MonoBehaviour
         }
 
 
-        isTransitioning = false;
+        _isTransitioning = false;
+    }
+
+    // =========================
+    // BACK TO MAIN MENU REQUEST
+    // =========================
+    private void HandleMainMenuRequested()
+    {
+        if (CurrentState != AppState.Experience)
+        {
+            return;
+        }
+
+        if (_isTransitioning)
+        {
+            return;
+        }
+
+        StartCoroutine(ReturnToMainMenuRoutine());
+    }
+
+    private IEnumerator ReturnToMainMenuRoutine()
+    {
+        _isTransitioning = true;
+
+        CurrentState = AppState.Loading;
+
+        yield return _sceneFlowManager.TransitionToMainMenu();
+
+        yield return null;
+
+
+        CurrentExperience = null;
+        CurrentState = AppState.MainMenu;
+
+        if (_mainMenuEntered != null)
+        {
+            _mainMenuEntered.RaiseEvent();
+        }
+
+        _isTransitioning = false;
     }
 }
