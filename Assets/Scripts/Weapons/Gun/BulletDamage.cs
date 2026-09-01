@@ -21,8 +21,8 @@ public sealed class BulletDamage : MonoBehaviour
         Collider other
     )
     {
-        EnemyDanniel enemy =
-            other.GetComponentInParent<EnemyDanniel>();
+        EnemyController enemy =
+            other.GetComponentInParent<EnemyController>();
 
 
         if (enemy == null)

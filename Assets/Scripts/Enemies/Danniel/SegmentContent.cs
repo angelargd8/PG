@@ -20,8 +20,8 @@ public class SegmentContent : MonoBehaviour
 
         activeEnemies.Add(enemy);
 
-        EnemyDanniel enemyScript =
-            enemy.GetComponent<EnemyDanniel>();
+        EnemyController enemyScript =
+            enemy.GetComponent<EnemyController>();
 
         if (enemyScript != null)
         {
@@ -74,8 +74,8 @@ public class SegmentContent : MonoBehaviour
                 continue;
 
 
-            EnemyDanniel enemyScript =
-                enemy.GetComponent<EnemyDanniel>();
+            EnemyController enemyScript =
+                enemy.GetComponent<EnemyController>();
 
             if (enemyScript != null)
             {

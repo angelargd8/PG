@@ -1,9 +1,9 @@
 using UnityEngine;
 
-
 [DisallowMultipleComponent]
-public class EnemyDanniel : MonoBehaviour
+public sealed class EnemyController : MonoBehaviour
 {
+    [Header("Health")]
     [SerializeField]
     private int maxHealth = 1;
 
@@ -14,6 +14,8 @@ public class EnemyDanniel : MonoBehaviour
 
     private EnemyPool enemyPool;
 
+    // OP
+    // Solo se utiliza en escenas con segmentos.
     private SegmentContent segmentContent;
 
 
@@ -26,6 +28,8 @@ public class EnemyDanniel : MonoBehaviour
         currentHealth = maxHealth;
 
         isDead = false;
+
+        segmentContent = null;
     }
 
 
@@ -128,9 +132,11 @@ public class EnemyDanniel : MonoBehaviour
         else
         {
             Debug.LogWarning(
-                "[EnemyDanniel] No tiene EnemyPool asignado.",
+                "[EnemyController] No tiene EnemyPool asignado.",
                 this
             );
+
+            gameObject.SetActive(false);
         }
     }
 }

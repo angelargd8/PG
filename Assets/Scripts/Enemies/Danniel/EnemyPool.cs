@@ -111,11 +111,29 @@ public class EnemyPool :
         }
 
 
-        if (enemyBulletPool == null)
+        if (enemyPrefab == null)
         {
             Debug.LogError(
-                "[EnemyPool] No se asignó " +
-                "Enemy Bullet Pool.",
+                "[EnemyPool] No se asignó Enemy Prefab.",
+                this
+            );
+
+            return;
+        }
+
+
+        EnemyShooter shooter =
+            enemyPrefab.GetComponent<EnemyShooter>();
+
+
+        if (
+            shooter != null &&
+            enemyBulletPool == null
+        )
+        {
+            Debug.LogError(
+                "[EnemyPool] El prefab tiene EnemyShooter " +
+                "pero no se asignó Enemy Bullet Pool.",
                 this
             );
         }
@@ -192,17 +210,21 @@ public class EnemyPool :
                 Instantiate(enemyPrefab);
 
 
-            EnemyDanniel enemyDanniel =
-                enemy.GetComponent<EnemyDanniel>();
+            EnemyController enemyController =
+                enemy.GetComponent<EnemyController>();
 
-            if (enemyDanniel != null)
+
+            if (enemyController != null)
             {
-                enemyDanniel.SetPool(this);
+                enemyController.SetPool(
+                    this
+                );
             }
 
 
             EnemyShooter shooter =
                 enemy.GetComponent<EnemyShooter>();
+
 
             if (shooter != null)
             {
@@ -211,6 +233,25 @@ public class EnemyPool :
                     enemyBulletPool
                 );
             }
+
+
+            EnemyFollowTarget followTarget =
+                enemy.GetComponent<EnemyFollowTarget>();
+
+
+            if (followTarget != null)
+            {
+                followTarget.SetTarget(
+                    playerTarget
+                );
+            }
+
+
+            // IMPORTANTE:
+            // El objeto permanece desactivado
+            // hasta que GetEnemy termine de
+            // posicionarlo.
+            enemy.SetActive(false);
 
 
             return enemy;
