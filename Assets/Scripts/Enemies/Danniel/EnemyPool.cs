@@ -281,11 +281,19 @@ public class EnemyPool :
 
 
     public GameObject GetEnemy(
-        Transform parent,
-        Vector3 position,
-        Quaternion rotation
-    )
+    Transform parent,
+    Vector3 position,
+    Quaternion rotation
+)
     {
+        if (playerTarget == null)
+        {
+            Debug.LogError(
+                "[EnemyPool] Player Target es null.",
+                this
+            );
+        }
+        
         using (GetMarker.Auto())
         {
             GameObject enemy =
@@ -308,6 +316,24 @@ public class EnemyPool :
             );
 
 
+            // =========================
+            // FOLLOW TARGET
+            // =========================
+
+            EnemyFollowTarget followTarget =
+                enemy.GetComponent<EnemyFollowTarget>();
+
+
+            if (followTarget != null)
+            {
+                followTarget.SetTarget(
+                    playerTarget
+                );
+            }
+
+
+            // Activamos después de configurar
+            // posición y referencias.
             enemy.SetActive(true);
 
 
