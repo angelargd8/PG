@@ -187,6 +187,9 @@ public sealed class ExperienceSceneBootstrap :
         }
 
 
+        isRunning = true;
+
+
         if (runtimeSystems != null)
         {
             for (
@@ -225,16 +228,12 @@ public sealed class ExperienceSceneBootstrap :
         }
 
 
-        isRunning = true;
-
-
         Debug.Log(
             $"Experiencia " +
             $"'{gameObject.scene.name}' iniciada.",
             this
         );
     }
-
 
     // =========================
     // END

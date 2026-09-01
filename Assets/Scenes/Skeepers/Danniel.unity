@@ -573,6 +573,8 @@ MonoBehaviour:
   preloaders:
   - {fileID: 613208085}
   - {fileID: 419797356}
+  runtimeSystems: []
+  experienceReady: {fileID: 11400000, guid: f4b8f7b73053533419eb97071978892d, type: 2}
 --- !u!4 &1463065917
 Transform:
   m_ObjectHideFlags: 0

@@ -325,15 +325,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 410202, guid: 652f1b1c2ef586f45ac26a1ddffab296, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.12
+      value: 1.75
       objectReference: {fileID: 0}
     - target: {fileID: 410202, guid: 652f1b1c2ef586f45ac26a1ddffab296, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 410202, guid: 652f1b1c2ef586f45ac26a1ddffab296, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -4.14
+      value: 1.99
       objectReference: {fileID: 0}
     - target: {fileID: 410202, guid: 652f1b1c2ef586f45ac26a1ddffab296, type: 3}
       propertyPath: m_LocalRotation.w
@@ -1395,7 +1395,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8670503442842216283, guid: 73618d6e37210b84cb46e4e4ab2c79a1, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 1.49993
+      value: 2.4
       objectReference: {fileID: 0}
     - target: {fileID: 8670503442842216283, guid: 73618d6e37210b84cb46e4e4ab2c79a1, type: 3}
       propertyPath: m_LocalPosition.y
@@ -1658,8 +1658,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ExperienceSceneBootstrap
   preloaders:
-  - {fileID: 0}
-  runtimeSystems: []
+  - {fileID: 1598613334}
+  runtimeSystems:
+  - {fileID: 486055939}
+  experienceReady: {fileID: 11400000, guid: f4b8f7b73053533419eb97071978892d, type: 2}
 --- !u!1 &1598613332
 GameObject:
   m_ObjectHideFlags: 0
@@ -1734,7 +1736,7 @@ Transform:
   m_GameObject: {fileID: 1675018889}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -1, z: 0}
+  m_LocalPosition: {x: 0, y: -1, z: 5.4}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1749,6 +1751,6 @@ SceneRoots:
   - {fileID: 1167007612}
   - {fileID: 1675018890}
   - {fileID: 697290353}
-  - {fileID: 1488598795}
   - {fileID: 1598613333}
   - {fileID: 486055938}
+  - {fileID: 1488598795}
