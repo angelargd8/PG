@@ -13,7 +13,7 @@ public sealed class EnemyWaveSpawner :
     [Header("Dependencies")]
 
     [SerializeField]
-    private EnemyPool enemyPool;
+    private EnemyPool[] enemyPools;
 
     [SerializeField]
     private Transform activeEnemiesRoot;
@@ -37,7 +37,7 @@ public sealed class EnemyWaveSpawner :
 
     [Min(0)]
     [SerializeField]
-    private int amountOfEnemies = 10;
+    private int amountOfEnemies = 15;
 
     [Min(0f)]
     [SerializeField]
@@ -51,6 +51,8 @@ public sealed class EnemyWaveSpawner :
     private Coroutine waveRoutine;
 
     private int nextSpawnPointIndex;
+
+    private int nextPoolIndex;
 
 
     public bool IsRunning =>
@@ -74,7 +76,7 @@ public sealed class EnemyWaveSpawner :
 
 
     // =========================
-    // WAVE
+    // BEGIN WAVE
     // =========================
 
     public void BeginWave()
@@ -85,10 +87,13 @@ public sealed class EnemyWaveSpawner :
         }
 
 
-        if (enemyPool == null)
+        if (
+            enemyPools == null ||
+            enemyPools.Length == 0
+        )
         {
             Debug.LogError(
-                "[EnemyWaveSpawner] EnemyPool no asignado.",
+                "[EnemyWaveSpawner] No hay Enemy Pools.",
                 this
             );
 
@@ -118,6 +123,8 @@ public sealed class EnemyWaveSpawner :
 
         nextSpawnPointIndex = 0;
 
+        nextPoolIndex = 0;
+
 
         waveRoutine =
             StartCoroutine(
@@ -125,6 +132,10 @@ public sealed class EnemyWaveSpawner :
             );
     }
 
+
+    // =========================
+    // STOP WAVE
+    // =========================
 
     public void StopWave()
     {
@@ -172,20 +183,12 @@ public sealed class EnemyWaveSpawner :
             i++
         )
         {
-            // Mantiene el comportamiento
-            // del spawner anterior:
-            //
-            // primero espera el intervalo
-            // y después aparece el enemigo.
             if (wait != null)
             {
                 yield return wait;
             }
             else
             {
-                // Si duration es 0,
-                // evitamos crear todos
-                // exactamente en el mismo frame.
                 yield return null;
             }
 
@@ -208,7 +211,14 @@ public sealed class EnemyWaveSpawner :
             GetNextSpawnPoint();
 
 
-        if (spawnPoint == null)
+        EnemyPool enemyPool =
+            GetNextEnemyPool();
+
+
+        if (
+            spawnPoint == null ||
+            enemyPool == null
+        )
         {
             return;
         }
@@ -234,15 +244,6 @@ public sealed class EnemyWaveSpawner :
 
     private Transform GetNextSpawnPoint()
     {
-        if (
-            spawnPoints == null ||
-            spawnPoints.Length == 0
-        )
-        {
-            return null;
-        }
-
-
         int attempts =
             spawnPoints.Length;
 
@@ -266,6 +267,43 @@ public sealed class EnemyWaveSpawner :
             if (point != null)
             {
                 return point;
+            }
+        }
+
+
+        return null;
+    }
+
+
+    // =========================
+    // ENEMY POOL
+    // =========================
+
+    private EnemyPool GetNextEnemyPool()
+    {
+        int attempts =
+            enemyPools.Length;
+
+
+        while (attempts-- > 0)
+        {
+            EnemyPool selectedPool =
+                enemyPools[
+                    nextPoolIndex
+                ];
+
+
+            nextPoolIndex =
+                (
+                    nextPoolIndex + 1
+                )
+                %
+                enemyPools.Length;
+
+
+            if (selectedPool != null)
+            {
+                return selectedPool;
             }
         }
 

@@ -125,9 +125,9 @@ GameObject:
   - component: {fileID: 8405644734824077319}
   - component: {fileID: 6965491140227825810}
   - component: {fileID: 1959627964173734827}
-  - component: {fileID: 6415332924283693469}
+  - component: {fileID: 6386476756333407880}
   m_Layer: 0
-  m_Name: EnemyJoaquin
+  m_Name: EnemyJoaquin 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -175,7 +175,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyFollowTarget
   speed: 2
---- !u!114 &6415332924283693469
+--- !u!114 &6386476756333407880
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

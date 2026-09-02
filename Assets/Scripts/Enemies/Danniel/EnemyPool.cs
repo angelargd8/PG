@@ -1,7 +1,7 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.Pool;
 using Unity.Profiling;
-using System.Collections;
 
 public class EnemyPool :
     MonoBehaviour,
@@ -49,9 +49,17 @@ public class EnemyPool :
 
     [Header("Enemy Combat")]
 
+    [Tooltip(
+        "Solo es necesario si el prefab " +
+        "tiene EnemyShooter."
+    )]
     [SerializeField]
     private BulletPool enemyBulletPool;
 
+
+    // =========================
+    // TARGET
+    // =========================
 
     private Transform playerTarget;
 
@@ -71,46 +79,34 @@ public class EnemyPool :
 
     private void Awake()
     {
-        ResolveCombatReferences();
+        // Intentamos resolverlo ahora,
+        // pero no es obligatorio que
+        // ya exista durante Awake.
+        TryResolvePlayerTarget();
 
 
-        pool = new ObjectPool<GameObject>(
-            CreateEnemy,
-            OnGetEnemy,
-            OnReleaseEnemy,
-            OnDestroyEnemy,
-            collectionCheck: false,
-            defaultCapacity: defaultCapacity,
-            maxSize: maxSize
-        );
+        ValidateReferences();
+
+
+        pool =
+            new ObjectPool<GameObject>(
+                CreateEnemy,
+                OnGetEnemy,
+                OnReleaseEnemy,
+                OnDestroyEnemy,
+                collectionCheck: false,
+                defaultCapacity: defaultCapacity,
+                maxSize: maxSize
+            );
     }
 
 
     // =========================
-    // REFERENCES
+    // VALIDATION
     // =========================
 
-    private void ResolveCombatReferences()
+    private void ValidateReferences()
     {
-        PlayerTargetProvider provider =
-            PlayerTargetProvider.Instance;
-
-
-        if (provider != null)
-        {
-            playerTarget =
-                provider.EnemyTarget;
-        }
-        else
-        {
-            Debug.LogWarning(
-                "[EnemyPool] No se encontró " +
-                "PlayerTargetProvider.",
-                this
-            );
-        }
-
-
         if (enemyPrefab == null)
         {
             Debug.LogError(
@@ -132,11 +128,42 @@ public class EnemyPool :
         )
         {
             Debug.LogError(
-                "[EnemyPool] El prefab tiene EnemyShooter " +
-                "pero no se asignó Enemy Bullet Pool.",
+                "[EnemyPool] El prefab tiene " +
+                "EnemyShooter pero no se asignó " +
+                "Enemy Bullet Pool.",
                 this
             );
         }
+    }
+
+
+    // =========================
+    // PLAYER TARGET
+    // =========================
+
+    private bool TryResolvePlayerTarget()
+    {
+        if (playerTarget != null)
+        {
+            return true;
+        }
+
+
+        PlayerTargetProvider provider =
+            PlayerTargetProvider.Instance;
+
+
+        if (provider == null)
+        {
+            return false;
+        }
+
+
+        playerTarget =
+            provider.EnemyTarget;
+
+
+        return playerTarget != null;
     }
 
 
@@ -148,6 +175,17 @@ public class EnemyPool :
     {
         if (isPrewarmed)
         {
+            yield break;
+        }
+
+
+        if (pool == null)
+        {
+            Debug.LogError(
+                "[EnemyPool] El pool no está inicializado.",
+                this
+            );
+
             yield break;
         }
 
@@ -164,23 +202,48 @@ public class EnemyPool :
             new GameObject[amount];
 
 
-        for (int i = 0; i < amount; i++)
+        // =========================
+        // GET
+        // =========================
+
+        for (
+            int i = 0;
+            i < amount;
+            i++
+        )
         {
             enemies[i] =
                 pool.Get();
 
 
             // Cada 2 enemigos dejamos
-            // pasar un frame.
-            if ((i + 1) % 2 == 0)
+            // pasar un frame para reducir
+            // picos durante Loading.
+            if (
+                (i + 1) % 2 == 0
+            )
             {
                 yield return null;
             }
         }
 
 
-        for (int i = 0; i < amount; i++)
+        // =========================
+        // RELEASE
+        // =========================
+
+        for (
+            int i = 0;
+            i < amount;
+            i++
+        )
         {
+            if (enemies[i] == null)
+            {
+                continue;
+            }
+
+
             pool.Release(
                 enemies[i]
             );
@@ -206,12 +269,32 @@ public class EnemyPool :
     {
         using (CreateMarker.Auto())
         {
-            GameObject enemy =
-                Instantiate(enemyPrefab);
+            if (enemyPrefab == null)
+            {
+                Debug.LogError(
+                    "[EnemyPool] No se puede crear " +
+                    "un enemigo porque Enemy Prefab " +
+                    "es null.",
+                    this
+                );
 
+                return null;
+            }
+
+
+            GameObject enemy =
+                Instantiate(
+                    enemyPrefab
+                );
+
+
+            // =========================
+            // CONTROLLER
+            // =========================
 
             EnemyController enemyController =
-                enemy.GetComponent<EnemyController>();
+                enemy.GetComponent<
+                    EnemyController>();
 
 
             if (enemyController != null)
@@ -220,10 +303,157 @@ public class EnemyPool :
                     this
                 );
             }
+            else
+            {
+                Debug.LogWarning(
+                    "[EnemyPool] El prefab no tiene " +
+                    "EnemyController.",
+                    enemy
+                );
+            }
 
+
+            // No configuramos aquí:
+            //
+            // - EnemyMeleeAI
+            // - EnemyShooter
+            //
+            // porque durante el prewarm
+            // PlayerTargetProvider podría
+            // todavía no estar disponible.
+
+
+            enemy.SetActive(
+                false
+            );
+
+
+            return enemy;
+        }
+    }
+
+
+    // =========================
+    // ON GET
+    // =========================
+
+    private void OnGetEnemy(
+        GameObject enemy
+    )
+    {
+        /*
+         * No activamos aquí.
+         *
+         * GetEnemy configura primero:
+         *
+         * - Parent
+         * - Position
+         * - Rotation
+         * - Target
+         * - Combat
+         *
+         * y después activa.
+         */
+    }
+
+
+    // =========================
+    // GET ENEMY
+    // =========================
+
+    public GameObject GetEnemy(
+        Transform parent,
+        Vector3 position,
+        Quaternion rotation
+    )
+    {
+        using (GetMarker.Auto())
+        {
+            // =========================
+            // TARGET
+            // =========================
+
+            bool hasTarget =
+                TryResolvePlayerTarget();
+
+
+            if (!hasTarget)
+            {
+                Debug.LogError(
+                    "[EnemyPool] No se pudo resolver " +
+                    "PlayerTargetProvider o EnemyTarget.",
+                    this
+                );
+            }
+
+
+            // =========================
+            // GET
+            // =========================
+
+            GameObject enemy =
+                pool.Get();
+
+
+            if (enemy == null)
+            {
+                Debug.LogError(
+                    "[EnemyPool] El pool devolvió null.",
+                    this
+                );
+
+                return null;
+            }
+
+
+            Transform enemyTransform =
+                enemy.transform;
+
+
+            // =========================
+            // PARENT
+            // =========================
+
+            enemyTransform.SetParent(
+                parent,
+                false
+            );
+
+
+            // =========================
+            // POSITION
+            // =========================
+
+            enemyTransform.SetPositionAndRotation(
+                position,
+                rotation
+            );
+
+
+            // =========================
+            // MELEE AI
+            // =========================
+
+            EnemyMeleeAI meleeAI =
+                enemy.GetComponent<
+                    EnemyMeleeAI>();
+
+
+            if (meleeAI != null)
+            {
+                meleeAI.SetTarget(
+                    playerTarget
+                );
+            }
+
+
+            // =========================
+            // SHOOTER
+            // =========================
 
             EnemyShooter shooter =
-                enemy.GetComponent<EnemyShooter>();
+                enemy.GetComponent<
+                    EnemyShooter>();
 
 
             if (shooter != null)
@@ -235,23 +465,13 @@ public class EnemyPool :
             }
 
 
-            EnemyFollowTarget followTarget =
-                enemy.GetComponent<EnemyFollowTarget>();
+            // =========================
+            // ACTIVATE
+            // =========================
 
-
-            if (followTarget != null)
-            {
-                followTarget.SetTarget(
-                    playerTarget
-                );
-            }
-
-
-            // IMPORTANTE:
-            // El objeto permanece desactivado
-            // hasta que GetEnemy termine de
-            // posicionarlo.
-            enemy.SetActive(false);
+            enemy.SetActive(
+                true
+            );
 
 
             return enemy;
@@ -260,97 +480,22 @@ public class EnemyPool :
 
 
     // =========================
-    // GET
-    // =========================
-
-    private void OnGetEnemy(
-        GameObject enemy
-    )
-    {
-        /*
-         * No activamos aquí.
-         *
-         * GetEnemy configura primero:
-         * - Parent
-         * - Position
-         * - Rotation
-         *
-         * y después activa.
-         */
-    }
-
-
-    public GameObject GetEnemy(
-    Transform parent,
-    Vector3 position,
-    Quaternion rotation
-)
-    {
-        if (playerTarget == null)
-        {
-            Debug.LogError(
-                "[EnemyPool] Player Target es null.",
-                this
-            );
-        }
-        
-        using (GetMarker.Auto())
-        {
-            GameObject enemy =
-                pool.Get();
-
-
-            Transform enemyTransform =
-                enemy.transform;
-
-
-            enemyTransform.SetParent(
-                parent,
-                false
-            );
-
-
-            enemyTransform.SetPositionAndRotation(
-                position,
-                rotation
-            );
-
-
-            // =========================
-            // FOLLOW TARGET
-            // =========================
-
-            EnemyFollowTarget followTarget =
-                enemy.GetComponent<EnemyFollowTarget>();
-
-
-            if (followTarget != null)
-            {
-                followTarget.SetTarget(
-                    playerTarget
-                );
-            }
-
-
-            // Activamos después de configurar
-            // posición y referencias.
-            enemy.SetActive(true);
-
-
-            return enemy;
-        }
-    }
-
-
-    // =========================
-    // RELEASE
+    // ON RELEASE
     // =========================
 
     private void OnReleaseEnemy(
         GameObject enemy
     )
     {
-        enemy.SetActive(false);
+        if (enemy == null)
+        {
+            return;
+        }
+
+
+        enemy.SetActive(
+            false
+        );
 
 
         enemy.transform.SetParent(
@@ -359,6 +504,10 @@ public class EnemyPool :
         );
     }
 
+
+    // =========================
+    // RELEASE ENEMY
+    // =========================
 
     public void ReleaseEnemy(
         GameObject enemy
@@ -372,7 +521,9 @@ public class EnemyPool :
 
         using (ReleaseMarker.Auto())
         {
-            pool.Release(enemy);
+            pool.Release(
+                enemy
+            );
         }
     }
 
@@ -385,6 +536,14 @@ public class EnemyPool :
         GameObject enemy
     )
     {
-        Destroy(enemy);
+        if (enemy == null)
+        {
+            return;
+        }
+
+
+        Destroy(
+            enemy
+        );
     }
 }
