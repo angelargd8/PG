@@ -1,6 +1,7 @@
 using UnityEngine;
 
 [DisallowMultipleComponent]
+[RequireComponent(typeof(Rigidbody))]
 public sealed class EnemyMeleeAI : MonoBehaviour
 {
     // =========================
@@ -40,13 +41,28 @@ public sealed class EnemyMeleeAI : MonoBehaviour
 
 
     // =========================
-    // RUNTIME
+    // REFERENCES
     // =========================
+
+    private Rigidbody rb;
 
     private Transform target;
 
+
+    // =========================
+    // RUNTIME
+    // =========================
+
     private float attackTimer;
 
+    private bool shouldMove;
+
+    private Vector3 moveDirection;
+
+
+    // =========================
+    // ANIMATOR HASHES
+    // =========================
 
     private static readonly int IsMovingHash =
         Animator.StringToHash(
@@ -60,24 +76,24 @@ public sealed class EnemyMeleeAI : MonoBehaviour
 
 
     // =========================
-    // TARGET
-    // =========================
-
-    public void SetTarget(
-        Transform newTarget
-    )
-    {
-        target = newTarget;
-    }
-
-
-    // =========================
     // UNITY
     // =========================
+
+    private void Awake()
+    {
+        rb =
+            GetComponent<Rigidbody>();
+    }
+
 
     private void OnEnable()
     {
         attackTimer = 0f;
+
+        shouldMove = false;
+
+        moveDirection =
+            Vector3.zero;
     }
 
 
@@ -86,21 +102,72 @@ public sealed class EnemyMeleeAI : MonoBehaviour
         target = null;
 
         attackTimer = 0f;
+
+        shouldMove = false;
+
+        moveDirection =
+            Vector3.zero;
+
+
+        if (rb != null)
+        {
+            rb.linearVelocity =
+                Vector3.zero;
+
+            rb.angularVelocity =
+                Vector3.zero;
+        }
     }
 
 
     private void Update()
     {
+        UpdateAI();
+    }
+
+
+    private void FixedUpdate()
+    {
+        ApplyMovement();
+    }
+
+
+    // =========================
+    // TARGET
+    // =========================
+
+    public void SetTarget(
+        Transform newTarget
+    )
+    {
+        target =
+            newTarget;
+    }
+
+
+    // =========================
+    // AI
+    // =========================
+
+    private void UpdateAI()
+    {
         if (target == null)
         {
-            SetMovingAnimation(false);
+            shouldMove = false;
+
+            SetMovingAnimation(
+                false
+            );
 
             return;
         }
 
 
-        attackTimer -=
-            Time.deltaTime;
+        if (attackTimer > 0f)
+        {
+            attackTimer -=
+                Time.deltaTime;
+        }
 
 
         Vector3 direction =
@@ -108,9 +175,6 @@ public sealed class EnemyMeleeAI : MonoBehaviour
             transform.position;
 
 
-        // No queremos que el enemigo
-        // intente subir/bajar hacia
-        // la altura de la cámara.
         direction.y = 0f;
 
 
@@ -132,9 +196,31 @@ public sealed class EnemyMeleeAI : MonoBehaviour
             attackRangeSquared
         )
         {
-            StopAndAttack(
+            shouldMove = false;
+
+            moveDirection =
+                Vector3.zero;
+
+
+            SetMovingAnimation(
+                false
+            );
+
+
+            FaceTarget(
                 direction
             );
+
+
+            if (attackTimer <= 0f)
+            {
+                attackTimer =
+                    attackCooldown;
+
+
+                PerformAttack();
+            }
+
 
             return;
         }
@@ -144,27 +230,100 @@ public sealed class EnemyMeleeAI : MonoBehaviour
         // CHASE
         // =========================
 
-        ChaseTarget(
-            direction
-        );
-    }
-
-
-    // =========================
-    // CHASE
-    // =========================
-
-    private void ChaseTarget(
-        Vector3 direction
-    )
-    {
         if (
             direction.sqrMagnitude <=
             0.001f
         )
         {
-            SetMovingAnimation(false);
+            shouldMove = false;
 
+            moveDirection =
+                Vector3.zero;
+
+
+            SetMovingAnimation(
+                false
+            );
+
+            return;
+        }
+
+
+        moveDirection =
+            direction.normalized;
+
+
+        shouldMove = true;
+
+
+        SetMovingAnimation(
+            true
+        );
+    }
+
+
+    // =========================
+    // PHYSICS MOVEMENT
+    // =========================
+
+    private void ApplyMovement()
+    {
+        if (
+            rb == null ||
+            !shouldMove
+        )
+        {
+            return;
+        }
+
+
+        Vector3 movement =
+            moveDirection *
+            moveSpeed *
+            Time.fixedDeltaTime;
+
+
+        rb.MovePosition(
+            rb.position +
+            movement
+        );
+
+
+        Quaternion targetRotation =
+            Quaternion.LookRotation(
+                moveDirection
+            );
+
+
+        Quaternion newRotation =
+            Quaternion.Slerp(
+                rb.rotation,
+                targetRotation,
+                rotationSpeed *
+                Time.fixedDeltaTime
+            );
+
+
+        rb.MoveRotation(
+            newRotation
+        );
+    }
+
+
+    // =========================
+    // FACE TARGET
+    // =========================
+
+    private void FaceTarget(
+        Vector3 direction
+    )
+    {
+        if (
+            rb == null ||
+            direction.sqrMagnitude <=
+            0.001f
+        )
+        {
             return;
         }
 
@@ -172,30 +331,24 @@ public sealed class EnemyMeleeAI : MonoBehaviour
         direction.Normalize();
 
 
-        // Movimiento
-        transform.position +=
-            direction *
-            moveSpeed *
-            Time.deltaTime;
-
-
-        // Rotación hacia jugador
         Quaternion targetRotation =
             Quaternion.LookRotation(
                 direction
             );
 
 
-        transform.rotation =
+        Quaternion newRotation =
             Quaternion.Slerp(
-                transform.rotation,
+                rb.rotation,
                 targetRotation,
                 rotationSpeed *
                 Time.deltaTime
             );
 
 
-        SetMovingAnimation(true);
+        rb.MoveRotation(
+            newRotation
+        );
     }
 
 
@@ -203,74 +356,17 @@ public sealed class EnemyMeleeAI : MonoBehaviour
     // ATTACK
     // =========================
 
-    private void StopAndAttack(
-        Vector3 direction
-    )
+    private void PerformAttack()
     {
-        SetMovingAnimation(false);
-
-
-        // Aunque esté atacando,
-        // sigue mirando al jugador.
-        if (
-            direction.sqrMagnitude >
-            0.001f
-        )
-        {
-            direction.Normalize();
-
-
-            Quaternion targetRotation =
-                Quaternion.LookRotation(
-                    direction
-                );
-
-
-            transform.rotation =
-                Quaternion.Slerp(
-                    transform.rotation,
-                    targetRotation,
-                    rotationSpeed *
-                    Time.deltaTime
-                );
-        }
-
-
-        if (attackTimer > 0f)
+        if (animator == null)
         {
             return;
         }
 
 
-        attackTimer =
-            attackCooldown;
-
-
-        PerformAttack();
-    }
-
-
-    // =========================
-    // PERFORM ATTACK
-    // =========================
-
-    private void PerformAttack()
-    {
-        if (animator != null)
-        {
-            animator.SetTrigger(
-                AttackHash
-            );
-        }
-
-
-        // Más adelante aquí NO recomiendo
-        // aplicar directamente el daño.
-        //
-        // Lo ideal será que la animación
-        // llame un Animation Event justo
-        // cuando la guitarra/mano/arma
-        // golpee al jugador.
+        animator.SetTrigger(
+            AttackHash
+        );
     }
 
 
