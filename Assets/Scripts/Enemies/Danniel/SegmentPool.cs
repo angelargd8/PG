@@ -5,7 +5,7 @@ using System.Collections;
 using System.Collections.Generic;
 
 
-public class SegmentPool : MonoBehaviour, IExperiencePreloadable
+public class SegmentPool :  MonoBehaviour, IExperiencePreloadable, IExperienceRuntime
 {
     // =========================
     // PROFILER
@@ -99,6 +99,10 @@ public class SegmentPool : MonoBehaviour, IExperiencePreloadable
     private bool isInitialized;
 
     private bool initialFillComplete;
+
+    private bool isRunning;
+
+    private Coroutine initialFillRoutine;
 
 
     // Alterna:
@@ -221,10 +225,6 @@ public class SegmentPool : MonoBehaviour, IExperiencePreloadable
         activeSegmentCount = 1;
 
 
-        SpawnEnemies(
-            firstSegment
-        );
-
 
         // Después del NORMAL
         // debe venir ROTATED.
@@ -242,12 +242,6 @@ public class SegmentPool : MonoBehaviour, IExperiencePreloadable
             this
         );
 
-
-        // El resto se carga sin bloquear
-        // el Preload principal.
-        StartCoroutine(
-            InitialFillRoutine()
-        );
 
 
         yield return null;
@@ -309,6 +303,8 @@ public class SegmentPool : MonoBehaviour, IExperiencePreloadable
         oldestIndex = 0;
 
         initialFillComplete = true;
+
+        initialFillRoutine = null;
 
 
         Debug.Log(
@@ -410,7 +406,10 @@ public class SegmentPool : MonoBehaviour, IExperiencePreloadable
 
     private void Update()
     {
-        if (!isInitialized)
+        if (
+        !isInitialized ||
+        !isRunning
+    )
         {
             return;
         }
@@ -910,4 +909,94 @@ public class SegmentPool : MonoBehaviour, IExperiencePreloadable
                 );
         }
     }
+
+    // =========================
+    // EXPERIENCE START
+    // =========================
+
+    public void BeginExperience()
+    {
+        if (!isInitialized)
+        {
+            Debug.LogError(
+                "[SegmentPool] No está preparado.",
+                this
+            );
+
+            return;
+        }
+
+
+        if (isRunning)
+        {
+            return;
+        }
+
+
+        isRunning = true;
+
+
+        // =========================
+        // FIRST ENEMIES
+        // =========================
+
+        if (
+            activeSegmentCount > 0 &&
+            segments[0] != null
+        )
+        {
+            SpawnEnemies(
+                segments[0]
+            );
+        }
+
+
+        // =========================
+        // INITIAL FILL
+        // =========================
+
+        initialFillRoutine =
+            StartCoroutine(
+                InitialFillRoutine()
+            );
+
+
+        Debug.Log(
+            "[SegmentPool] Gameplay iniciado.",
+            this
+        );
+    }
+
+
+    // =========================
+    // EXPERIENCE END
+    // =========================
+
+    public void EndExperience()
+    {
+        if (!isRunning)
+        {
+            return;
+        }
+
+
+        isRunning = false;
+
+
+        if (initialFillRoutine != null)
+        {
+            StopCoroutine(
+                initialFillRoutine
+            );
+
+            initialFillRoutine = null;
+        }
+
+
+        Debug.Log(
+            "[SegmentPool] Gameplay detenido.",
+            this
+        );
+    }
+
 }
