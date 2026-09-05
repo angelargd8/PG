@@ -25,14 +25,12 @@ public sealed class ExperienceLaunchButton : MonoBehaviour
         "siguientes escenas. Si está desactivado " +
         "solo reproduce la escena seleccionada."
     )]
-    [SerializeField]
-    private bool playFullSequence = true;
+    [SerializeField] private bool playFullSequence = true;
 
 
-    [Header("Development")]
+    [Header("Scene Selection")]
 
-    [SerializeField]
-    private ExperienceSceneSelector experienceSceneSelector;
+    [SerializeField] private ExperienceSceneSelector experienceSceneSelector;
 
 
     [Header("Event")]
@@ -72,8 +70,6 @@ public sealed class ExperienceLaunchButton : MonoBehaviour
             playFullSequence;
 
 
-#if UNITY_EDITOR || DEVELOPMENT_BUILD
-
         if (experienceSceneSelector != null)
         {
             requestedStartScene =
@@ -82,8 +78,6 @@ public sealed class ExperienceLaunchButton : MonoBehaviour
             requestedFullSequence =
                 experienceSceneSelector.PlayFullSequence;
         }
-
-#endif
 
 
         int startIndex = 0;
