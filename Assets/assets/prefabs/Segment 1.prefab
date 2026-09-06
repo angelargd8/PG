@@ -25,7 +25,7 @@ Transform:
   m_GameObject: {fileID: 1316007655692007508}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -7.22, y: 0.99, z: 12.94}
+  m_LocalPosition: {x: -6.02, y: 0.89, z: 12.6}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -56,7 +56,7 @@ Transform:
   m_GameObject: {fileID: 1357756341309142379}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.63, y: 0.99, z: 9.04}
+  m_LocalPosition: {x: -0.59, y: 0.99, z: 9.77}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -388,7 +388,7 @@ Transform:
   m_GameObject: {fileID: 4255258475537241368}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -6.61, y: 0.99, z: -0.94}
+  m_LocalPosition: {x: -6.01, y: 0.99, z: -0.94}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -908,7 +908,7 @@ Transform:
   m_GameObject: {fileID: 8477225009890160509}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -6.86, y: 2.418, z: 32.58}
+  m_LocalPosition: {x: -6.56, y: 2.09, z: 32.58}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -939,7 +939,7 @@ Transform:
   m_GameObject: {fileID: 8969356127059456521}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 1.541, y: 1.089, z: 31.235}
+  m_LocalPosition: {x: 1, y: 1.089, z: 31.235}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -970,7 +970,7 @@ Transform:
   m_GameObject: {fileID: 9148881934240809176}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 1.002, y: 1.31, z: 21.87}
+  m_LocalPosition: {x: 0.55, y: 1.31, z: 21.87}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1059,6 +1059,10 @@ PrefabInstance:
     - target: {fileID: 791092137723241627, guid: c1a44be93d9965d46bb9b43644bde05a, type: 3}
       propertyPath: m_LocalPosition.z
       value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 795569653670466132, guid: c1a44be93d9965d46bb9b43644bde05a, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.435
       objectReference: {fileID: 0}
     - target: {fileID: 927001807957564574, guid: c1a44be93d9965d46bb9b43644bde05a, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1692,10 +1696,39 @@ PrefabInstance:
     - {fileID: 3728098826962585253, guid: c1a44be93d9965d46bb9b43644bde05a, type: 3}
     - {fileID: 7859896829588969732, guid: c1a44be93d9965d46bb9b43644bde05a, type: 3}
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 536766410133990895, guid: c1a44be93d9965d46bb9b43644bde05a, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1780347134656586324}
   m_SourcePrefab: {fileID: 100100000, guid: c1a44be93d9965d46bb9b43644bde05a, type: 3}
 --- !u!4 &1793403595653703732 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 339783847376015160, guid: c1a44be93d9965d46bb9b43644bde05a, type: 3}
   m_PrefabInstance: {fileID: 2041349484442265356}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1956443221923875555 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 536766410133990895, guid: c1a44be93d9965d46bb9b43644bde05a, type: 3}
+  m_PrefabInstance: {fileID: 2041349484442265356}
+  m_PrefabAsset: {fileID: 0}
+--- !u!65 &1780347134656586324
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1956443221923875555}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.39, y: 3.6, z: 2.98}
+  m_Center: {x: 0, y: 0, z: 0}
