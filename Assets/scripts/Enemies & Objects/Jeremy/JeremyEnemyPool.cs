@@ -76,7 +76,8 @@ public sealed class JeremyEnemyPool :
         Vector3 position,
         Quaternion rotation,
         Vector3 targetPosition,
-        JeremyCutDirection expectedDirection
+        JeremyCutDirection expectedDirection,
+        JeremyHand expectedHand
     ){
         JeremyEnemy enemy = _pool.Get();
 
@@ -91,7 +92,12 @@ public sealed class JeremyEnemyPool :
         }
 
         enemy.transform.SetPositionAndRotation(position, rotation);
-        enemy.Initialize(this, targetPosition, expectedDirection);
+        enemy.Initialize(
+            this, 
+            targetPosition, 
+            expectedDirection, 
+            expectedHand
+        );
         enemy.gameObject.SetActive(true);
 
         return enemy;

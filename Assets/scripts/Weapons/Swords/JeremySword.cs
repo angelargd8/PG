@@ -9,6 +9,7 @@ public sealed class JeremySword : MonoBehaviour
 
     [Header("Cut Detection")]
     [SerializeField] private float _minimumCutSpeed = 0.5f;
+    [SerializeField] private JeremyHand _hand;
 
     private Vector3 _previousPosition;
     private Vector3 _velocity;
@@ -48,7 +49,7 @@ public sealed class JeremySword : MonoBehaviour
 
         JeremyCutDirection direction = GetCutDirection(_velocity);
 
-        _hitEvaluator.EvaluateHit(enemy, direction);
+        _hitEvaluator.EvaluateHit(enemy, direction, _hand);
     }
 
 

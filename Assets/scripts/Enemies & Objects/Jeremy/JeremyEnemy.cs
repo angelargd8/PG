@@ -3,6 +3,10 @@ using UnityEngine;
 [DisallowMultipleComponent]
 public sealed class JeremyEnemy : MonoBehaviour
 {
+    [Header("References")]
+    [SerializeField] private JeremyEnemyCue _cue;
+
+
     [Header("Movement")]
     [SerializeField] private float _movementSpeed = 2f;
     [SerializeField] private float _arrivalDistance = 0.05f;
@@ -11,9 +15,11 @@ public sealed class JeremyEnemy : MonoBehaviour
     private JeremyEnemyPool _pool;
     private Vector3 _targetPosition;
     private bool _isMoving;
+    private bool _isResolved;
 
 
     public JeremyCutDirection ExpectedDirection { get; private set; }
+    public JeremyHand ExpectedHand { get; private set; }
 
 
     private void Update()
@@ -27,11 +33,22 @@ public sealed class JeremyEnemy : MonoBehaviour
     }
 
 
-    public void Initialize(JeremyEnemyPool pool, Vector3 targetPosition, JeremyCutDirection expectedDirection)
-    {
+    public void Initialize(
+        JeremyEnemyPool pool, 
+        Vector3 targetPosition, 
+        JeremyCutDirection expectedDirection,
+        JeremyHand expectedHand
+    ){
+        if (_cue != null)
+        {
+            _cue.Configure(ExpectedDirection, ExpectedHand);
+        }
+
         _pool = pool;
         _targetPosition = targetPosition;
         ExpectedDirection = expectedDirection;
+        ExpectedHand = expectedHand;
+        _isResolved = false;
         _isMoving = true;
     }
 
@@ -74,6 +91,29 @@ public sealed class JeremyEnemy : MonoBehaviour
     public void ResetEnemy()
     {
         _isMoving = false;
+        _isResolved = false;
         _pool = null;
+    }
+
+    public bool TryResolveHit()
+    {
+        if (_isResolved)
+        {
+            return false;
+        }
+
+        _isResolved = true;
+        _isMoving = false;
+
+        if (_pool != null)
+        {
+            _pool.ReleaseEnemy(this);
+        }
+        else
+        {
+            gameObject.SetActive(false);
+        }
+
+        return true;
     }
 }
