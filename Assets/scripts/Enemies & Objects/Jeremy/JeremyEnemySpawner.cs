@@ -35,10 +35,13 @@ public sealed class JeremyEnemySpawner : MonoBehaviour
             return;
         }
 
+        JeremyCutDirection direction = (JeremyCutDirection)Random.Range(0, 4);
+
         _enemyPool.GetEnemy(
             spawnPoint.position,
             spawnPoint.rotation,
-            _enemyTarget.position
+            _enemyTarget.position,
+            direction
         );
     }
 }

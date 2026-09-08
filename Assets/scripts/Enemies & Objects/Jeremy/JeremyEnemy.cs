@@ -13,6 +13,9 @@ public sealed class JeremyEnemy : MonoBehaviour
     private bool _isMoving;
 
 
+    public JeremyCutDirection ExpectedDirection { get; private set; }
+
+
     private void Update()
     {
         if (!_isMoving)
@@ -24,10 +27,11 @@ public sealed class JeremyEnemy : MonoBehaviour
     }
 
 
-    public void Initialize(JeremyEnemyPool pool, Vector3 targetPosition)
+    public void Initialize(JeremyEnemyPool pool, Vector3 targetPosition, JeremyCutDirection expectedDirection)
     {
         _pool = pool;
         _targetPosition = targetPosition;
+        ExpectedDirection = expectedDirection;
         _isMoving = true;
     }
 
