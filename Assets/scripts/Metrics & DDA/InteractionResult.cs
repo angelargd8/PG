@@ -4,7 +4,6 @@ using UnityEngine;
 public readonly struct InteractionResult
 {
     public string MinigameId { get; }
-    public string TargetId { get; }              // ¿Realmente lo voy a necesitar?
 
     public InteractionType InteractionType { get; }
     public InteractionOutcome Outcome { get; }
@@ -25,7 +24,6 @@ public readonly struct InteractionResult
 
     public InteractionResult(
         string minigameId,
-        string targetId,
         InteractionType interactionType,
         InteractionOutcome outcome,
         DifficultyLevel difficulty,
@@ -37,7 +35,6 @@ public readonly struct InteractionResult
         bool? usedCorrectHand = null)
     {
         MinigameId = minigameId;
-        TargetId = targetId;
 
         InteractionType = interactionType;
         Outcome = outcome;

@@ -8,6 +8,7 @@ public sealed class MetricsSystem : MonoBehaviour
 
     [Header("Events")]
     [SerializeField] private BoolEventChannelSO _gameplayPauseChanged;
+    [SerializeField] private InteractionResultEventChannelSO _interactionRegistered;
 
     [Header("Logging")]
     [SerializeField] private MetricsLogger _metricsLogger;
@@ -64,6 +65,11 @@ public sealed class MetricsSystem : MonoBehaviour
         {
             _gameplayPauseChanged.Raised += HandlePauseChanged;
         }
+
+        if (_interactionRegistered != null)
+        {
+            _interactionRegistered.Raised += RegisterInteraction;
+        }
     }
 
 
@@ -72,6 +78,11 @@ public sealed class MetricsSystem : MonoBehaviour
         if (_gameplayPauseChanged != null)
         {
             _gameplayPauseChanged.Raised -= HandlePauseChanged;
+        }
+
+        if (_interactionRegistered != null)
+        {
+            _interactionRegistered.Raised -= RegisterInteraction;
         }
     }
 

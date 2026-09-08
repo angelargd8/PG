@@ -1763,6 +1763,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2fd5f7e42ec039848926836fea9b05f7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::JeremyHitEvaluator
+  _interactionRegistered: {fileID: 11400000, guid: 188abd6f30130bb42b4877604a6ce24f, type: 2}
+  _difficulty: 1
 --- !u!4 &1885393297
 Transform:
   m_ObjectHideFlags: 0
