@@ -69,6 +69,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::JeremyEnemy
   _cue: {fileID: 6582081644786170258}
+  _interactionRegistered: {fileID: 11400000, guid: 188abd6f30130bb42b4877604a6ce24f, type: 2}
   _movementSpeed: 2
   _arrivalDistance: 0.05
 --- !u!1 &4075759923519981712

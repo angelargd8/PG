@@ -6,9 +6,6 @@ public sealed class JeremyHitEvaluator : MonoBehaviour
     [Header("Events")]
     [SerializeField] private InteractionResultEventChannelSO _interactionRegistered;
 
-    [Header("Temporary")]
-    [SerializeField] private DifficultyLevel _difficulty = DifficultyLevel.Normal;
-
 
     public void EvaluateHit(JeremyEnemy enemy, JeremyCutDirection actualDirection, JeremyHand actualHand)
     {
@@ -41,7 +38,7 @@ public sealed class JeremyHitEvaluator : MonoBehaviour
             minigameId: "Jeremy",
             interactionType: InteractionType.SwordCut,
             outcome: outcome,
-            difficulty: _difficulty,
+            difficulty: enemy.Difficulty,
             expectedTime: 0.0,
             directionAccuracy: correctDirection ? 1f : 0f,
             usedCorrectHand: correctHand

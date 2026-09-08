@@ -7,6 +7,10 @@ public sealed class JeremyEnemy : MonoBehaviour
     [SerializeField] private JeremyEnemyCue _cue;
 
 
+    [Header("Events")]
+    [SerializeField] private InteractionResultEventChannelSO _interactionRegistered;
+
+
     [Header("Movement")]
     [SerializeField] private float _movementSpeed = 2f;
     [SerializeField] private float _arrivalDistance = 0.05f;
@@ -20,6 +24,7 @@ public sealed class JeremyEnemy : MonoBehaviour
 
     public JeremyCutDirection ExpectedDirection { get; private set; }
     public JeremyHand ExpectedHand { get; private set; }
+    public DifficultyLevel Difficulty { get; private set; }
 
 
     private void Update()
@@ -37,12 +42,14 @@ public sealed class JeremyEnemy : MonoBehaviour
         JeremyEnemyPool pool, 
         Vector3 targetPosition, 
         JeremyCutDirection expectedDirection,
-        JeremyHand expectedHand
+        JeremyHand expectedHand,
+        DifficultyLevel difficulty
     ){
         _pool = pool;
         _targetPosition = targetPosition;
         ExpectedDirection = expectedDirection;
         ExpectedHand = expectedHand;
+        Difficulty = difficulty;
 
         if (_cue != null)
         {
@@ -69,7 +76,26 @@ public sealed class JeremyEnemy : MonoBehaviour
 
     private void ReachTarget()
     {
+        if (_isResolved)
+        {
+            return;
+        }
+
+        _isResolved = true;
         _isMoving = false;
+
+        InteractionResult result = new InteractionResult(
+            minigameId: "Jeremy",
+            interactionType: InteractionType.SwordCut,
+            outcome: InteractionOutcome.Missed,
+            difficulty: Difficulty,
+            expectedTime: 0.0
+        );
+
+        if (_interactionRegistered != null)
+        {
+            _interactionRegistered.RaiseEvent(result);
+        }
 
         if (_pool != null)
         {

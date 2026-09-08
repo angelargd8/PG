@@ -77,27 +77,27 @@ public sealed class JeremyEnemyPool :
         Quaternion rotation,
         Vector3 targetPosition,
         JeremyCutDirection expectedDirection,
-        JeremyHand expectedHand
+        JeremyHand expectedHand,
+        DifficultyLevel difficulty
     ){
         JeremyEnemy enemy = _pool.Get();
 
         if (enemy == null)
         {
-            Debug.LogError(
-                "[JeremyEnemyPool] El pool devolvió null.",
-                this
-            );
-
+            Debug.LogError("[JeremyEnemyPool] El pool devolvió null.", this);
             return null;
         }
 
         enemy.transform.SetPositionAndRotation(position, rotation);
+
         enemy.Initialize(
             this, 
             targetPosition, 
             expectedDirection, 
-            expectedHand
+            expectedHand,
+            difficulty
         );
+
         enemy.gameObject.SetActive(true);
 
         return enemy;

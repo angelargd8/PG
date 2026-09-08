@@ -8,6 +8,10 @@ public sealed class JeremyEnemySpawner : MonoBehaviour
     [SerializeField] private Transform _enemyTarget;
 
 
+    [Header("Temporary")]
+    [SerializeField] private DifficultyLevel _difficulty = DifficultyLevel.Normal; // Esto lo voy a quitar cuando haga el sistema de DDA
+
+
     public void SpawnAt(Transform spawnPoint)
     {
         if (spawnPoint == null)
@@ -43,7 +47,8 @@ public sealed class JeremyEnemySpawner : MonoBehaviour
             spawnPoint.rotation,
             _enemyTarget.position,
             direction,
-            hand
+            hand,
+            _difficulty
         );
     }
 }
