@@ -26,9 +26,9 @@ public sealed class JeremyEnemyCue : MonoBehaviour
         float angle = direction switch
         {
             JeremyCutDirection.Up => 0f,
-            JeremyCutDirection.Right => -90f,
+            JeremyCutDirection.Right => 90f,
             JeremyCutDirection.Down => 180f,
-            JeremyCutDirection.Left => 90f,
+            JeremyCutDirection.Left => -90f,
             _ => 0f
         };
 

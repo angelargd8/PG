@@ -39,15 +39,16 @@ public sealed class JeremyEnemy : MonoBehaviour
         JeremyCutDirection expectedDirection,
         JeremyHand expectedHand
     ){
-        if (_cue != null)
-        {
-            _cue.Configure(ExpectedDirection, ExpectedHand);
-        }
-
         _pool = pool;
         _targetPosition = targetPosition;
         ExpectedDirection = expectedDirection;
         ExpectedHand = expectedHand;
+
+        if (_cue != null)
+        {
+            _cue.Configure(expectedDirection, expectedHand);
+        }
+
         _isResolved = false;
         _isMoving = true;
     }
@@ -55,16 +56,9 @@ public sealed class JeremyEnemy : MonoBehaviour
 
     private void MoveTowardsTarget()
     {
-        transform.position = Vector3.MoveTowards(
-            transform.position,
-            _targetPosition,
-            _movementSpeed * Time.deltaTime
-        );
+        transform.position = Vector3.MoveTowards(transform.position, _targetPosition, _movementSpeed * Time.deltaTime);
 
-        float distanceToTarget = Vector3.Distance(
-            transform.position,
-            _targetPosition
-        );
+        float distanceToTarget = Vector3.Distance(transform.position, _targetPosition);
 
         if (distanceToTarget <= _arrivalDistance)
         {
