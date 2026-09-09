@@ -78,7 +78,10 @@ public sealed class JeremyEnemyPool :
         Vector3 targetPosition,
         JeremyCutDirection expectedDirection,
         JeremyHand expectedHand,
-        DifficultyLevel difficulty
+        DifficultyLevel difficulty,
+        float movementSpeed,
+        float idealCutDistance,
+        double expectedHitTime
     ){
         JeremyEnemy enemy = _pool.Get();
 
@@ -95,7 +98,10 @@ public sealed class JeremyEnemyPool :
             targetPosition, 
             expectedDirection, 
             expectedHand,
-            difficulty
+            difficulty,
+            movementSpeed,
+            idealCutDistance,
+            expectedHitTime
         );
 
         enemy.gameObject.SetActive(true);

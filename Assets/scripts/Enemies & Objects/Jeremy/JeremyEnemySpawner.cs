@@ -8,11 +8,21 @@ public sealed class JeremyEnemySpawner : MonoBehaviour
     [SerializeField] private Transform _enemyTarget;
 
 
+    [Header("Movement")]
+    [SerializeField] private float _movementSpeed = 2f;
+    [SerializeField] private float _idealCutDistance = 0.5f;
+
+
     [Header("Temporary")]
     [SerializeField] private DifficultyLevel _difficulty = DifficultyLevel.Normal; // Esto lo voy a quitar cuando haga el sistema de DDA
 
 
-    public void SpawnAt(Transform spawnPoint)
+    public Vector3 TargetPosition => _enemyTarget.position;
+    public float MovementSpeed => _movementSpeed;
+    public float IdealCutDistance => _idealCutDistance;
+
+
+    public void SpawnAt(Transform spawnPoint, double expectedHitTime)
     {
         if (spawnPoint == null)
         {
@@ -48,7 +58,10 @@ public sealed class JeremyEnemySpawner : MonoBehaviour
             _enemyTarget.position,
             direction,
             hand,
-            _difficulty
+            _difficulty,
+            _movementSpeed,
+            _idealCutDistance,
+            expectedHitTime
         );
     }
 }

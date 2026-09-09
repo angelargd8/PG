@@ -12,10 +12,11 @@ public sealed class JeremyEnemy : MonoBehaviour
 
 
     [Header("Movement")]
-    [SerializeField] private float _movementSpeed = 2f;
     [SerializeField] private float _arrivalDistance = 0.05f;
 
 
+    private float _movementSpeed;
+    private float _idealCutDistance;
     private JeremyEnemyPool _pool;
     private Vector3 _targetPosition;
     private bool _isMoving;
@@ -25,6 +26,9 @@ public sealed class JeremyEnemy : MonoBehaviour
     public JeremyCutDirection ExpectedDirection { get; private set; }
     public JeremyHand ExpectedHand { get; private set; }
     public DifficultyLevel Difficulty { get; private set; }
+    public double ExpectedHitTime { get; private set; }
+    public float MovementSpeed => _movementSpeed;
+    public float IdealCutDistance => _idealCutDistance;
 
 
     private void Update()
@@ -43,14 +47,20 @@ public sealed class JeremyEnemy : MonoBehaviour
         Vector3 targetPosition, 
         JeremyCutDirection expectedDirection,
         JeremyHand expectedHand,
-        DifficultyLevel difficulty
+        DifficultyLevel difficulty,
+        float movementSpeed,
+        float idealCutDistance,
+        double expectedHitTime
     ){
         _pool = pool;
         _targetPosition = targetPosition;
         ExpectedDirection = expectedDirection;
         ExpectedHand = expectedHand;
         Difficulty = difficulty;
-
+        _movementSpeed = movementSpeed;
+        _idealCutDistance = idealCutDistance;
+        ExpectedHitTime = expectedHitTime;
+        
         if (_cue != null)
         {
             _cue.Configure(expectedDirection, expectedHand);
