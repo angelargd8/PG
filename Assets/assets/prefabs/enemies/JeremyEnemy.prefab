@@ -70,7 +70,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::JeremyEnemy
   _cue: {fileID: 6582081644786170258}
   _interactionRegistered: {fileID: 11400000, guid: 188abd6f30130bb42b4877604a6ce24f, type: 2}
-  _movementSpeed: 2
   _arrivalDistance: 0.05
 --- !u!1 &4075759923519981712
 GameObject:
@@ -281,9 +280,17 @@ PrefabInstance:
       value: model
       objectReference: {fileID: 0}
     - target: {fileID: 5866666021909216657, guid: 5332fc9f4d7d2f444a97fe9b87cadb28, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5866666021909216657, guid: 5332fc9f4d7d2f444a97fe9b87cadb28, type: 3}
       propertyPath: m_Controller
       value: 
       objectReference: {fileID: 9100000, guid: 088a6f2d883de88468016b6ce7fabd79, type: 2}
+    - target: {fileID: 5866666021909216657, guid: 5332fc9f4d7d2f444a97fe9b87cadb28, type: 3}
+      propertyPath: m_ApplyRootMotion
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
