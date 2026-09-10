@@ -7,9 +7,21 @@ public sealed class JeremyHitEvaluator : MonoBehaviour
     [SerializeField] private InteractionResultEventChannelSO _interactionRegistered;
 
 
-    [Header("References")]
-    [SerializeField] private JeremyBeatClock _beatClock;
+    private ExperienceMusicClock _musicClock;
 
+
+    private void Awake()
+    {
+        _musicClock = FindFirstObjectByType<ExperienceMusicClock>();
+
+        if (_musicClock == null)
+        {
+            Debug.LogError(
+                "[JeremyHitEvaluator] No se encontró ExperienceMusicClock.",
+                this
+            );
+        }
+    }
 
     public void EvaluateHit(JeremyEnemy enemy, JeremyCutDirection actualDirection, JeremyHand actualHand)
     {
@@ -29,7 +41,7 @@ public sealed class JeremyHitEvaluator : MonoBehaviour
 
         bool correctHit = correctDirection && correctHand;
 
-        double actualHitTime = _beatClock.SongTime;
+        double actualHitTime = _musicClock.SongTime;
 
         if (!enemy.TryResolveHit())
         {
@@ -69,8 +81,8 @@ public sealed class JeremyHitEvaluator : MonoBehaviour
         Debug.Log(
             $"[JeremyHitEvaluator] Hit | " +
             $"Expected: {enemy.ExpectedHitTime:F3} | " +
-            $"Actual: {_beatClock.SongTime:F3} | " +
-            $"Offset: {_beatClock.SongTime - enemy.ExpectedHitTime:F3}",
+            $"Actual: {actualHitTime:F3} | " +
+            $"Offset: {actualHitTime - enemy.ExpectedHitTime:F3}",
             this
         );
     }

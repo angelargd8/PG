@@ -32,8 +32,8 @@ public sealed class JeremyEnemy : MonoBehaviour
 
 
     // Variables para pruebas
-    private bool _hasCrossedIdealDistance;
-    private JeremyBeatClock _beatClock;
+    // private bool _hasCrossedIdealDistance;
+    // private ExperienceMusicClock _musicClock;
 
 
     private void Update()
@@ -66,6 +66,16 @@ public sealed class JeremyEnemy : MonoBehaviour
         _idealCutDistance = idealCutDistance;
         ExpectedHitTime = expectedHitTime;
 
+        // _musicClock = FindFirstObjectByType<ExperienceMusicClock>();
+
+        // if (_musicClock == null)
+        // {
+        //     Debug.LogError(
+        //         "[JeremyEnemy] No se encontró ExperienceMusicClock.",
+        //         this
+        //     );
+        // }
+
         if (_cue != null)
         {
             _cue.Configure(expectedDirection, expectedHand);
@@ -74,12 +84,7 @@ public sealed class JeremyEnemy : MonoBehaviour
         _isResolved = false;
         _isMoving = true;
 
-        _hasCrossedIdealDistance = false;
-
-        if (_beatClock == null)
-        {
-            _beatClock = FindFirstObjectByType<JeremyBeatClock>();
-        }
+        // _hasCrossedIdealDistance = false;
     }
 
 
@@ -89,24 +94,24 @@ public sealed class JeremyEnemy : MonoBehaviour
 
         float distanceToTarget = Vector3.Distance(transform.position, _targetPosition);
 
-        if (!_hasCrossedIdealDistance && distanceToTarget <= _idealCutDistance)
-        {
-            _hasCrossedIdealDistance = true;
+        // if (!_hasCrossedIdealDistance && distanceToTarget <= _idealCutDistance)
+        // {
+        //     _hasCrossedIdealDistance = true;
 
-            if (_beatClock != null)
-            {
-                double actualCrossingTime = _beatClock.SongTime;
-                double offset = actualCrossingTime - ExpectedHitTime;
+        //     if (_musicClock != null)
+        //     {
+        //         double actualCrossingTime = _musicClock.SongTime;
+        //         double offset = actualCrossingTime - ExpectedHitTime;
 
-                // Debug.Log(
-                //     $"[JeremyEnemy] Ideal crossing | " +
-                //     $"Expected: {ExpectedHitTime:F3} | " +
-                //     $"Actual: {actualCrossingTime:F3} | " +
-                //     $"Offset: {offset:F3}",
-                //     this
-                // );
-            }
-        }
+        //         Debug.Log(
+        //             $"[JeremyEnemy] Ideal crossing | " +
+        //             $"Expected: {ExpectedHitTime:F3} | " +
+        //             $"Actual: {actualCrossingTime:F3} | " +
+        //             $"Offset: {offset:F3}",
+        //             this
+        //         );
+        //     }
+        // }
 
         if (distanceToTarget <= _arrivalDistance)
         {
@@ -154,7 +159,7 @@ public sealed class JeremyEnemy : MonoBehaviour
         _isMoving = false;
         _isResolved = false;
         _pool = null;
-        _hasCrossedIdealDistance = false;
+        // _hasCrossedIdealDistance = false;
     }
 
     public bool TryResolveHit()

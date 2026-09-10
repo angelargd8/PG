@@ -19,19 +19,21 @@ public sealed class JeremySpawnDirector :
     [SerializeField] private JeremyEnemySpawner _enemySpawner;
     [SerializeField] private Transform[] _spawnPoints;
 
+
     [Header("Beat Map")]
     [SerializeField] private BeatMapSO _beatMap;
-    [SerializeField] private JeremyBeatClock _beatClock;
+
 
     [Header("Scheduling")]
     [SerializeField] private int _lookAheadBeats = 8;
+
 
     [Header("Temporary Difficulty")]
     [SerializeField] private int _spawnEveryNBeats = 2;
 
 
     private readonly List<ScheduledSpawn> _scheduledSpawns = new List<ScheduledSpawn>();
-
+    private ExperienceMusicClock _musicClock;
     private bool _isRunning;
     private int _nextBeatIndex;
 
@@ -45,6 +47,18 @@ public sealed class JeremySpawnDirector :
 
         if (!ValidateReferences())
         {
+            return;
+        }
+
+        _musicClock = FindFirstObjectByType<ExperienceMusicClock>();
+
+        if (_musicClock == null)
+        {
+            Debug.LogError(
+                "[JeremySpawnDirector] No se encontró ExperienceMusicClock.",
+                this
+            );
+
             return;
         }
 
@@ -128,7 +142,7 @@ public sealed class JeremySpawnDirector :
 
     private void ProcessScheduledSpawns()
     {
-        double songTime = _beatClock.SongTime;
+        double songTime = _musicClock.SongTime;
 
         while (
             _scheduledSpawns.Count > 0 &&
@@ -279,12 +293,6 @@ public sealed class JeremySpawnDirector :
         if (_enemySpawner.MovementSpeed <= 0f)
         {
             Debug.LogError("[JeremySpawnDirector] Movement Speed debe ser mayor que 0.", this);
-            return false;
-        }
-
-        if (_beatClock == null)
-        {
-            Debug.LogError("[JeremySpawnDirector] No se asignó JeremyBeatClock.", this);
             return false;
         }
 
