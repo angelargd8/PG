@@ -7,6 +7,10 @@ public sealed class JeremyHitEvaluator : MonoBehaviour
     [SerializeField] private InteractionResultEventChannelSO _interactionRegistered;
 
 
+    [Header("References")]
+    [SerializeField] private JeremyBeatClock _beatClock;
+
+
     public void EvaluateHit(JeremyEnemy enemy, JeremyCutDirection actualDirection, JeremyHand actualHand)
     {
         if (enemy == null)
@@ -25,6 +29,8 @@ public sealed class JeremyHitEvaluator : MonoBehaviour
 
         bool correctHit = correctDirection && correctHand;
 
+        double actualHitTime = _beatClock.SongTime;
+
         if (!enemy.TryResolveHit())
         {
             return;
@@ -39,7 +45,9 @@ public sealed class JeremyHitEvaluator : MonoBehaviour
             interactionType: InteractionType.SwordCut,
             outcome: outcome,
             difficulty: enemy.Difficulty,
-            expectedTime: 0.0,
+            expectedTime: enemy.ExpectedHitTime,
+            actualTime: actualHitTime,
+            // reactionTime: actualHitTime - enemy.ExpectedHitTime,
             directionAccuracy: correctDirection ? 1f : 0f,
             usedCorrectHand: correctHand
         );
@@ -49,13 +57,21 @@ public sealed class JeremyHitEvaluator : MonoBehaviour
             _interactionRegistered.RaiseEvent(result);
         }
 
+        // Debug.Log(
+        //     $"Jeremy Hit | Expected: {expectedHand} {expectedDirection} | " +
+        //     $"Actual: {actualHand} {actualDirection} | " +
+        //     $"Correct Hand: {correctHand} | " +
+        //     $"Correct Direction: {correctDirection} | " +
+        //     $"Outcome: {outcome}",
+        //     enemy
+        // );
+
         Debug.Log(
-            $"Jeremy Hit | Expected: {expectedHand} {expectedDirection} | " +
-            $"Actual: {actualHand} {actualDirection} | " +
-            $"Correct Hand: {correctHand} | " +
-            $"Correct Direction: {correctDirection} | " +
-            $"Outcome: {outcome}",
-            enemy
+            $"[JeremyHitEvaluator] Hit | " +
+            $"Expected: {enemy.ExpectedHitTime:F3} | " +
+            $"Actual: {_beatClock.SongTime:F3} | " +
+            $"Offset: {_beatClock.SongTime - enemy.ExpectedHitTime:F3}",
+            this
         );
     }
 }

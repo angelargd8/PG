@@ -486,6 +486,7 @@ Transform:
   - {fileID: 1340442702}
   - {fileID: 279479338}
   - {fileID: 1885393297}
+  - {fileID: 1519506293}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &804921211
@@ -538,6 +539,7 @@ MonoBehaviour:
   - {fileID: 3259664555849340608}
   - {fileID: 5083672912895701401}
   - {fileID: 701691271}
+  - {fileID: 1519506294}
   - {fileID: 1626963702}
   experienceReady: {fileID: 11400000, guid: f4b8f7b73053533419eb97071978892d, type: 2}
 --- !u!1 &1123466201
@@ -831,6 +833,53 @@ MonoBehaviour:
   m_ShadowLayerMask: 1
   m_RenderingLayers: 1
   m_ShadowRenderingLayers: 1
+--- !u!1 &1519506292
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1519506293}
+  - component: {fileID: 1519506294}
+  m_Layer: 0
+  m_Name: BeatClock
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1519506293
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1519506292}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 760771254}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1519506294
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1519506292}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 40ca57091307f8d4ea3a9cb7258b4407, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::JeremyBeatClock
+  _beatMap: {fileID: 11400000, guid: dde8e63a528c3a64aa8ef99df2dfc5c8, type: 2}
+  _musicSource: {fileID: 0}
+  _startDelay: 0.1
 --- !u!1 &1626963700
 GameObject:
   m_ObjectHideFlags: 0
@@ -883,6 +932,8 @@ MonoBehaviour:
   - {fileID: 710631675}
   - {fileID: 450723778}
   _beatMap: {fileID: 11400000, guid: dde8e63a528c3a64aa8ef99df2dfc5c8, type: 2}
+  _beatClock: {fileID: 1519506294}
+  _lookAheadBeats: 8
   _spawnEveryNBeats: 4
 --- !u!1 &1697949989
 GameObject:
@@ -945,6 +996,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::JeremyHitEvaluator
   _interactionRegistered: {fileID: 11400000, guid: 188abd6f30130bb42b4877604a6ce24f, type: 2}
+  _beatClock: {fileID: 1519506294}
 --- !u!4 &1885393297
 Transform:
   m_ObjectHideFlags: 0

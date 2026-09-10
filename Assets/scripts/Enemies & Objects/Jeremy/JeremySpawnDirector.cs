@@ -21,6 +21,7 @@ public sealed class JeremySpawnDirector :
 
     [Header("Beat Map")]
     [SerializeField] private BeatMapSO _beatMap;
+    [SerializeField] private JeremyBeatClock _beatClock;
 
     [Header("Scheduling")]
     [SerializeField] private int _lookAheadBeats = 8;
@@ -32,7 +33,6 @@ public sealed class JeremySpawnDirector :
     private readonly List<ScheduledSpawn> _scheduledSpawns = new List<ScheduledSpawn>();
 
     private bool _isRunning;
-    private float _experienceStartTime;
     private int _nextBeatIndex;
 
 
@@ -50,7 +50,6 @@ public sealed class JeremySpawnDirector :
 
         _isRunning = true;
         _nextBeatIndex = 0;
-        _experienceStartTime = Time.time;
 
         _scheduledSpawns.Clear();
 
@@ -129,14 +128,21 @@ public sealed class JeremySpawnDirector :
 
     private void ProcessScheduledSpawns()
     {
-        double elapsedTime = Time.time - _experienceStartTime;
+        double songTime = _beatClock.SongTime;
 
         while (
             _scheduledSpawns.Count > 0 &&
-            elapsedTime >= _scheduledSpawns[0].SpawnTime)
+            songTime >= _scheduledSpawns[0].SpawnTime)
         {
             ScheduledSpawn scheduledSpawn = _scheduledSpawns[0];
             _scheduledSpawns.RemoveAt(0);
+
+            // Debug.Log(
+            //     $"[JeremySpawnDirector] Spawn | SongTime: {songTime:F3} | " +
+            //     $"SpawnTime: {scheduledSpawn.SpawnTime:F3} | " +
+            //     $"ExpectedHitTime: {scheduledSpawn.ExpectedHitTime:F3}",
+            //     this
+            // );
 
             _enemySpawner.SpawnAt(
                 scheduledSpawn.SpawnPoint,
@@ -273,6 +279,12 @@ public sealed class JeremySpawnDirector :
         if (_enemySpawner.MovementSpeed <= 0f)
         {
             Debug.LogError("[JeremySpawnDirector] Movement Speed debe ser mayor que 0.", this);
+            return false;
+        }
+
+        if (_beatClock == null)
+        {
+            Debug.LogError("[JeremySpawnDirector] No se asignó JeremyBeatClock.", this);
             return false;
         }
 

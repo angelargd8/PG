@@ -31,6 +31,11 @@ public sealed class JeremyEnemy : MonoBehaviour
     public float IdealCutDistance => _idealCutDistance;
 
 
+    // Variables para pruebas
+    private bool _hasCrossedIdealDistance;
+    private JeremyBeatClock _beatClock;
+
+
     private void Update()
     {
         if (!_isMoving)
@@ -60,7 +65,7 @@ public sealed class JeremyEnemy : MonoBehaviour
         _movementSpeed = movementSpeed;
         _idealCutDistance = idealCutDistance;
         ExpectedHitTime = expectedHitTime;
-        
+
         if (_cue != null)
         {
             _cue.Configure(expectedDirection, expectedHand);
@@ -68,6 +73,13 @@ public sealed class JeremyEnemy : MonoBehaviour
 
         _isResolved = false;
         _isMoving = true;
+
+        _hasCrossedIdealDistance = false;
+
+        if (_beatClock == null)
+        {
+            _beatClock = FindFirstObjectByType<JeremyBeatClock>();
+        }
     }
 
 
@@ -76,6 +88,25 @@ public sealed class JeremyEnemy : MonoBehaviour
         transform.position = Vector3.MoveTowards(transform.position, _targetPosition, _movementSpeed * Time.deltaTime);
 
         float distanceToTarget = Vector3.Distance(transform.position, _targetPosition);
+
+        if (!_hasCrossedIdealDistance && distanceToTarget <= _idealCutDistance)
+        {
+            _hasCrossedIdealDistance = true;
+
+            if (_beatClock != null)
+            {
+                double actualCrossingTime = _beatClock.SongTime;
+                double offset = actualCrossingTime - ExpectedHitTime;
+
+                // Debug.Log(
+                //     $"[JeremyEnemy] Ideal crossing | " +
+                //     $"Expected: {ExpectedHitTime:F3} | " +
+                //     $"Actual: {actualCrossingTime:F3} | " +
+                //     $"Offset: {offset:F3}",
+                //     this
+                // );
+            }
+        }
 
         if (distanceToTarget <= _arrivalDistance)
         {
@@ -99,7 +130,7 @@ public sealed class JeremyEnemy : MonoBehaviour
             interactionType: InteractionType.SwordCut,
             outcome: InteractionOutcome.Missed,
             difficulty: Difficulty,
-            expectedTime: 0.0
+            expectedTime: ExpectedHitTime
         );
 
         if (_interactionRegistered != null)
@@ -123,6 +154,7 @@ public sealed class JeremyEnemy : MonoBehaviour
         _isMoving = false;
         _isResolved = false;
         _pool = null;
+        _hasCrossedIdealDistance = false;
     }
 
     public bool TryResolveHit()
