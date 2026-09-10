@@ -1,4 +1,4 @@
-using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 [DisallowMultipleComponent]
@@ -6,6 +6,15 @@ public sealed class JeremySpawnDirector :
     MonoBehaviour,
     IExperienceRuntime
 {
+    private sealed class ScheduledSpawn
+    {
+        public int BeatIndex;
+        public Transform SpawnPoint;
+        public double ExpectedHitTime;
+        public double SpawnTime;
+    }
+
+
     [Header("Spawning")]
     [SerializeField] private JeremyEnemySpawner _enemySpawner;
     [SerializeField] private Transform[] _spawnPoints;
@@ -13,17 +22,18 @@ public sealed class JeremySpawnDirector :
     [Header("Beat Map")]
     [SerializeField] private BeatMapSO _beatMap;
 
+    [Header("Scheduling")]
+    [SerializeField] private int _lookAheadBeats = 8;
+
     [Header("Temporary Difficulty")]
     [SerializeField] private int _spawnEveryNBeats = 2;
 
 
-    private Coroutine _spawnRoutine;
+    private readonly List<ScheduledSpawn> _scheduledSpawns = new List<ScheduledSpawn>();
+
     private bool _isRunning;
     private float _experienceStartTime;
     private int _nextBeatIndex;
-
-    private int _lastSpawnIndex = -1;
-    private int _consecutiveSameSpawn;
 
 
     public void BeginExperience()
@@ -40,124 +50,175 @@ public sealed class JeremySpawnDirector :
 
         _isRunning = true;
         _nextBeatIndex = 0;
-
-        _lastSpawnIndex = -1;
-        _consecutiveSameSpawn = 0;
-
         _experienceStartTime = Time.time;
 
-        _spawnRoutine = StartCoroutine(SpawnRoutine());
+        _scheduledSpawns.Clear();
+
+        FillSchedule();
     }
 
 
     public void EndExperience()
+    {
+        _isRunning = false;
+        _scheduledSpawns.Clear();
+    }
+
+
+    private void Update()
     {
         if (!_isRunning)
         {
             return;
         }
 
-        _isRunning = false;
-
-        if (_spawnRoutine != null)
-        {
-            StopCoroutine(_spawnRoutine);
-            _spawnRoutine = null;
-        }
+        ProcessScheduledSpawns();
+        FillSchedule();
     }
 
 
-    private IEnumerator SpawnRoutine()
+    private void FillSchedule()
     {
-        while (_isRunning && _nextBeatIndex < _beatMap.BeatTimes.Count)
+        while (
+            _scheduledSpawns.Count < _lookAheadBeats &&
+            _nextBeatIndex < _beatMap.BeatTimes.Count)
         {
-            if (_nextBeatIndex % _spawnEveryNBeats != 0)
-            {
-                _nextBeatIndex++;
-                continue;
-            }
-
-            double expectedHitTime = _beatMap.BeatTimes[_nextBeatIndex];
-
-            int spawnIndex = GetNextSpawnIndex();
-            Transform spawnPoint = _spawnPoints[spawnIndex];
-
-            float travelTime = CalculateTravelTime(spawnPoint);
-            double spawnTime = expectedHitTime - travelTime;
-
-            if (spawnTime < 0.0)
-            {
-                _nextBeatIndex++;
-                continue;
-            }
-
-            while (_isRunning)
-            {
-                float elapsedTime = Time.time - _experienceStartTime;
-
-                if (elapsedTime >= spawnTime)
-                {
-                    break;
-                }
-
-                yield return null;
-            }
-
-            if (!_isRunning)
-            {
-                yield break;
-            }
-
-            _enemySpawner.SpawnAt(spawnPoint, expectedHitTime);
-
-            RegisterSpawn(spawnIndex);
-
+            int beatIndex = _nextBeatIndex;
             _nextBeatIndex++;
 
-            yield return null;
-        }
-    }
-
-
-    private int GetNextSpawnIndex()
-    {
-        if (_spawnPoints.Length == 1)
-        {
-            return 0;
-        }
-
-        if (_lastSpawnIndex >= 0 && _consecutiveSameSpawn >= 3)
-        {
-            int randomIndex = Random.Range(0, _spawnPoints.Length - 1);
-
-            if (randomIndex >= _lastSpawnIndex)
+            if (beatIndex % _spawnEveryNBeats != 0)
             {
-                randomIndex++;
+                continue;
             }
 
-            return randomIndex;
+            ScheduleBeat(beatIndex);
         }
-
-        return Random.Range(0, _spawnPoints.Length);
     }
 
 
-    private void RegisterSpawn(int spawnIndex)
+    private void ScheduleBeat(int beatIndex)
     {
-        if (spawnIndex == _lastSpawnIndex)
+        double expectedHitTime = _beatMap.BeatTimes[beatIndex];
+
+        Transform spawnPoint = GetSpawnPointForSchedule();
+
+        if (spawnPoint == null)
         {
-            _consecutiveSameSpawn++;
             return;
         }
 
-        _lastSpawnIndex = spawnIndex;
-        _consecutiveSameSpawn = 1;
+        float travelTime = CalculateTravelTime(spawnPoint);
+        double spawnTime = expectedHitTime - travelTime;
+
+        if (spawnTime < 0.0)
+        {
+            return;
+        }
+
+        ScheduledSpawn scheduledSpawn = new ScheduledSpawn
+        {
+            BeatIndex = beatIndex,
+            SpawnPoint = spawnPoint,
+            ExpectedHitTime = expectedHitTime,
+            SpawnTime = spawnTime
+        };
+
+        InsertSorted(scheduledSpawn);
+    }
+
+
+    private void ProcessScheduledSpawns()
+    {
+        double elapsedTime = Time.time - _experienceStartTime;
+
+        while (
+            _scheduledSpawns.Count > 0 &&
+            elapsedTime >= _scheduledSpawns[0].SpawnTime)
+        {
+            ScheduledSpawn scheduledSpawn = _scheduledSpawns[0];
+            _scheduledSpawns.RemoveAt(0);
+
+            _enemySpawner.SpawnAt(
+                scheduledSpawn.SpawnPoint,
+                scheduledSpawn.ExpectedHitTime
+            );
+        }
+    }
+
+
+    private void InsertSorted(ScheduledSpawn scheduledSpawn)
+    {
+        int insertIndex = 0;
+
+        while (
+            insertIndex < _scheduledSpawns.Count &&
+            _scheduledSpawns[insertIndex].SpawnTime <= scheduledSpawn.SpawnTime)
+        {
+            insertIndex++;
+        }
+
+        _scheduledSpawns.Insert(insertIndex, scheduledSpawn);
+    }
+
+
+    private Transform GetSpawnPointForSchedule()
+    {
+        if (_spawnPoints.Length == 1)
+        {
+            return _spawnPoints[0];
+        }
+
+        const int maxAttempts = 20;
+
+        for (int attempt = 0; attempt < maxAttempts; attempt++)
+        {
+            int randomIndex = Random.Range(0, _spawnPoints.Length);
+            Transform candidate = _spawnPoints[randomIndex];
+
+            if (!WouldCreateTooManyConsecutive(candidate))
+            {
+                return candidate;
+            }
+        }
+
+        return _spawnPoints[Random.Range(0, _spawnPoints.Length)];
+    }
+
+
+    private bool WouldCreateTooManyConsecutive(Transform candidate)
+    {
+        if (_scheduledSpawns.Count < 3)
+        {
+            return false;
+        }
+
+        int sameCount = 0;
+
+        for (int i = _scheduledSpawns.Count - 1; i >= 0; i--)
+        {
+            if (_scheduledSpawns[i].SpawnPoint != candidate)
+            {
+                break;
+            }
+
+            sameCount++;
+
+            if (sameCount >= 3)
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
 
     private float CalculateTravelTime(Transform spawnPoint)
     {
-        float distanceToTarget = Vector3.Distance(spawnPoint.position, _enemySpawner.TargetPosition);
+        float distanceToTarget = Vector3.Distance(
+            spawnPoint.position,
+            _enemySpawner.TargetPosition
+        );
 
         float travelDistance =
             distanceToTarget - _enemySpawner.IdealCutDistance;
@@ -200,6 +261,12 @@ public sealed class JeremySpawnDirector :
         if (_spawnEveryNBeats <= 0)
         {
             Debug.LogError("[JeremySpawnDirector] Spawn Every N Beats debe ser mayor que 0.", this);
+            return false;
+        }
+
+        if (_lookAheadBeats <= 0)
+        {
+            Debug.LogError("[JeremySpawnDirector] Look Ahead Beats debe ser mayor que 0.", this);
             return false;
         }
 
