@@ -14,6 +14,22 @@ public sealed class EnemyShooter : MonoBehaviour
 
 
     // =========================
+    // ANIMATION
+    // =========================
+
+    [Header("Animation")]
+
+    [SerializeField]
+    private Animator animator;
+
+
+    private static readonly int ShootHash =
+        Animator.StringToHash(
+            "Shoot"
+        );
+
+
+    // =========================
     // SHOOTING
     // =========================
 
@@ -35,6 +51,10 @@ public sealed class EnemyShooter : MonoBehaviour
     [SerializeField]
     private float fireCooldown = 1.5f;
 
+
+    // =========================
+    // INITIAL DELAY
+    // =========================
 
     [Header("Initial Delay")]
 
@@ -83,11 +103,24 @@ public sealed class EnemyShooter : MonoBehaviour
     }
 
 
+    private void OnDisable()
+    {
+        if (animator != null)
+        {
+            animator.ResetTrigger(
+                ShootHash
+            );
+        }
+    }
+
+
     private void Update()
     {
-        if (target == null ||
+        if (
+            target == null ||
             bulletPoint == null ||
-            bulletPool == null)
+            bulletPool == null
+        )
         {
             return;
         }
@@ -98,23 +131,29 @@ public sealed class EnemyShooter : MonoBehaviour
             bulletPoint.position;
 
 
-        // Usamos distancia al cuadrado
-        // para evitar sqrt.
-        if (toTarget.sqrMagnitude >
-            shootingRangeSquared)
+        // Distancia al cuadrado para
+        // evitar calcular sqrt.
+        if (
+            toTarget.sqrMagnitude >
+            shootingRangeSquared
+        )
         {
             return;
         }
 
 
-        if (Time.time <
-            nextFireTime)
+        if (
+            Time.time <
+            nextFireTime
+        )
         {
             return;
         }
 
 
-        Shoot(toTarget);
+        Shoot(
+            toTarget
+        );
 
 
         nextFireTime =
@@ -148,12 +187,30 @@ public sealed class EnemyShooter : MonoBehaviour
         Vector3 toTarget
     )
     {
-        if (toTarget.sqrMagnitude <=
-            Mathf.Epsilon)
+        if (
+            toTarget.sqrMagnitude <=
+            Mathf.Epsilon
+        )
         {
             return;
         }
 
+
+        // =========================
+        // ANIMATION
+        // =========================
+
+        if (animator != null)
+        {
+            animator.SetTrigger(
+                ShootHash
+            );
+        }
+
+
+        // =========================
+        // BULLET
+        // =========================
 
         Quaternion shotRotation =
             Quaternion.LookRotation(
@@ -182,6 +239,7 @@ public sealed class EnemyShooter : MonoBehaviour
                 minInitialDelay,
                 maxInitialDelay
             );
+
 
         float maxDelay =
             Mathf.Max(
