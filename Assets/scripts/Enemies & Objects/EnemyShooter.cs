@@ -30,6 +30,23 @@ public sealed class EnemyShooter : MonoBehaviour
 
 
     // =========================
+    // AIM
+    // =========================
+
+    [Header("Aim")]
+
+    [SerializeField]
+    private float rotationSpeed = 120f;
+
+    //[Tooltip(
+    //    "orientacion del modelo. " +
+    //    "Usar 180 si el modelo mira en direccion opuesta al +Z."
+    //)]
+    [SerializeField]
+    private float rotationOffsetY = 180f;
+
+
+    // =========================
     // SHOOTING
     // =========================
 
@@ -131,8 +148,10 @@ public sealed class EnemyShooter : MonoBehaviour
             bulletPoint.position;
 
 
-        // Distancia al cuadrado para
-        // evitar calcular sqrt.
+        // =========================
+        // RANGE
+        // =========================
+
         if (
             toTarget.sqrMagnitude >
             shootingRangeSquared
@@ -141,6 +160,17 @@ public sealed class EnemyShooter : MonoBehaviour
             return;
         }
 
+
+        // =========================
+        // ROTATE
+        // =========================
+
+        RotateTowardsTarget();
+
+
+        // =========================
+        // COOLDOWN
+        // =========================
 
         if (
             Time.time <
@@ -176,6 +206,65 @@ public sealed class EnemyShooter : MonoBehaviour
 
         bulletPool =
             newBulletPool;
+    }
+
+
+    // =========================
+    // ROTATION
+    // =========================
+
+    private void RotateTowardsTarget()
+    {
+        if (target == null)
+        {
+            return;
+        }
+
+
+        Vector3 direction =
+            target.position -
+            transform.position;
+
+
+        direction.y = 0f;
+
+
+        if (
+            direction.sqrMagnitude <=
+            Mathf.Epsilon
+        )
+        {
+            return;
+        }
+
+
+        Quaternion lookRotation =
+            Quaternion.LookRotation(
+                direction.normalized,
+                Vector3.up
+            );
+
+
+        Quaternion offsetRotation =
+            Quaternion.Euler(
+                0f,
+                rotationOffsetY,
+                0f
+            );
+
+
+        Quaternion targetRotation =
+            lookRotation *
+            offsetRotation;
+
+
+        transform.rotation =
+            Quaternion.RotateTowards(
+                transform.rotation,
+                targetRotation,
+                rotationSpeed *
+                Time.deltaTime
+            );
     }
 
 

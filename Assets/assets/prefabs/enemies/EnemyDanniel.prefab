@@ -179,6 +179,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemyShooter
   bulletPoint: {fileID: 6696746449227251171}
   animator: {fileID: 0}
+  rotationSpeed: 120
+  rotationOffsetY: 180
   shootingRange: 40
   muzzleSpeed: 10
   bulletLifetime: 10
