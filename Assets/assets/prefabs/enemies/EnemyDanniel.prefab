@@ -370,7 +370,7 @@ MonoBehaviour:
   animator: {fileID: 3807722307620518727}
   handOverride: {fileID: 0}
   handBone: 18
-  positionOffset: {x: 0, y: -0.2, z: 0}
+  positionOffset: {x: -0.1, y: 0.15, z: 0.05}
   rotationOffset: {x: 0, y: 50, z: 270}
   localScale: {x: 0.5, y: 0.5, z: 0.5}
 --- !u!4 &1067159998890484899 stripped
