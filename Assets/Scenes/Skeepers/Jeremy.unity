@@ -386,6 +386,14 @@ PrefabInstance:
       propertyPath: _hand
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6142108299746217823, guid: e9935457407eb7549ad319e8cba733ec, type: 3}
+      propertyPath: _mainMenuRequested
+      value: 
+      objectReference: {fileID: 11400000, guid: 79709713fbe723e48b79c6b3004f8758, type: 2}
+    - target: {fileID: 6142108299746217823, guid: e9935457407eb7549ad319e8cba733ec, type: 3}
+      propertyPath: _gameplayPauseChanged
+      value: 
+      objectReference: {fileID: 11400000, guid: 1415d9d465e8b3d43b5df09e48696b07, type: 2}
     - target: {fileID: 6647221880645150926, guid: e9935457407eb7549ad319e8cba733ec, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
@@ -1089,6 +1097,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: rightKatana
       objectReference: {fileID: 0}
+    - target: {fileID: 6142108299746217823, guid: e9935457407eb7549ad319e8cba733ec, type: 3}
+      propertyPath: _mainMenuRequested
+      value: 
+      objectReference: {fileID: 11400000, guid: 79709713fbe723e48b79c6b3004f8758, type: 2}
+    - target: {fileID: 6142108299746217823, guid: e9935457407eb7549ad319e8cba733ec, type: 3}
+      propertyPath: _gameplayPauseChanged
+      value: 
+      objectReference: {fileID: 11400000, guid: 1415d9d465e8b3d43b5df09e48696b07, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
