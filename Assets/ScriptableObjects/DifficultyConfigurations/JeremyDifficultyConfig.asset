@@ -13,14 +13,14 @@ MonoBehaviour:
   m_Name: JeremyDifficultyConfig
   m_EditorClassIdentifier: Assembly-CSharp::JeremyDifficultyConfigSO
   _easy:
-    _spawnEveryNBeats: 0
-    _movementSpeed: 0
-    _specificHandProbability: 0
+    _spawnEveryNBeats: 6
+    _movementSpeed: 4
+    _specificHandProbability: 0.15
   _normal:
-    _spawnEveryNBeats: 0
-    _movementSpeed: 0
-    _specificHandProbability: 0
+    _spawnEveryNBeats: 4
+    _movementSpeed: 3
+    _specificHandProbability: 0.65
   _hard:
-    _spawnEveryNBeats: 0
-    _movementSpeed: 0
-    _specificHandProbability: 0
+    _spawnEveryNBeats: 2
+    _movementSpeed: 2
+    _specificHandProbability: 0.9
