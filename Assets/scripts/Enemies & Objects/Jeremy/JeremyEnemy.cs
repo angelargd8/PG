@@ -34,6 +34,7 @@ public sealed class JeremyEnemy : MonoBehaviour
     // Variables para pruebas
     // private bool _hasCrossedIdealDistance;
     // private ExperienceMusicClock _musicClock;
+    // public float DistanceToTarget => Vector3.Distance(transform.position, _targetPosition);
 
 
     private void Update()
