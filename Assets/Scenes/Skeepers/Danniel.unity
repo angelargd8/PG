@@ -418,6 +418,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 4752311941042380876, guid: 4d8de6316d12ef54698481aa31098f7e, type: 3}
+      propertyPath: hapticAmplitude
+      value: 0.4
+      objectReference: {fileID: 0}
     - target: {fileID: 5244482214434824308, guid: 4d8de6316d12ef54698481aa31098f7e, type: 3}
       propertyPath: _fireAction
       value: 

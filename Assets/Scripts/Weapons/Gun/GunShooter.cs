@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.XR;
 
 [DisallowMultipleComponent]
 public sealed class GunShooter : MonoBehaviour
@@ -31,6 +32,49 @@ public sealed class GunShooter : MonoBehaviour
     private AudioSource shotAudioSource;
 
     private float nextAllowedFireTime;
+
+    // =========================
+    // HAPTICS
+    // =========================
+
+    [Header("Haptic Feedback")]
+
+    [SerializeField]
+    private XRNode hapticHand =
+        XRNode.RightHand;
+
+
+    [Range(0f, 1f)]
+    [SerializeField]
+    private float hapticAmplitude = 0.3f;
+
+
+    [Min(0.01f)]
+    [SerializeField]
+    private float hapticDuration = 0.05f;
+
+    // =========================
+    // HAPTIC
+    // =========================
+
+    private void PlayShotHaptic()
+    {
+        XRHapticFeedback haptics =
+            XRHapticFeedback.Instance;
+
+
+        if (haptics == null)
+        {
+            return;
+        }
+
+
+        haptics.Pulse(
+            hapticHand,
+            hapticAmplitude,
+            hapticDuration
+        );
+    }
 
     /// <summary>
     /// Método público llamado por XR Grab Interactable → Activated.
@@ -68,6 +112,8 @@ public sealed class GunShooter : MonoBehaviour
             muzzleSpeed,
             bulletLifetime
         );
+
+        PlayShotHaptic();
 
         if (muzzleFlash != null)
         {
