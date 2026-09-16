@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.XR;
 
 [DisallowMultipleComponent]
 public sealed class GuitarDamage : MonoBehaviour
@@ -15,6 +16,43 @@ public sealed class GuitarDamage : MonoBehaviour
 
 
     // =========================
+    // HAPTICS
+    // =========================
+
+    [Header("Haptic Feedback")]
+
+    [SerializeField]
+    private XRNode hapticHand =
+        XRNode.RightHand;
+
+
+    [Range(0f, 1f)]
+    [SerializeField]
+    private float hapticAmplitude = 0.6f;
+
+
+    [Min(0.01f)]
+    [SerializeField]
+    private float hapticDuration = 0.08f;
+
+
+    [Tooltip(
+        "Evita varias vibraciones seguidas " +
+        "por múltiples colliders."
+    )]
+    [Min(0f)]
+    [SerializeField]
+    private float hapticCooldown = 0.1f;
+
+
+    // =========================
+    // RUNTIME
+    // =========================
+
+    private float nextHapticTime;
+
+
+    // =========================
     // TRIGGER
     // =========================
 
@@ -22,7 +60,7 @@ public sealed class GuitarDamage : MonoBehaviour
         Collider other
     )
     {
-        TryDamage(
+        HandleHit(
             other
         );
     }
@@ -36,17 +74,17 @@ public sealed class GuitarDamage : MonoBehaviour
         Collision collision
     )
     {
-        TryDamage(
+        HandleHit(
             collision.collider
         );
     }
 
 
     // =========================
-    // DAMAGE
+    // HIT
     // =========================
 
-    private void TryDamage(
+    private void HandleHit(
         Collider other
     )
     {
@@ -67,8 +105,63 @@ public sealed class GuitarDamage : MonoBehaviour
         }
 
 
+        // =========================
+        // DAMAGE
+        // =========================
+
         enemy.TakeDamage(
             damage
+        );
+
+
+        // =========================
+        // HAPTIC
+        // =========================
+
+        PlayHaptic();
+    }
+
+
+    // =========================
+    // HAPTIC
+    // =========================
+
+    private void PlayHaptic()
+    {
+        if (
+            Time.time <
+            nextHapticTime
+        )
+        {
+            return;
+        }
+
+
+        nextHapticTime =
+            Time.time +
+            hapticCooldown;
+
+
+        XRHapticFeedback haptics =
+            XRHapticFeedback.Instance;
+
+
+        if (haptics == null)
+        {
+            Debug.LogWarning(
+                "[GuitarDamage] No se encontró " +
+                "XRHapticFeedback.",
+                this
+            );
+
+            return;
+        }
+
+
+        haptics.Pulse(
+            hapticHand,
+            hapticAmplitude,
+            hapticDuration
         );
     }
 }

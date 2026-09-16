@@ -520,6 +520,10 @@ PrefabInstance:
       propertyPath: m_IsTrigger
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 6872394342640668113, guid: 652f1b1c2ef586f45ac26a1ddffab296, type: 3}
+      propertyPath: hapticAmplitude
+      value: 0.8
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
