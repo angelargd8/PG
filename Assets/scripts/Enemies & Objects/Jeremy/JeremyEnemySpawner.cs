@@ -10,7 +10,7 @@ public sealed class JeremyEnemySpawner : MonoBehaviour
 
     [Header("Movement")]
     [SerializeField] private float _movementSpeed = 2f;
-    [SerializeField] private float _idealCutDistance = 0.5f;
+    [SerializeField] private float _idealCutDistance = 1.3f;
 
 
     [Header("Temporary")]
