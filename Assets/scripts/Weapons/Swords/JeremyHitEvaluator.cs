@@ -7,6 +7,20 @@ public sealed class JeremyHitEvaluator : MonoBehaviour
     [SerializeField] private InteractionResultEventChannelSO _interactionRegistered;
 
 
+    [Header("Haptic Feedback")]
+    [Range(0f, 1f)]
+    [SerializeField] private float _successHapticAmplitude = 0.4f;
+
+    [Min(0.01f)]
+    [SerializeField] private float _successHapticDuration = 0.06f;
+
+    [Range(0f, 1f)]
+    [SerializeField] private float _failureHapticAmplitude = 0.6f;
+
+    [Min(0.01f)]
+    [SerializeField] private float _failureHapticDuration = 0.1f;
+
+
     private ExperienceMusicClock _musicClock;
 
 
@@ -52,6 +66,8 @@ public sealed class JeremyHitEvaluator : MonoBehaviour
             ? InteractionOutcome.Success
             : InteractionOutcome.Failed;
 
+        PlayHapticFeedback(outcome, actualHand);
+
         InteractionResult result = new InteractionResult(
             minigameId: "Jeremy",
             interactionType: InteractionType.SwordCut,
@@ -85,5 +101,48 @@ public sealed class JeremyHitEvaluator : MonoBehaviour
             $"Offset: {actualHitTime - enemy.ExpectedHitTime:F3}",
             this
         );
+    }
+
+    private void PlayHapticFeedback(InteractionOutcome outcome, JeremyHand actualHand)
+    {
+        XRHapticFeedback haptics = XRHapticFeedback.Instance;
+
+        if (haptics == null)
+        {
+            return;
+        }
+
+        if (outcome == InteractionOutcome.Success)
+        {
+            if (actualHand == JeremyHand.Left)
+            {
+                haptics.PulseLeft(
+                    _successHapticAmplitude,
+                    _successHapticDuration
+                );
+            }
+            else if (actualHand == JeremyHand.Right)
+            {
+                haptics.PulseRight(
+                    _successHapticAmplitude,
+                    _successHapticDuration
+                );
+            }
+
+            return;
+        }
+
+        if (outcome == InteractionOutcome.Failed)
+        {
+            haptics.PulseLeft(
+                _failureHapticAmplitude,
+                _failureHapticDuration
+            );
+
+            haptics.PulseRight(
+                _failureHapticAmplitude,
+                _failureHapticDuration
+            );
+        }
     }
 }
