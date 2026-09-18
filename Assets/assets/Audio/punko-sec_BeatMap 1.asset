@@ -1,0 +1,3353 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3a6212a9c0df37747aa87f0db8c2a781, type: 3}
+  m_Name: punko-sec_BeatMap 1
+  m_EditorClassIdentifier: Assembly-CSharp::BeatMapSO
+  _audioClip: {fileID: 8300000, guid: 42aebd92908450a4d9930e8cae01b668, type: 3}
+  _estimatedBpm: 156.60512
+  _beatsPerBar: 4
+  _beatUnit: 4
+  _beats:
+  - _time: 0.2786394557823129
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 0.6617686973020503
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 1.0448979388217878
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 1.4280271803415252
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 1.8111564218612626
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 2.194285663381
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 2.5774149049007375
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 2.960544146420475
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 3.3436733879402123
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 3.7268026294599497
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 4.109931870979687
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 4.493061112499425
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 4.876190354019163
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 5.2593195955389005
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 5.642448837058638
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 6.025578078578376
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 6.408707320098114
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 6.791836561617852
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 7.17496580313759
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 7.558095044657327
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 7.941224286177065
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 8.324353527696802
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 8.70748276921654
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 9.090612010736278
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 9.473741252256016
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 9.856870493775753
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 10.239999735295491
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 10.623128976815229
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 11.006258218334967
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 11.389387459854705
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 11.772516701374443
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 12.15564594289418
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 12.538775184413918
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 12.921904425933656
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 13.305033667453394
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 13.688162908973132
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 14.07129215049287
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 14.454421392012607
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 14.837550633532345
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 15.220679875052083
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 15.60380911657182
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 15.986938358091558
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 16.370067599611296
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 16.753196841131032
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 17.13632608265077
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 17.519455324170504
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 17.90258456569024
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 18.285713807209977
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 18.668843048729713
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 19.05197229024945
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 19.435101531769185
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 19.81823077328892
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 20.201360014808657
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 20.584489256328393
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 20.96761849784813
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 21.350747739367865
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 21.7338769808876
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 22.117006222407337
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 22.500135463927073
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 22.88326470544681
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 23.266393946966545
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 23.64952318848628
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 24.032652430006017
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 24.415781671525753
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 24.79891091304549
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 25.182040154565225
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 25.56516939608496
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 25.948298637604697
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 26.331427879124433
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 26.71455712064417
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 27.097686362163905
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 27.48081560368364
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 27.863944845203378
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 28.247074086723114
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 28.63020332824285
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 29.013332569762586
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 29.39646181128232
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 29.779591052802058
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 30.162720294321794
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 30.54584953584153
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 30.928978777361266
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 31.312108018881002
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 31.695237260400738
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 32.07836650192048
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 32.46149574344022
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 32.84462498495996
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 33.227754226479696
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 33.610883467999436
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 33.994012709519176
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 34.377141951038915
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 34.760271192558655
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 35.143400434078394
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 35.526529675598134
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 35.90965891711787
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 36.29278815863761
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 36.67591740015735
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 37.05904664167709
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 37.44217588319683
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 37.82530512471657
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 38.20843436623631
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 38.59156360775605
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 38.97469284927579
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 39.35782209079553
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 39.74095133231527
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 40.12408057383501
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 40.50720981535475
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 40.89033905687449
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 41.27346829839423
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 41.65659753991397
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 42.03972678143371
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 42.42285602295345
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 42.805985264473186
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 43.189114505992926
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 43.572243747512665
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 43.955372989032405
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 44.338502230552145
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 44.721631472071884
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 45.104760713591624
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 45.48788995511136
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 45.8710191966311
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 46.25414843815084
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 46.63727767967058
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 47.02040692119032
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 47.40353616271006
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 47.7866654042298
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 48.16979464574954
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 48.55292388726928
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 48.93605312878902
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 49.31918237030876
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 49.7023116118285
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 50.08544085334824
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 50.46857009486798
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 50.85169933638772
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 51.23482857790746
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 51.6179578194272
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 52.001087060946936
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 52.384216302466676
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 52.767345543986416
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 53.150474785506155
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 53.533604027025895
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 53.916733268545634
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 54.299862510065374
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 54.682991751585114
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 55.06612099310485
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 55.44925023462459
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 55.83237947614433
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 56.21550871766407
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 56.59863795918381
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 56.98176720070355
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 57.36489644222329
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 57.74802568374303
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 58.13115492526277
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 58.51428416678251
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 58.89741340830225
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 59.28054264982199
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 59.66367189134173
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 60.04680113286147
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 60.42993037438121
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 60.81305961590095
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 61.19618885742069
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 61.579318098940426
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 61.962447340460166
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 62.345576581979905
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 62.728705823499645
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 63.111835065019385
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 63.494964306539124
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 63.878093548058864
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 64.2612227895786
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 64.64435203109834
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 65.02748127261808
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 65.41061051413782
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 65.79373975565755
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 66.1768689971773
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 66.55999823869703
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 66.94312748021677
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 67.32625672173651
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 67.70938596325625
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 68.09251520477599
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 68.47564444629573
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 68.85877368781547
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 69.24190292933521
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 69.62503217085495
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 70.00816141237469
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 70.39129065389443
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 70.77441989541417
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 71.15754913693391
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 71.54067837845365
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 71.92380761997339
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 72.30693686149313
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 72.69006610301287
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 73.0731953445326
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 73.45632458605235
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 73.83945382757209
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 74.22258306909183
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 74.60571231061157
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 74.9888415521313
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 75.37197079365104
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 75.75510003517078
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 76.13822927669052
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 76.52135851821026
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 76.90448775973
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 77.28761700124974
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 77.67074624276948
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 78.05387548428922
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 78.43700472580896
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 78.8201339673287
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 79.20326320884844
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 79.58639245036818
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 79.96952169188792
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 80.35265093340766
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 80.7357801749274
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 81.11890941644714
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 81.50203865796688
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 81.88516789948662
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 82.26829714100636
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 82.6514263825261
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 83.03455562404584
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 83.41768486556558
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 83.80081410708532
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 84.18394334860506
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 84.5670725901248
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 84.95020183164453
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 85.33333107316427
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 85.71646031468401
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 86.09958955620375
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 86.48271879772349
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 86.86584803924323
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 87.24897728076297
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 87.63210652228271
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 88.01523576380245
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 88.39836500532219
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 88.78149424684193
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 89.16462348836167
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 89.54775272988141
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 89.93088197140115
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 90.31401121292089
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 90.69714045444063
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 91.08026969596037
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 91.46339893748011
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 91.84652817899985
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 92.22965742051959
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 92.61278666203933
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 92.99591590355907
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 93.3790451450788
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 93.76217438659855
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 94.14530362811828
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 94.52843286963802
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 94.91156211115776
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 95.2946913526775
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 95.67782059419724
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 96.06094983571698
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 96.44407907723672
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 96.82720831875646
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 97.2103375602762
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 97.59346680179594
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 97.97659604331568
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 98.35972528483542
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 98.74285452635516
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 99.1259837678749
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 99.50911300939464
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 99.89224225091438
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 100.27537149243412
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 100.65850073395386
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 101.0416299754736
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 101.42475921699334
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 101.80788845851308
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 102.19101770003282
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 102.57414694155256
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 102.9572761830723
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 103.34040542459203
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 103.72353466611177
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 104.10666390763151
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 104.48979314915125
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 104.872922390671
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 105.25605163219073
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 105.63918087371047
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 106.02231011523021
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 106.40543935674995
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 106.78856859826969
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 107.17169783978943
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 107.55482708130917
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 107.93795632282891
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 108.32108556434865
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 108.70421480586839
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 109.08734404738813
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 109.47047328890787
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 109.85360253042761
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 110.23673177194735
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 110.61986101346709
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 111.00299025498683
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 111.38611949650657
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 111.7692487380263
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 112.15237797954605
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 112.53550722106579
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 112.91863646258552
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 113.30176570410526
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 113.684894945625
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 114.06802418714474
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 114.45115342866448
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 114.83428267018422
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 115.21741191170396
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 115.6005411532237
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 115.98367039474344
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 116.36679963626318
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 116.74992887778292
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 117.13305811930266
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 117.5161873608224
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 117.89931660234214
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 118.28244584386188
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 118.66557508538162
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 119.04870432690136
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 119.4318335684211
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 119.81496280994084
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 120.19809205146058
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 120.58122129298032
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 120.96435053450006
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 121.3474797760198
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 121.73060901753954
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 122.11373825905928
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 122.49686750057901
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 122.87999674209875
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 123.2631259836185
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 123.64625522513823
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 124.02938446665797
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 124.41251370817771
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 124.79564294969745
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 125.17877219121719
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 125.56190143273693
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 125.94503067425667
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 126.32815991577641
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 126.71128915729615
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 127.09441839881589
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 127.47754764033563
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 127.86067688185537
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 128.2438061233751
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 128.62693536489482
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 129.01006460641455
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 129.39319384793427
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 129.776323089454
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 130.15945233097372
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 130.54258157249345
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 130.92571081401317
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 131.3088400555329
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 131.69196929705262
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 132.07509853857235
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 132.45822778009207
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 132.8413570216118
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 133.22448626313152
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 133.60761550465125
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 133.99074474617098
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 134.3738739876907
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 134.75700322921043
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 135.14013247073015
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 135.52326171224988
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 135.9063909537696
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 136.28952019528933
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 136.67264943680905
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 137.05577867832878
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 137.4389079198485
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 137.82203716136823
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 138.20516640288795
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 138.58829564440768
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 138.9714248859274
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 139.35455412744713
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 139.73768336896686
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 140.12081261048658
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 140.5039418520063
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 140.88707109352603
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 141.27020033504576
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 141.65332957656548
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 142.0364588180852
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 142.41958805960493
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 142.80271730112466
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 143.18584654264438
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 143.5689757841641
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 143.95210502568384
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 144.33523426720356
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 144.7183635087233
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 145.101492750243
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 145.48462199176274
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 145.86775123328246
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 146.2508804748022
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 146.6340097163219
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 147.01713895784164
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 147.40026819936136
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 147.7833974408811
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 148.16652668240081
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 148.54965592392054
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 148.93278516544027
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 149.31591440696
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 149.69904364847972
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 150.08217288999944
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 150.46530213151917
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 150.8484313730389
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 151.23156061455862
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 151.61468985607834
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 151.99781909759807
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 152.3809483391178
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 152.76407758063752
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 153.14720682215724
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 153.53033606367697
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 153.9134653051967
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 154.29659454671642
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 154.67972378823615
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 155.06285302975587
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 155.4459822712756
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 155.82911151279532
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 156.21224075431505
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 156.59536999583477
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 156.9784992373545
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 157.36162847887422
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 157.74475772039395
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 158.12788696191367
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 158.5110162034334
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 158.89414544495312
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 159.27727468647285
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 159.66040392799258
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 160.0435331695123
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 160.42666241103203
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 160.80979165255175
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 161.19292089407148
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 161.5760501355912
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 161.95917937711093
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 162.34230861863065
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 162.72543786015038
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 163.1085671016701
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 163.49169634318983
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 163.87482558470955
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 164.25795482622928
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 164.641084067749
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 165.02421330926873
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 165.40734255078846
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 165.79047179230818
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 166.1736010338279
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 166.55673027534763
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 166.93985951686736
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 167.32298875838708
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 167.7061179999068
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 168.08924724142653
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 168.47237648294626
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 168.85550572446598
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 169.2386349659857
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 169.62176420750544
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 170.00489344902516
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 170.3880226905449
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 170.7711519320646
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 171.15428117358434
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 171.53741041510406
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 171.9205396566238
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 172.3036688981435
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 172.68679813966324
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 173.06992738118296
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 173.4530566227027
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 173.83618586422241
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 174.21931510574214
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 174.60244434726187
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 174.9855735887816
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 175.36870283030132
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 175.75183207182104
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 176.13496131334077
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 176.5180905548605
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 176.90121979638022
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 177.28434903789994
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 177.66747827941967
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 178.0506075209394
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 178.43373676245912
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 178.81686600397884
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 179.19999524549857
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 179.5831244870183
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 179.96625372853802
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 180.34938297005775
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 180.73251221157747
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 181.1156414530972
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 181.49877069461692
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 181.88189993613665
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  - _time: 182.26502917765637
+    _intensity: 1
+    _isAccent: 0
+    _bar: 0
+    _beatInBar: 0
+    _subdivisionsPerBeat: 1
+    _subdivisionIndex: 1
+  _sections: []
+  _beatTimes: []
