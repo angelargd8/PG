@@ -7,9 +7,6 @@ public class EnemyPool :
     MonoBehaviour,
     IExperiencePreloadable
 {
-    // =========================
-    // PROFILER
-    // =========================
 
     private static readonly ProfilerMarker GetMarker =
         new ProfilerMarker("EnemyPool.Get");
@@ -21,9 +18,6 @@ public class EnemyPool :
         new ProfilerMarker("EnemyPool.Instantiate");
 
 
-    // =========================
-    // POOL
-    // =========================
 
     [Header("Pool")]
 
@@ -37,15 +31,12 @@ public class EnemyPool :
     private int maxSize = 30;
 
     [Tooltip(
-        "Cantidad de enemigos que se crearán al iniciar."
+        "Cantidad de enemigos que se crearï¿½n al iniciar."
     )]
     [SerializeField]
     private int prewarmCount = 12;
 
 
-    // =========================
-    // COMBAT
-    // =========================
 
     [Header("Enemy Combat")]
 
@@ -56,32 +47,22 @@ public class EnemyPool :
     [SerializeField]
     private BulletPool enemyBulletPool;
 
+    [Tooltip("Asigna el director de Danniel para que los enemigos disparen con el beat.")]
+    [SerializeField]
+    private DannielRhythmDirector rhythmDirector;
 
-    // =========================
-    // TARGET
-    // =========================
 
     private Transform playerTarget;
 
-
-    // =========================
-    // RUNTIME
-    // =========================
 
     private ObjectPool<GameObject> pool;
 
     private bool isPrewarmed;
 
 
-    // =========================
-    // UNITY
-    // =========================
-
     private void Awake()
     {
-        // Intentamos resolverlo ahora,
-        // pero no es obligatorio que
-        // ya exista durante Awake.
+
         TryResolvePlayerTarget();
 
 
@@ -101,16 +82,13 @@ public class EnemyPool :
     }
 
 
-    // =========================
-    // VALIDATION
-    // =========================
 
     private void ValidateReferences()
     {
         if (enemyPrefab == null)
         {
             Debug.LogError(
-                "[EnemyPool] No se asignó Enemy Prefab.",
+                "[EnemyPool] No se asignï¿½ Enemy Prefab.",
                 this
             );
 
@@ -129,17 +107,13 @@ public class EnemyPool :
         {
             Debug.LogError(
                 "[EnemyPool] El prefab tiene " +
-                "EnemyShooter pero no se asignó " +
+                "EnemyShooter pero no se asignï¿½ " +
                 "Enemy Bullet Pool.",
                 this
             );
         }
     }
 
-
-    // =========================
-    // PLAYER TARGET
-    // =========================
 
     private bool TryResolvePlayerTarget()
     {
@@ -167,10 +141,6 @@ public class EnemyPool :
     }
 
 
-    // =========================
-    // PRELOAD
-    // =========================
-
     public IEnumerator Preload()
     {
         if (isPrewarmed)
@@ -182,7 +152,7 @@ public class EnemyPool :
         if (pool == null)
         {
             Debug.LogError(
-                "[EnemyPool] El pool no está inicializado.",
+                "[EnemyPool] El pool no esta inicializado.",
                 this
             );
 
@@ -201,10 +171,6 @@ public class EnemyPool :
         GameObject[] enemies =
             new GameObject[amount];
 
-
-        // =========================
-        // GET
-        // =========================
 
         for (
             int i = 0;
@@ -227,10 +193,6 @@ public class EnemyPool :
             }
         }
 
-
-        // =========================
-        // RELEASE
-        // =========================
 
         for (
             int i = 0;
@@ -261,10 +223,6 @@ public class EnemyPool :
     }
 
 
-    // =========================
-    // CREATE
-    // =========================
-
     private GameObject CreateEnemy()
     {
         using (CreateMarker.Auto())
@@ -288,9 +246,7 @@ public class EnemyPool :
                 );
 
 
-            // =========================
-            // CONTROLLER
-            // =========================
+
 
             EnemyController enemyController =
                 enemy.GetComponent<
@@ -313,16 +269,6 @@ public class EnemyPool :
             }
 
 
-            // No configuramos aquí:
-            //
-            // - EnemyMeleeAI
-            // - EnemyShooter
-            //
-            // porque durante el prewarm
-            // PlayerTargetProvider podría
-            // todavía no estar disponible.
-
-
             enemy.SetActive(
                 false
             );
@@ -333,16 +279,13 @@ public class EnemyPool :
     }
 
 
-    // =========================
-    // ON GET
-    // =========================
 
     private void OnGetEnemy(
         GameObject enemy
     )
     {
         /*
-         * No activamos aquí.
+         * No activamos aquï¿½.
          *
          * GetEnemy configura primero:
          *
@@ -352,14 +295,11 @@ public class EnemyPool :
          * - Target
          * - Combat
          *
-         * y después activa.
+         * y despuï¿½s activa.
          */
     }
 
 
-    // =========================
-    // GET ENEMY
-    // =========================
 
     public GameObject GetEnemy(
         Transform parent,
@@ -369,9 +309,6 @@ public class EnemyPool :
     {
         using (GetMarker.Auto())
         {
-            // =========================
-            // TARGET
-            // =========================
 
             bool hasTarget =
                 TryResolvePlayerTarget();
@@ -387,10 +324,6 @@ public class EnemyPool :
             }
 
 
-            // =========================
-            // GET
-            // =========================
-
             GameObject enemy =
                 pool.Get();
 
@@ -398,7 +331,7 @@ public class EnemyPool :
             if (enemy == null)
             {
                 Debug.LogError(
-                    "[EnemyPool] El pool devolvió null.",
+                    "[EnemyPool] El pool devolviï¿½ null.",
                     this
                 );
 
@@ -409,30 +342,18 @@ public class EnemyPool :
             Transform enemyTransform =
                 enemy.transform;
 
-
-            // =========================
-            // PARENT
-            // =========================
-
             enemyTransform.SetParent(
                 parent,
                 false
             );
 
 
-            // =========================
-            // POSITION
-            // =========================
 
             enemyTransform.SetPositionAndRotation(
                 position,
                 rotation
             );
 
-
-            // =========================
-            // MELEE AI
-            // =========================
 
             EnemyMeleeAI meleeAI =
                 enemy.GetComponent<
@@ -447,9 +368,6 @@ public class EnemyPool :
             }
 
 
-            // =========================
-            // SHOOTER
-            // =========================
 
             EnemyShooter shooter =
                 enemy.GetComponent<
@@ -460,14 +378,11 @@ public class EnemyPool :
             {
                 shooter.Configure(
                     playerTarget,
-                    enemyBulletPool
+                    enemyBulletPool,
+                    rhythmDirector
                 );
             }
 
-
-            // =========================
-            // ACTIVATE
-            // =========================
 
             enemy.SetActive(
                 true
@@ -478,10 +393,6 @@ public class EnemyPool :
         }
     }
 
-
-    // =========================
-    // ON RELEASE
-    // =========================
 
     private void OnReleaseEnemy(
         GameObject enemy
@@ -505,10 +416,6 @@ public class EnemyPool :
     }
 
 
-    // =========================
-    // RELEASE ENEMY
-    // =========================
-
     public void ReleaseEnemy(
         GameObject enemy
     )
@@ -527,10 +434,6 @@ public class EnemyPool :
         }
     }
 
-
-    // =========================
-    // DESTROY
-    // =========================
 
     private void OnDestroyEnemy(
         GameObject enemy

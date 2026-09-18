@@ -83,6 +83,19 @@ public sealed class EnemyShooter : MonoBehaviour
     [SerializeField]
     private float maxInitialDelay = 1.5f;
 
+    [Header("Rhythm Feedback (Optional)")]
+    [Tooltip("Particulas de aviso, un beat antes del disparo. Desactiva Play On Awake.")]
+    [SerializeField] private ParticleSystem rhythmCueVfx;
+
+    private DannielRhythmDirector rhythmDirector;
+    private bool isRhythmControlled;
+
+    public bool CanShootOnBeat =>
+        isRhythmControlled && isActiveAndEnabled &&
+        target != null && bulletPoint != null && bulletPool != null &&
+        (target.position - bulletPoint.position).sqrMagnitude <= shootingRangeSquared &&
+        (target.position - bulletPoint.position).sqrMagnitude > Mathf.Epsilon;
+
 
     // =========================
     // RUNTIME REFERENCES
@@ -117,11 +130,22 @@ public sealed class EnemyShooter : MonoBehaviour
     private void OnEnable()
     {
         ScheduleInitialShot();
+        if (rhythmDirector != null)
+        {
+            rhythmDirector.RegisterShooter(this);
+        }
     }
 
 
     private void OnDisable()
     {
+        if (rhythmDirector != null)
+        {
+            rhythmDirector.UnregisterShooter(this);
+        }
+
+        ClearRhythmCue();
+
         if (animator != null)
         {
             animator.ResetTrigger(
@@ -167,6 +191,11 @@ public sealed class EnemyShooter : MonoBehaviour
 
         RotateTowardsTarget();
 
+        if (isRhythmControlled)
+        {
+            return;
+        }
+
 
         // =========================
         // COOLDOWN
@@ -198,14 +227,58 @@ public sealed class EnemyShooter : MonoBehaviour
 
     public void Configure(
         Transform newTarget,
-        BulletPool newBulletPool
+        BulletPool newBulletPool,
+        DannielRhythmDirector newRhythmDirector = null
     )
     {
+        if (rhythmDirector != null)
+        {
+            rhythmDirector.UnregisterShooter(this);
+        }
+
         target =
             newTarget;
 
         bulletPool =
             newBulletPool;
+
+        rhythmDirector = newRhythmDirector;
+        isRhythmControlled = newRhythmDirector != null;
+
+        if (rhythmDirector != null && isActiveAndEnabled)
+        {
+            rhythmDirector.RegisterShooter(this);
+        }
+    }
+
+    public void ShowRhythmCue()
+    {
+        if (rhythmCueVfx != null)
+        {
+            rhythmCueVfx.Play(true);
+        }
+    }
+
+
+    public void ClearRhythmCue()
+    {
+        if (rhythmCueVfx != null)
+        {
+            rhythmCueVfx.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
+        }
+    }
+
+
+    public bool TryShootOnBeat()
+    {
+        if (!CanShootOnBeat || rhythmDirector == null || !rhythmDirector.IsRunning)
+        {
+            return false;
+        }
+
+        RotateTowardsTarget();
+        Shoot(target.position - bulletPoint.position);
+        return true;
     }
 
 

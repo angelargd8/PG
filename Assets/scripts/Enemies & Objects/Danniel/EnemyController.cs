@@ -19,10 +19,6 @@ public sealed class EnemyController : MonoBehaviour
     private SegmentContent segmentContent;
 
 
-    // =========================
-    // UNITY
-    // =========================
-
     private void OnEnable()
     {
         currentHealth = maxHealth;
@@ -32,11 +28,6 @@ public sealed class EnemyController : MonoBehaviour
         segmentContent = null;
     }
 
-
-    // =========================
-    // POOL
-    // =========================
-
     public void SetPool(
         EnemyPool pool
     )
@@ -45,9 +36,6 @@ public sealed class EnemyController : MonoBehaviour
     }
 
 
-    // =========================
-    // SEGMENT
-    // =========================
 
     public void SetSegmentContent(
         SegmentContent content
@@ -67,10 +55,6 @@ public sealed class EnemyController : MonoBehaviour
         }
     }
 
-
-    // =========================
-    // DAMAGE
-    // =========================
 
     public void TakeDamage(
         int damage
@@ -93,9 +77,6 @@ public sealed class EnemyController : MonoBehaviour
     }
 
 
-    // =========================
-    // DEATH
-    // =========================
 
     private void Die()
     {
