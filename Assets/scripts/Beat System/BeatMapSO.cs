@@ -25,7 +25,7 @@ public sealed class BeatMapSO : ScriptableObject
         [Min(0f)]
         [SerializeField] private double _time;
 
-        [Tooltip("Intensidad entre 0 y 1. El generador usa 1 hasta editarla.")]
+        [Tooltip("Fuerza relativa entre 0 y 1, estimada desde el audio. Puedes corregirla manualmente; solo se reemplaza al recalcular intensidades.")]
         [Range(0f, 1f)]
         [SerializeField] private float _intensity = 1f;
 
@@ -65,6 +65,11 @@ public sealed class BeatMapSO : ScriptableObject
         public Beat(double time)
         {
             _time = time;
+        }
+
+        internal void SetIntensity(float intensity)
+        {
+            _intensity = Mathf.Clamp01(intensity);
         }
 
 
@@ -197,6 +202,37 @@ public sealed class BeatMapSO : ScriptableObject
         foreach (double time in beatTimes)
         {
             _beats.Add(new Beat(time));
+        }
+    }
+
+
+    /// <summary>
+    /// Updates only intensities, preserving beat times and all manually authored metadata.
+    /// </summary>
+    public void SetIntensities(IReadOnlyList<float> intensities)
+    {
+        if (intensities == null)
+        {
+            throw new ArgumentNullException(nameof(intensities));
+        }
+
+        if (intensities.Count != _beats.Count)
+        {
+            throw new ArgumentException("Provide one intensity per beat.", nameof(intensities));
+        }
+
+        // Validate all values before changing the asset, so invalid input cannot partially overwrite it.
+        for (int i = 0; i < intensities.Count; i++)
+        {
+            if (float.IsNaN(intensities[i]) || float.IsInfinity(intensities[i]))
+            {
+                throw new ArgumentException("Intensities must be finite.", nameof(intensities));
+            }
+        }
+
+        for (int i = 0; i < intensities.Count; i++)
+        {
+            _beats[i].SetIntensity(intensities[i]);
         }
     }
 

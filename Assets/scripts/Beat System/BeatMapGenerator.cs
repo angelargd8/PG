@@ -1,3 +1,4 @@
+#if UNITY_EDITOR
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
@@ -22,7 +23,12 @@ public static class BeatMapGenerator
             return;
         }
 
-        float[] samples = ReadMonoSamples(audioClip);
+        if (!TryReadSamples(audioClip, out float[] interleavedSamples))
+        {
+            return;
+        }
+
+        float[] samples = ReadMonoSamples(interleavedSamples, audioClip.channels);
         float[] energyEnvelope = CalculateEnergyEnvelope(samples);
 
         float bpm = EstimateBpm(energyEnvelope, audioClip.frequency);
@@ -38,22 +44,86 @@ public static class BeatMapGenerator
             audioClip.length
         );
 
-        CreateBeatMapAsset(audioClip, bpm, beatTimes);
+        float[] intensities = BeatIntensityAnalyzer.Analyze(
+            interleavedSamples, audioClip.channels, audioClip.frequency, beatTimes);
+
+        CreateBeatMapAsset(audioClip, bpm, beatTimes, intensities);
     }
 
 
-    private static float[] ReadMonoSamples(AudioClip audioClip)
+    [MenuItem("Tools/Music/Recalculate Beat Intensities")]
+    public static void RecalculateBeatIntensities()
     {
-        int channels = audioClip.channels;
+        BeatMapSO beatMap = Selection.activeObject as BeatMapSO;
+        if (beatMap == null || beatMap.AudioClip == null || beatMap.Beats.Count == 0)
+        {
+            Debug.LogError("[BeatMapGenerator] Selecciona un BeatMap con audio y beats en el Project.");
+            return;
+        }
 
-        float[] interleavedSamples =
-            new float[audioClip.samples * channels];
+        AudioClip audioClip = beatMap.AudioClip;
+        if (!TryReadSamples(audioClip, out float[] interleavedSamples))
+        {
+            return;
+        }
 
-        audioClip.GetData(interleavedSamples, 0);
+        float[] intensities = BeatIntensityAnalyzer.Analyze(
+            interleavedSamples, audioClip.channels, audioClip.frequency, beatMap.BeatTimes);
 
-        float[] monoSamples = new float[audioClip.samples];
+        Undo.RecordObject(beatMap, "Recalculate Beat Intensities");
+        beatMap.SetIntensities(intensities);
+        EditorUtility.SetDirty(beatMap);
+        AssetDatabase.SaveAssetIfDirty(beatMap);
 
-        for (int i = 0; i < audioClip.samples; i++)
+        Debug.Log($"[BeatMapGenerator] Intensidades recalculadas para {intensities.Length} beats. Los tiempos y demas datos se conservaron.", beatMap);
+    }
+
+
+    [MenuItem("Tools/Music/Recalculate Beat Intensities", true)]
+    private static bool CanRecalculateBeatIntensities()
+    {
+        return Selection.activeObject is BeatMapSO beatMap &&
+            beatMap.AudioClip != null && beatMap.Beats.Count > 0;
+    }
+
+
+    private static bool TryReadSamples(AudioClip audioClip, out float[] samples)
+    {
+        samples = null;
+
+        if (audioClip.samples <= 0 || audioClip.channels <= 0 || audioClip.frequency <= 0)
+        {
+            Debug.LogError("[BeatMapGenerator] El audio no contiene muestras validas.", audioClip);
+            return false;
+        }
+
+        if (audioClip.loadState != AudioDataLoadState.Loaded)
+        {
+            audioClip.LoadAudioData();
+            if (audioClip.loadState != AudioDataLoadState.Loaded)
+            {
+                Debug.LogError("[BeatMapGenerator] El audio aun no esta cargado. Espera a que termine de cargar y vuelve a intentarlo.", audioClip);
+                return false;
+            }
+        }
+
+        samples = new float[audioClip.samples * audioClip.channels];
+        if (!audioClip.GetData(samples, 0))
+        {
+            samples = null;
+            Debug.LogError("[BeatMapGenerator] No se pudo leer el audio. Configura Load Type como Decompress On Load en el importador y pulsa Apply.", audioClip);
+            return false;
+        }
+
+        return true;
+    }
+
+
+    private static float[] ReadMonoSamples(float[] interleavedSamples, int channels)
+    {
+        float[] monoSamples = new float[interleavedSamples.Length / channels];
+
+        for (int i = 0; i < monoSamples.Length; i++)
         {
             float sum = 0f;
 
@@ -197,11 +267,13 @@ public static class BeatMapGenerator
     private static void CreateBeatMapAsset(
         AudioClip audioClip,
         float bpm,
-        List<double> beatTimes)
+        List<double> beatTimes,
+        IReadOnlyList<float> intensities)
     {
         BeatMapSO beatMap = ScriptableObject.CreateInstance<BeatMapSO>();
 
         beatMap.SetData(audioClip, bpm, beatTimes);
+        beatMap.SetIntensities(intensities);
 
         string clipPath = AssetDatabase.GetAssetPath(audioClip);
 
@@ -225,3 +297,4 @@ public static class BeatMapGenerator
         );
     }
 }
+#endif
