@@ -33,9 +33,6 @@ public sealed class GunShooter : MonoBehaviour
 
     private float nextAllowedFireTime;
 
-    // =========================
-    // HAPTICS
-    // =========================
 
     [Header("Haptic Feedback")]
 
@@ -52,10 +49,6 @@ public sealed class GunShooter : MonoBehaviour
     [Min(0.01f)]
     [SerializeField]
     private float hapticDuration = 0.05f;
-
-    // =========================
-    // HAPTIC
-    // =========================
 
     private void PlayShotHaptic()
     {
@@ -76,9 +69,7 @@ public sealed class GunShooter : MonoBehaviour
         );
     }
 
-    /// <summary>
-    /// Método público llamado por XR Grab Interactable → Activated.
-    /// </summary>
+
     public void Fire()
     {
         if (Time.time < nextAllowedFireTime)

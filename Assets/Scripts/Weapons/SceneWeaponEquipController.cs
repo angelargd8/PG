@@ -5,6 +5,17 @@ using UnityEngine;
 [DisallowMultipleComponent]
 public sealed class SceneWeaponEquipController : MonoBehaviour
 {
+    public enum Hand
+    {
+        Right = 0,
+        Left = 1
+    }
+
+    [Header("Attachment")]
+    [Tooltip("Mano que seguira esta arma. Es independiente del input y de la vibracion.")]
+    [SerializeField]
+    private Hand hand = Hand.Right;
+
     [Header("Event Channels")]
 
     [SerializeField]
@@ -59,13 +70,28 @@ public sealed class SceneWeaponEquipController : MonoBehaviour
             return;
         }
 
-        RightWeaponAnchor anchor =
-            FindFirstObjectByType<RightWeaponAnchor>();
+        string anchorName = hand == Hand.Left
+            ? "LeftWeaponAnchor"
+            : "RightWeaponAnchor";
+
+        Transform anchor;
+
+        if (hand == Hand.Left)
+        {
+            GameObject leftAnchor = GameObject.Find(anchorName);
+            anchor = leftAnchor != null ? leftAnchor.transform : null;
+        }
+        else
+        {
+            RightWeaponAnchor rightAnchor =
+                FindFirstObjectByType<RightWeaponAnchor>();
+            anchor = rightAnchor != null ? rightAnchor.transform : null;
+        }
 
         if (anchor == null)
         {
             Debug.LogError(
-                "[SceneWeaponEquipController] No se encontró RightWeaponAnchor en Bootstrap.",
+                $"[SceneWeaponEquipController] No se encontró {anchorName} en Bootstrap. Comprueba que esté activo.",
                 this
             );
 
@@ -73,11 +99,11 @@ public sealed class SceneWeaponEquipController : MonoBehaviour
         }
 
         Debug.Log(
-            $"[SceneWeaponEquipController] RightWeaponAnchor encontrado: {anchor.name}.",
+            $"[SceneWeaponEquipController] {anchorName} encontrado: {anchor.name}.",
             this
         );
 
-        weaponFollower.Bind(anchor.transform);
+        weaponFollower.Bind(anchor);
 
         Debug.Log(
             $"[SceneWeaponEquipController] {name} equipada correctamente.",
