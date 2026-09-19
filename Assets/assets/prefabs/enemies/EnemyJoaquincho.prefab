@@ -50,7 +50,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1614f21b7725d8a44ba081e03c5c5706, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyController
-  maxHealth: 3
+  maxHealth: 5
 --- !u!114 &6415332924283693469
 MonoBehaviour:
   m_ObjectHideFlags: 0
