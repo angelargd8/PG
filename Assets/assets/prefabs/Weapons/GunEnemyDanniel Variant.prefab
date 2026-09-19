@@ -18,7 +18,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3548680158775987234, guid: 4d8de6316d12ef54698481aa31098f7e, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.285
+      value: -0.297
       objectReference: {fileID: 0}
     - target: {fileID: 4752311941042380876, guid: 4d8de6316d12ef54698481aa31098f7e, type: 3}
       propertyPath: bulletPool
@@ -75,6 +75,10 @@ PrefabInstance:
     - target: {fileID: 7517754996364038104, guid: 4d8de6316d12ef54698481aa31098f7e, type: 3}
       propertyPath: m_Name
       value: GunEnemyDanniel Variant
+      objectReference: {fileID: 0}
+    - target: {fileID: 8534453589909287040, guid: 4d8de6316d12ef54698481aa31098f7e, type: 3}
+      propertyPath: m_CastShadows
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 1517914027283820250, guid: 4d8de6316d12ef54698481aa31098f7e, type: 3}
