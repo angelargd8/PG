@@ -181,7 +181,7 @@ MonoBehaviour:
   animator: {fileID: 0}
   rotationSpeed: 120
   rotationOffsetY: 180
-  shootingRange: 40
+  shootingRange: 20
   muzzleSpeed: 10
   bulletLifetime: 10
   fireCooldown: 2
