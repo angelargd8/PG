@@ -304,7 +304,7 @@ MonoBehaviour:
   - {fileID: 906415570}
   - {fileID: 570466774}
   - {fileID: 804558484}
-  amountOfEnemies: 100
+  amountOfEnemies: 150
   beatsPerSpawn: 4
   introductionBeats: 16
   intensityAverageBeats: 4

@@ -59,6 +59,17 @@ public sealed class EnemyMeleeAI : MonoBehaviour
 
     private Vector3 moveDirection;
 
+    private bool knockbackActive;
+    private bool knockbackImpulsePending;
+    private bool knockbackPaused;
+    private Vector3 knockbackDirection;
+    private Vector3 pausedKnockbackVelocity;
+    private float knockbackSpeed;
+    private float knockbackTimeRemaining;
+    private float knockbackRecoveryRemaining;
+
+    public bool IsKnockedBack => knockbackActive;
+
 
     // =========================
     // ANIMATOR HASHES
@@ -88,6 +99,7 @@ public sealed class EnemyMeleeAI : MonoBehaviour
 
     private void OnEnable()
     {
+        ClearKnockback();
         attackTimer = 0f;
 
         shouldMove = false;
@@ -99,6 +111,7 @@ public sealed class EnemyMeleeAI : MonoBehaviour
 
     private void OnDisable()
     {
+        ClearKnockback();
         target = null;
 
         attackTimer = 0f;
@@ -109,7 +122,7 @@ public sealed class EnemyMeleeAI : MonoBehaviour
             Vector3.zero;
 
 
-        if (rb != null)
+        if (rb != null && !rb.isKinematic)
         {
             rb.linearVelocity =
                 Vector3.zero;
@@ -128,7 +141,131 @@ public sealed class EnemyMeleeAI : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (knockbackActive)
+        {
+            ApplyKnockbackMovement();
+            return;
+        }
+
+        if (Time.timeScale <= 0f || AudioListener.pause)
+        {
+            return;
+        }
+
         ApplyMovement();
+    }
+
+    /// <summary>Temporarily yields pursuit to an impulse away from the player.</summary>
+    public bool TryApplyKnockback(Vector3 hitSource, float speed, float duration, float recoveryDuration)
+    {
+        if (!isActiveAndEnabled || rb == null || speed <= 0f || duration <= 0f ||
+            Time.timeScale <= 0f || AudioListener.pause)
+        {
+            return false;
+        }
+
+        Vector3 origin = target != null ? target.position : hitSource;
+        Vector3 direction = rb.position - origin;
+        direction.y = 0f;
+        if (direction.sqrMagnitude <= 0.001f)
+        {
+            direction = -transform.forward;
+            direction.y = 0f;
+        }
+
+        if (direction.sqrMagnitude <= 0.001f)
+        {
+            return false;
+        }
+
+        knockbackDirection = direction.normalized;
+        knockbackSpeed = speed;
+        knockbackTimeRemaining = duration;
+        knockbackRecoveryRemaining = Mathf.Max(0f, recoveryDuration);
+        knockbackActive = true;
+        knockbackImpulsePending = true;
+        knockbackPaused = false;
+        shouldMove = false;
+        moveDirection = Vector3.zero;
+        attackTimer = Mathf.Max(attackTimer, attackCooldown);
+        SetMovingAnimation(false);
+        if (animator != null)
+        {
+            animator.ResetTrigger(AttackHash);
+        }
+
+        return true;
+    }
+
+    private void ApplyKnockbackMovement()
+    {
+        if (rb == null)
+        {
+            ClearKnockback();
+            return;
+        }
+
+        if (Time.timeScale <= 0f || AudioListener.pause)
+        {
+            if (!knockbackPaused && !rb.isKinematic)
+            {
+                pausedKnockbackVelocity = rb.linearVelocity;
+                StopHorizontalVelocity();
+            }
+            knockbackPaused = true;
+            return;
+        }
+
+        if (knockbackPaused && !rb.isKinematic && !knockbackImpulsePending)
+        {
+            rb.linearVelocity = new Vector3(pausedKnockbackVelocity.x, rb.linearVelocity.y, pausedKnockbackVelocity.z);
+        }
+        knockbackPaused = false;
+
+        if (knockbackTimeRemaining > 0f)
+        {
+            if (rb.isKinematic)
+            {
+                float step = Mathf.Min(Time.fixedDeltaTime, knockbackTimeRemaining);
+                rb.MovePosition(rb.position + knockbackDirection * knockbackSpeed * step);
+            }
+            else if (knockbackImpulsePending)
+            {
+                // Apply once: collisions can stop the retreat instead of fighting a new force every frame.
+                StopHorizontalVelocity();
+                rb.AddForce(knockbackDirection * knockbackSpeed, ForceMode.VelocityChange);
+            }
+
+            knockbackImpulsePending = false;
+            knockbackTimeRemaining = Mathf.Max(0f, knockbackTimeRemaining - Time.fixedDeltaTime);
+            return;
+        }
+
+        StopHorizontalVelocity();
+        knockbackRecoveryRemaining = Mathf.Max(0f, knockbackRecoveryRemaining - Time.fixedDeltaTime);
+        if (knockbackRecoveryRemaining <= 0f)
+        {
+            ClearKnockback();
+        }
+    }
+
+    private void StopHorizontalVelocity()
+    {
+        if (rb != null && !rb.isKinematic)
+        {
+            rb.linearVelocity = new Vector3(0f, rb.linearVelocity.y, 0f);
+        }
+    }
+
+    private void ClearKnockback()
+    {
+        knockbackActive = false;
+        knockbackImpulsePending = false;
+        knockbackPaused = false;
+        knockbackTimeRemaining = 0f;
+        knockbackRecoveryRemaining = 0f;
+        knockbackDirection = Vector3.zero;
+        pausedKnockbackVelocity = Vector3.zero;
     }
 
 
@@ -151,6 +288,13 @@ public sealed class EnemyMeleeAI : MonoBehaviour
 
     private void UpdateAI()
     {
+        if (knockbackActive || Time.timeScale <= 0f || AudioListener.pause)
+        {
+            shouldMove = false;
+            SetMovingAnimation(false);
+            return;
+        }
+
         if (target == null)
         {
             shouldMove = false;

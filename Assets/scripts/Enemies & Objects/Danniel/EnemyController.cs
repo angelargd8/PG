@@ -12,6 +12,9 @@ public sealed class EnemyController : MonoBehaviour
 
     private bool isDead;
 
+    public bool IsAlive => isActiveAndEnabled && !isDead;
+    public uint SpawnVersion { get; private set; }
+
     private EnemyPool enemyPool;
 
     // OP
@@ -21,6 +24,7 @@ public sealed class EnemyController : MonoBehaviour
 
     private void OnEnable()
     {
+        SpawnVersion++;
         currentHealth = maxHealth;
 
         isDead = false;
