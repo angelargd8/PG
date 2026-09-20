@@ -4,9 +4,6 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody))]
 public sealed class EnemyMeleeAI : MonoBehaviour
 {
-    // =========================
-    // MOVEMENT
-    // =========================
 
     [Header("Movement")]
 
@@ -17,10 +14,6 @@ public sealed class EnemyMeleeAI : MonoBehaviour
     private float rotationSpeed = 8f;
 
 
-    // =========================
-    // ATTACK
-    // =========================
-
     [Header("Attack")]
 
     [SerializeField]
@@ -30,28 +23,17 @@ public sealed class EnemyMeleeAI : MonoBehaviour
     private float attackCooldown = 1.5f;
 
 
-    // =========================
-    // ANIMATION
-    // =========================
-
     [Header("Animation")]
 
     [SerializeField]
     private Animator animator;
 
 
-    // =========================
-    // REFERENCES
-    // =========================
 
     private Rigidbody rb;
 
     private Transform target;
 
-
-    // =========================
-    // RUNTIME
-    // =========================
 
     private float attackTimer;
 
@@ -71,10 +53,6 @@ public sealed class EnemyMeleeAI : MonoBehaviour
     public bool IsKnockedBack => knockbackActive;
 
 
-    // =========================
-    // ANIMATOR HASHES
-    // =========================
-
     private static readonly int IsMovingHash =
         Animator.StringToHash(
             "IsMoving"
@@ -86,20 +64,18 @@ public sealed class EnemyMeleeAI : MonoBehaviour
         );
 
 
-    // =========================
-    // UNITY
-    // =========================
-
     private void Awake()
     {
         rb =
             GetComponent<Rigidbody>();
+        KeepUpright();
     }
 
 
     private void OnEnable()
     {
         ClearKnockback();
+        KeepUpright();
         attackTimer = 0f;
 
         shouldMove = false;
@@ -141,6 +117,11 @@ public sealed class EnemyMeleeAI : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (Time.timeScale > 0f && !AudioListener.pause)
+        {
+            KeepUpright();
+        }
+
         if (knockbackActive)
         {
             ApplyKnockbackMovement();
@@ -155,7 +136,7 @@ public sealed class EnemyMeleeAI : MonoBehaviour
         ApplyMovement();
     }
 
-    /// <summary>Temporarily yields pursuit to an impulse away from the player.</summary>
+    /// Temporarily yields pursuit to an impulse away from the player
     public bool TryApplyKnockback(Vector3 hitSource, float speed, float duration, float recoveryDuration)
     {
         if (!isActiveAndEnabled || rb == null || speed <= 0f || duration <= 0f ||
@@ -164,6 +145,7 @@ public sealed class EnemyMeleeAI : MonoBehaviour
             return false;
         }
 
+        KeepUpright();
         Vector3 origin = target != null ? target.position : hitSource;
         Vector3 direction = rb.position - origin;
         direction.y = 0f;
@@ -249,6 +231,47 @@ public sealed class EnemyMeleeAI : MonoBehaviour
         }
     }
 
+    private void KeepUpright()
+    {
+        if (rb == null)
+        {
+            return;
+        }
+
+        // These enemies turn through the AI. Contacts must not tip their physical body.
+        const RigidbodyConstraints uprightConstraints =
+            RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
+        if ((rb.constraints & uprightConstraints) != uprightConstraints)
+        {
+            rb.constraints |= uprightConstraints;
+        }
+
+        if (!rb.isKinematic)
+        {
+            rb.angularVelocity = Vector3.zero;
+        }
+
+        if (Vector3.Dot(rb.rotation * Vector3.up, Vector3.up) >= 0.99999f)
+        {
+            return;
+        }
+
+        // Constraints prevent new tipping, but do not straighten an already fallen body.
+        Vector3 forward = rb.rotation * Vector3.forward;
+        forward.y = 0f;
+        if (forward.sqrMagnitude <= 0.001f)
+        {
+            // Looking straight up/down: use the right axis to recover a stable heading.
+            forward = Vector3.Cross(rb.rotation * Vector3.right, Vector3.up);
+            forward.y = 0f;
+        }
+
+        if (forward.sqrMagnitude > 0.001f)
+        {
+            rb.rotation = Quaternion.LookRotation(forward.normalized, Vector3.up);
+        }
+    }
+
     private void StopHorizontalVelocity()
     {
         if (rb != null && !rb.isKinematic)
@@ -282,9 +305,8 @@ public sealed class EnemyMeleeAI : MonoBehaviour
     }
 
 
-    // =========================
+
     // AI
-    // =========================
 
     private void UpdateAI()
     {
@@ -331,10 +353,6 @@ public sealed class EnemyMeleeAI : MonoBehaviour
             attackRange;
 
 
-        // =========================
-        // ATTACK
-        // =========================
-
         if (
             distanceSquared <=
             attackRangeSquared
@@ -370,9 +388,6 @@ public sealed class EnemyMeleeAI : MonoBehaviour
         }
 
 
-        // =========================
-        // CHASE
-        // =========================
 
         if (
             direction.sqrMagnitude <=
@@ -406,9 +421,6 @@ public sealed class EnemyMeleeAI : MonoBehaviour
     }
 
 
-    // =========================
-    // PHYSICS MOVEMENT
-    // =========================
 
     private void ApplyMovement()
     {
@@ -454,10 +466,6 @@ public sealed class EnemyMeleeAI : MonoBehaviour
     }
 
 
-    // =========================
-    // FACE TARGET
-    // =========================
-
     private void FaceTarget(
         Vector3 direction
     )
@@ -496,9 +504,6 @@ public sealed class EnemyMeleeAI : MonoBehaviour
     }
 
 
-    // =========================
-    // ATTACK
-    // =========================
 
     private void PerformAttack()
     {
@@ -513,10 +518,6 @@ public sealed class EnemyMeleeAI : MonoBehaviour
         );
     }
 
-
-    // =========================
-    // ANIMATION
-    // =========================
 
     private void SetMovingAnimation(
         bool isMoving
