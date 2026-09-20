@@ -20,6 +20,7 @@ public sealed class ExperienceBeatPlayer : MonoBehaviour
     public event Action<BeatMapSO.Beat, int> BeatReached;
     public event Action PlaybackReset;
 
+    public BeatMapSO BeatMap => _beatMap;
     public double SongTime => _musicClock != null ? _musicClock.SongTime : 0.0;
     public bool IsPlaying =>
         isActiveAndEnabled && _beatMap != null && _beatMap.Beats.Count > 0 &&

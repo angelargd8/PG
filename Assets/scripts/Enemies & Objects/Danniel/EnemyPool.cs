@@ -182,7 +182,7 @@ public class EnemyPool :
                 pool.Get();
 
 
-            // Cada 2 enemigos dejamos
+            // Cada 2 enemigos se deja
             // pasar un frame para reducir
             // picos durante Loading.
             if (
@@ -285,7 +285,7 @@ public class EnemyPool :
     )
     {
         /*
-         * No activamos aqu�.
+         * No activamos aqui
          *
          * GetEnemy configura primero:
          *
@@ -295,7 +295,7 @@ public class EnemyPool :
          * - Target
          * - Combat
          *
-         * y despu�s activa.
+         * y despues activa.
          */
     }
 

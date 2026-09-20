@@ -4,9 +4,6 @@ using UnityEngine.XR;
 [DisallowMultipleComponent]
 public sealed class GuitarDamage : MonoBehaviour
 {
-    // =========================
-    // DAMAGE
-    // =========================
 
     [Header("Damage")]
 
@@ -14,10 +11,6 @@ public sealed class GuitarDamage : MonoBehaviour
     [SerializeField]
     private int damage = 1;
 
-
-    // =========================
-    // HAPTICS
-    // =========================
 
     [Header("Haptic Feedback")]
 
@@ -45,16 +38,8 @@ public sealed class GuitarDamage : MonoBehaviour
     private float hapticCooldown = 0.1f;
 
 
-    // =========================
-    // RUNTIME
-    // =========================
-
     private float nextHapticTime;
 
-
-    // =========================
-    // TRIGGER
-    // =========================
 
     private void OnTriggerEnter(
         Collider other
@@ -66,10 +51,6 @@ public sealed class GuitarDamage : MonoBehaviour
     }
 
 
-    // =========================
-    // COLLISION
-    // =========================
-
     private void OnCollisionEnter(
         Collision collision
     )
@@ -79,10 +60,6 @@ public sealed class GuitarDamage : MonoBehaviour
         );
     }
 
-
-    // =========================
-    // HIT
-    // =========================
 
     private void HandleHit(
         Collider other
@@ -105,26 +82,16 @@ public sealed class GuitarDamage : MonoBehaviour
         }
 
 
-        // =========================
-        // DAMAGE
-        // =========================
-
         enemy.TakeDamage(
             damage
         );
 
 
-        // =========================
-        // HAPTIC
-        // =========================
 
         PlayHaptic();
     }
 
 
-    // =========================
-    // HAPTIC
-    // =========================
 
     private void PlayHaptic()
     {

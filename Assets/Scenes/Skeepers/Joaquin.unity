@@ -298,13 +298,22 @@ MonoBehaviour:
   - {fileID: 1598613334}
   - {fileID: 631068415}
   activeEnemiesRoot: {fileID: 0}
+  beatPlayer: {fileID: 0}
   spawnPoints:
   - {fileID: 720561888}
   - {fileID: 906415570}
   - {fileID: 570466774}
   - {fileID: 804558484}
-  amountOfEnemies: 30
-  spawnDuration: 120
+  amountOfEnemies: 100
+  beatsPerSpawn: 4
+  introductionBeats: 16
+  intensityAverageBeats: 4
+  strongIntensityThreshold: 0.7
+  normalEnemiesPerSpawn: 1
+  strongEnemiesPerSpawn: 2
+  introductionMaxActiveEnemies: 4
+  maxActiveEnemies: 6
+  logWaves: 0
 --- !u!1001 &520024241
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -496,9 +505,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyPool
   enemyPrefab: {fileID: 4713494131514942183, guid: 149fe98a54cfbfc4baf83212c3b1bd91, type: 3}
-  defaultCapacity: 3
-  maxSize: 20
-  prewarmCount: 8
+  defaultCapacity: 6
+  maxSize: 6
+  prewarmCount: 3
   enemyBulletPool: {fileID: 0}
   rhythmDirector: {fileID: 0}
 --- !u!4 &631068416
@@ -2244,9 +2253,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyPool
   enemyPrefab: {fileID: 4713494131514942183, guid: 2c68736d7fbfa4041a15c0aec94e890c, type: 3}
-  defaultCapacity: 3
-  maxSize: 20
-  prewarmCount: 8
+  defaultCapacity: 6
+  maxSize: 6
+  prewarmCount: 3
   enemyBulletPool: {fileID: 0}
   rhythmDirector: {fileID: 0}
 --- !u!1 &1675018889
