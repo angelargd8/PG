@@ -1370,7 +1370,7 @@ MonoBehaviour:
   ambienceSource: {fileID: 1256191395}
   sfxSource: {fileID: 1752760267}
   loopSFXSource: {fileID: 1045225215}
-  mainMenuMusic: {fileID: 8300000, guid: 3383b696136629140b38f8950e833902, type: 3}
+  mainMenuMusic: {fileID: 8300000, guid: d0595ddc1f38b9a4c99da0018cd540a6, type: 3}
   musicFadeDuration: 1
   mainMenuEntered: {fileID: 11400000, guid: 73e469e2fa118f34fba2072a9fe03733, type: 2}
   experienceTransitionStarted: {fileID: 11400000, guid: 8c258fad8f9755a44803254bc504e7a7, type: 2}
