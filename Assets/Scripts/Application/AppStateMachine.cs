@@ -42,10 +42,7 @@ public sealed class AppStateMachine : MonoBehaviour
     private bool _isTransitioning;
 
 
-    // =========================
-    // SUBSCRIPTIONS
-    // =========================
-
+    // Suscribirse 
     private void OnEnable()
     {
         if (experienceRequested != null)
@@ -60,7 +57,7 @@ public sealed class AppStateMachine : MonoBehaviour
         }
     }
 
-
+    // Desuscribirse
     private void OnDisable()
     {
         if (experienceRequested != null)
@@ -76,10 +73,6 @@ public sealed class AppStateMachine : MonoBehaviour
     }
 
 
-    // =========================
-    // INITIAL MENU
-    // =========================
-
     private IEnumerator Start()
     {
         CurrentState =
@@ -89,8 +82,6 @@ public sealed class AppStateMachine : MonoBehaviour
         yield return
             _sceneFlowManager.LoadInitialMenu();
 
-
-        // Permitir Awake / OnEnable
         yield return null;
 
 
@@ -117,9 +108,6 @@ public sealed class AppStateMachine : MonoBehaviour
     }
 
 
-    // =========================
-    // EXPERIENCE REQUEST
-    // =========================
 
     private void HandleExperienceRequested(
         ExperienceRequest request
@@ -158,9 +146,6 @@ public sealed class AppStateMachine : MonoBehaviour
     }
 
 
-    // =========================
-    // START EXPERIENCE
-    // =========================
 
     private IEnumerator StartExperienceRoutine(
         ExperienceRequest request
@@ -176,19 +161,13 @@ public sealed class AppStateMachine : MonoBehaviour
             request.Experience;
 
 
-        // =========================
-        // TRANSITION STARTED
-        // =========================
+
 
         if (experienceTransitionStarted != null)
         {
             experienceTransitionStarted.RaiseEvent();
         }
 
-
-        // =========================
-        // LOAD EXPERIENCE
-        // =========================
 
         yield return
             _sceneFlowManager.TransitionToExperience(
@@ -198,10 +177,6 @@ public sealed class AppStateMachine : MonoBehaviour
 
         yield return null;
 
-
-        // =========================
-        // EXPERIENCE READY
-        // =========================
 
         CurrentState =
             AppState.Experience;
@@ -222,9 +197,6 @@ public sealed class AppStateMachine : MonoBehaviour
         _isTransitioning = false;
     }
 
-    // =========================
-    // BACK TO MAIN MENU REQUEST
-    // =========================
     public bool RequestMainMenu()
     {
         if (!isActiveAndEnabled || CurrentState != AppState.Experience || _isTransitioning)
@@ -232,7 +204,7 @@ public sealed class AppStateMachine : MonoBehaviour
             return false;
         }
 
-        // Use the same channel as the pause menu so equipment also receives the exit event.
+        // usar el mismo canal como el pause menu para que el equipo tmb reciba el evento de salida
         if (_mainMenuRequested != null)
         {
             _mainMenuRequested.RaiseEvent();
