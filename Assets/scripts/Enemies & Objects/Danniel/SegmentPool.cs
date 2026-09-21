@@ -7,9 +7,7 @@ using System.Collections.Generic;
 
 public class SegmentPool :  MonoBehaviour, IExperiencePreloadable, IExperienceRuntime
 {
-    // =========================
-    // PROFILER
-    // =========================
+
 
     private static readonly ProfilerMarker MoveMarker =
         new ProfilerMarker("SegmentPool.Move");
@@ -24,9 +22,6 @@ public class SegmentPool :  MonoBehaviour, IExperiencePreloadable, IExperienceRu
         new ProfilerMarker("SegmentPool.SpawnEnemies");
 
 
-    // =========================
-    // SEGMENTS
-    // =========================
 
     [Header("Segments")]
 
@@ -40,6 +35,8 @@ public class SegmentPool :  MonoBehaviour, IExperiencePreloadable, IExperienceRu
     [SerializeField]
     private float speed = 1f;
 
+    [Tooltip("Multiplicador fijo, o final cuando Use Progressive Speed esta activado.")]
+    [Min(0f)]
     [SerializeField]
     private float speedMultiplier = 2f;
 
@@ -69,6 +66,30 @@ public class SegmentPool :  MonoBehaviour, IExperiencePreloadable, IExperienceRu
     )]
     [SerializeField]
     private float recycleZ = -80f;
+
+
+    [Header("Progressive Speed")]
+    [Tooltip("Aumenta la velocidad con el tiempo musical transcurrido en esta escena.")]
+    [SerializeField] private bool useProgressiveSpeed;
+
+    [Tooltip("Multiplicador inicial. Se limita al valor final de Speed Multiplier.")]
+    [Min(0f)]
+    [SerializeField] private float startSpeedMultiplier = 1.5f;
+
+    [Tooltip("Segundos de musica en esta escena para alcanzar Speed Multiplier.")]
+    [Min(0.01f)]
+    [SerializeField] private float accelerationDuration = 120f;
+
+    [Tooltip("Opcional. Se busca en ExperienceCore al comenzar la experiencia.")]
+    [SerializeField] private ExperienceMusicClock musicClock;
+
+    [Tooltip("Valor calculado durante Play. No es un ajuste de velocidad.")]
+    [SerializeField] private float currentSpeedMultiplier;
+
+    private double speedStartSongTime;
+    private bool hasSpeedStartSongTime;
+
+    public float CurrentSpeedMultiplier => currentSpeedMultiplier;
 
 
     // =========================
@@ -115,10 +136,6 @@ public class SegmentPool :  MonoBehaviour, IExperiencePreloadable, IExperienceRu
     private bool nextShouldBeRotated;
 
 
-    // =========================
-    // INACTIVE POOLS
-    // =========================
-
     private readonly Stack<SegmentData> normalPool =
         new Stack<SegmentData>();
 
@@ -126,10 +143,6 @@ public class SegmentPool :  MonoBehaviour, IExperiencePreloadable, IExperienceRu
     private readonly Stack<SegmentData> rotatedPool =
         new Stack<SegmentData>();
 
-
-    // =========================
-    // SEGMENT DATA CLASS
-    // =========================
 
     private class SegmentData
     {
@@ -147,10 +160,6 @@ public class SegmentPool :  MonoBehaviour, IExperiencePreloadable, IExperienceRu
     }
 
 
-    // =========================
-    // PRELOAD
-    // =========================
-
     public IEnumerator Preload()
     {
         if (isInitialized)
@@ -165,9 +174,6 @@ public class SegmentPool :  MonoBehaviour, IExperiencePreloadable, IExperienceRu
         );
 
 
-        // =========================
-        // INITIAL STATE
-        // =========================
 
         segments =
             new SegmentData[
@@ -226,13 +232,13 @@ public class SegmentPool :  MonoBehaviour, IExperiencePreloadable, IExperienceRu
 
 
 
-        // Después del NORMAL
+        // despues del NORMAL
         // debe venir ROTATED.
         nextShouldBeRotated = true;
 
 
         // Permitimos que el primer
-        // segmento empiece a moverse.
+        // segmento empiece a moverse
         isInitialized = true;
 
 
@@ -248,24 +254,15 @@ public class SegmentPool :  MonoBehaviour, IExperiencePreloadable, IExperienceRu
     }
 
 
-    // =========================
-    // INITIAL FILL
-    // =========================
-
     private IEnumerator InitialFillRoutine()
     {
-        // =========================
-        // WAIT 5 SECONDS
-        // =========================
+
 
         yield return new WaitForSeconds(
             secondSegmentDelay
         );
 
 
-        // =========================
-        // SECOND SEGMENT
-        // =========================
 
         if (
             activeSegmentCount <
@@ -276,14 +273,8 @@ public class SegmentPool :  MonoBehaviour, IExperiencePreloadable, IExperienceRu
         }
 
 
-        // Evitamos crear segundo y tercero
-        // exactamente en el mismo frame.
         yield return null;
 
-
-        // =========================
-        // REMAINING SEGMENTS
-        // =========================
 
         while (
             activeSegmentCount <
@@ -294,11 +285,6 @@ public class SegmentPool :  MonoBehaviour, IExperiencePreloadable, IExperienceRu
 
             yield return null;
         }
-
-
-        // =========================
-        // POOLING READY
-        // =========================
 
         oldestIndex = 0;
 
@@ -315,10 +301,6 @@ public class SegmentPool :  MonoBehaviour, IExperiencePreloadable, IExperienceRu
         );
     }
 
-
-    // =========================
-    // ADD INITIAL SEGMENT
-    // =========================
 
     private void AddInitialSegment()
     {
@@ -350,19 +332,12 @@ public class SegmentPool :  MonoBehaviour, IExperiencePreloadable, IExperienceRu
         }
 
 
-        // =========================
-        // CONNECT SEGMENTS
-        // =========================
-
         PlaceAfter(
             previousSegment,
             newSegment
         );
 
 
-        // =========================
-        // STORE
-        // =========================
 
         segments[
             activeSegmentCount
@@ -373,18 +348,13 @@ public class SegmentPool :  MonoBehaviour, IExperiencePreloadable, IExperienceRu
         activeSegmentCount++;
 
 
-        // =========================
-        // ENEMIES
-        // =========================
+
 
         SpawnEnemies(
             newSegment
         );
 
 
-        // =========================
-        // NEXT TYPE
-        // =========================
 
         nextShouldBeRotated =
             !nextShouldBeRotated;
@@ -400,9 +370,7 @@ public class SegmentPool :  MonoBehaviour, IExperiencePreloadable, IExperienceRu
     }
 
 
-    // =========================
-    // UPDATE
-    // =========================
+
 
     private void Update()
     {
@@ -421,24 +389,22 @@ public class SegmentPool :  MonoBehaviour, IExperiencePreloadable, IExperienceRu
         }
 
 
-        // =========================
-        // MOVEMENT
-        // =========================
+
+        if (!UpdateSpeedProgression())
+        {
+            return;
+        }
 
         MoveSegments();
 
 
-        // Todavía estamos en los
-        // primeros 5 segundos / llenado.
         if (!initialFillComplete)
         {
             return;
         }
 
 
-        // =========================
-        // RECYCLE
-        // =========================
+
 
         int safety =
             activeSegmentCount;
@@ -457,9 +423,82 @@ public class SegmentPool :  MonoBehaviour, IExperiencePreloadable, IExperienceRu
     }
 
 
-    // =========================
-    // MOVEMENT
-    // =========================
+    private void ResetSpeedProgression()
+    {
+        hasSpeedStartSongTime = false;
+        currentSpeedMultiplier = useProgressiveSpeed
+            ? Mathf.Clamp(startSpeedMultiplier, 0f, Mathf.Max(0f, speedMultiplier))
+            : Mathf.Max(0f, speedMultiplier);
+
+        if (!useProgressiveSpeed)
+        {
+            return;
+        }
+
+        if (musicClock == null)
+        {
+            musicClock = FindFirstObjectByType<ExperienceMusicClock>();
+        }
+
+        if (musicClock == null)
+        {
+            Debug.LogWarning(
+                "[SegmentPool] No se encontro ExperienceMusicClock. " +
+                "Se mantiene la velocidad inicial. Inicia desde Bootstrap para cargar ExperienceCore.",
+                this);
+            return;
+        }
+
+        // Si la musica ya sigue sonando al entrar en Danniel, contar desde aqui.
+        // Si aun no arranca, capturar el inicio en el primer frame de reproduccion.
+        if (musicClock.IsPlaying)
+        {
+            speedStartSongTime = musicClock.SongTime;
+            hasSpeedStartSongTime = true;
+        }
+    }
+
+
+    private bool UpdateSpeedProgression()
+    {
+        if (Time.timeScale <= 0f || AudioListener.pause)
+        {
+            return false;
+        }
+
+        float finalMultiplier = Mathf.Max(0f, speedMultiplier);
+        if (!useProgressiveSpeed)
+        {
+            currentSpeedMultiplier = finalMultiplier;
+            return true;
+        }
+
+        float initialMultiplier = Mathf.Clamp(startSpeedMultiplier, 0f, finalMultiplier);
+        if (musicClock == null)
+        {
+            currentSpeedMultiplier = initialMultiplier;
+            return true;
+        }
+
+        if (!musicClock.IsPlaying)
+        {
+            return false;
+        }
+
+        double songTime = musicClock.SongTime;
+        if (!hasSpeedStartSongTime || songTime < speedStartSongTime)
+        {
+            // Tambien reinicia al volver a un punto anterior al inicio de esta escena.
+            speedStartSongTime = songTime;
+            hasSpeedStartSongTime = true;
+        }
+
+        float progress = (float)((songTime - speedStartSongTime) /
+            Mathf.Max(0.01f, accelerationDuration));
+        currentSpeedMultiplier = Mathf.Lerp(initialMultiplier, finalMultiplier, progress);
+        return true;
+    }
+
 
     private void MoveSegments()
     {
@@ -467,7 +506,7 @@ public class SegmentPool :  MonoBehaviour, IExperiencePreloadable, IExperienceRu
         {
             float movement =
                 speed *
-                speedMultiplier *
+                currentSpeedMultiplier *
                 Time.deltaTime;
 
 
@@ -535,9 +574,6 @@ public class SegmentPool :  MonoBehaviour, IExperiencePreloadable, IExperienceRu
             }
 
 
-            // =========================
-            // FIND LAST
-            // =========================
 
             int lastIndex =
                 (
@@ -555,18 +591,12 @@ public class SegmentPool :  MonoBehaviour, IExperiencePreloadable, IExperienceRu
                 ];
 
 
-            // =========================
-            // RETURN OLD TO POOL
-            // =========================
 
             ReturnToPool(
                 oldSegment
             );
 
 
-            // =========================
-            // GET NEXT TYPE
-            // =========================
 
             SegmentData newSegment =
                 GetSegment(
@@ -585,9 +615,6 @@ public class SegmentPool :  MonoBehaviour, IExperiencePreloadable, IExperienceRu
             }
 
 
-            // =========================
-            // CONNECT EXACTLY
-            // =========================
 
             PlaceAfter(
                 lastSegment,
@@ -595,9 +622,6 @@ public class SegmentPool :  MonoBehaviour, IExperiencePreloadable, IExperienceRu
             );
 
 
-            // =========================
-            // REPLACE ARRAY SLOT
-            // =========================
 
             segments[
                 oldestIndex
@@ -605,26 +629,17 @@ public class SegmentPool :  MonoBehaviour, IExperiencePreloadable, IExperienceRu
                 newSegment;
 
 
-            // =========================
-            // NEW ENEMIES
-            // =========================
+
 
             SpawnEnemies(
                 newSegment
             );
 
 
-            // =========================
-            // NEXT TYPE
-            // =========================
 
             nextShouldBeRotated =
                 !nextShouldBeRotated;
 
-
-            // =========================
-            // NEXT OLDEST
-            // =========================
 
             oldestIndex =
                 (
@@ -636,9 +651,6 @@ public class SegmentPool :  MonoBehaviour, IExperiencePreloadable, IExperienceRu
     }
 
 
-    // =========================
-    // PLACE AFTER
-    // =========================
 
     private void PlaceAfter(
         SegmentData previousSegment,
@@ -682,10 +694,6 @@ public class SegmentPool :  MonoBehaviour, IExperiencePreloadable, IExperienceRu
         }
 
 
-        // =========================
-        // EXACT CONNECTION
-        // =========================
-
         Vector3 targetPosition =
             previousSegment
                 .Anchors
@@ -705,9 +713,6 @@ public class SegmentPool :  MonoBehaviour, IExperiencePreloadable, IExperienceRu
             currentStartPosition;
 
 
-        // Movemos TODO el segmento
-        // exactamente la diferencia
-        // necesaria.
         newSegment.Transform.position +=
             difference;
 
@@ -722,9 +727,6 @@ public class SegmentPool :  MonoBehaviour, IExperiencePreloadable, IExperienceRu
     }
 
 
-    // =========================
-    // GET SEGMENT
-    // =========================
 
     private SegmentData GetSegment(
         bool isRotated
@@ -736,9 +738,6 @@ public class SegmentPool :  MonoBehaviour, IExperiencePreloadable, IExperienceRu
                 : normalPool;
 
 
-        // =========================
-        // REUSE
-        // =========================
 
         if (selectedPool.Count > 0)
         {
@@ -755,9 +754,6 @@ public class SegmentPool :  MonoBehaviour, IExperiencePreloadable, IExperienceRu
         }
 
 
-        // =========================
-        // CREATE
-        // =========================
 
         return CreateSegment(
             isRotated
@@ -765,9 +761,7 @@ public class SegmentPool :  MonoBehaviour, IExperiencePreloadable, IExperienceRu
     }
 
 
-    // =========================
-    // CREATE SEGMENT
-    // =========================
+
 
     private SegmentData CreateSegment(
         bool isRotated
@@ -791,12 +785,9 @@ public class SegmentPool :  MonoBehaviour, IExperiencePreloadable, IExperienceRu
             return null;
         }
 
-
-        // IMPORTANTE:
-        // usamos la rotación propia
+        // usar la rotación propia
         // del prefab.
-        //
-        // SegmentPool NO rota nada.
+
         GameObject segmentObject =
             Instantiate(
                 prefab,
@@ -855,10 +846,6 @@ public class SegmentPool :  MonoBehaviour, IExperiencePreloadable, IExperienceRu
     }
 
 
-    // =========================
-    // RETURN TO POOL
-    // =========================
-
     private void ReturnToPool(
         SegmentData segment
     )
@@ -883,9 +870,6 @@ public class SegmentPool :  MonoBehaviour, IExperiencePreloadable, IExperienceRu
     }
 
 
-    // =========================
-    // SPAWN ENEMIES
-    // =========================
 
     private void SpawnEnemies(
         SegmentData segment
@@ -910,10 +894,6 @@ public class SegmentPool :  MonoBehaviour, IExperiencePreloadable, IExperienceRu
         }
     }
 
-    // =========================
-    // EXPERIENCE START
-    // =========================
-
     public void BeginExperience()
     {
         if (!isInitialized)
@@ -933,12 +913,10 @@ public class SegmentPool :  MonoBehaviour, IExperiencePreloadable, IExperienceRu
         }
 
 
+        ResetSpeedProgression();
         isRunning = true;
 
 
-        // =========================
-        // FIRST ENEMIES
-        // =========================
 
         if (
             activeSegmentCount > 0 &&
@@ -950,10 +928,6 @@ public class SegmentPool :  MonoBehaviour, IExperiencePreloadable, IExperienceRu
             );
         }
 
-
-        // =========================
-        // INITIAL FILL
-        // =========================
 
         initialFillRoutine =
             StartCoroutine(
@@ -968,9 +942,6 @@ public class SegmentPool :  MonoBehaviour, IExperiencePreloadable, IExperienceRu
     }
 
 
-    // =========================
-    // EXPERIENCE END
-    // =========================
 
     public void EndExperience()
     {
@@ -981,6 +952,7 @@ public class SegmentPool :  MonoBehaviour, IExperiencePreloadable, IExperienceRu
 
 
         isRunning = false;
+        hasSpeedStartSongTime = false;
 
 
         if (initialFillRoutine != null)
@@ -998,5 +970,5 @@ public class SegmentPool :  MonoBehaviour, IExperiencePreloadable, IExperienceRu
             this
         );
     }
-
+    
 }
