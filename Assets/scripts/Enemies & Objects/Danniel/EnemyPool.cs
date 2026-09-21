@@ -57,8 +57,6 @@ public class EnemyPool :
 
     private ObjectPool<GameObject> pool;
 
-    private bool isPrewarmed;
-
 
     private void Awake()
     {
@@ -143,12 +141,12 @@ public class EnemyPool :
 
     public IEnumerator Preload()
     {
-        if (isPrewarmed)
-        {
-            yield break;
-        }
+        return EnsurePrewarmed(prewarmCount);
+    }
 
 
+    public IEnumerator EnsurePrewarmed(int minimumCount)
+    {
         if (pool == null)
         {
             Debug.LogError(
@@ -162,10 +160,16 @@ public class EnemyPool :
 
         int amount =
             Mathf.Clamp(
-                prewarmCount,
+                Mathf.Max(prewarmCount, minimumCount),
                 0,
                 maxSize
             );
+
+
+        if (pool.CountInactive >= amount)
+        {
+            yield break;
+        }
 
 
         GameObject[] enemies =
@@ -210,9 +214,6 @@ public class EnemyPool :
                 enemies[i]
             );
         }
-
-
-        isPrewarmed = true;
 
 
         Debug.Log(

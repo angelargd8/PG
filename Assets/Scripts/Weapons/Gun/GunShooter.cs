@@ -33,6 +33,9 @@ public sealed class GunShooter : MonoBehaviour
 
     private float nextAllowedFireTime;
 
+    [Header("Debug")]
+    [SerializeField] private bool logShots;
+
 
     [Header("Haptic Feedback")]
 
@@ -116,8 +119,11 @@ public sealed class GunShooter : MonoBehaviour
             shotAudioSource.Play();
         }
 
-        Debug.Log(
-            $"[GunShooter] Disparo desde {bulletPoint.position}",
-            this);
+        if (logShots)
+        {
+            Debug.Log(
+                $"[GunShooter] Disparo desde {bulletPoint.position}",
+                this);
+        }
     }
 }

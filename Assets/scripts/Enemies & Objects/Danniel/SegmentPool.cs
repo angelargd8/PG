@@ -117,6 +117,9 @@ public class SegmentPool :  MonoBehaviour, IExperiencePreloadable, IExperienceRu
     private int oldestIndex;
 
 
+    [Header("Debug")]
+    [SerializeField] private bool logLifecycle;
+
     private bool isInitialized;
 
     private bool initialFillComplete;
@@ -168,13 +171,17 @@ public class SegmentPool :  MonoBehaviour, IExperiencePreloadable, IExperienceRu
         }
 
 
-        Debug.Log(
-            "SegmentPool comienza Preload.",
-            this
-        );
+        if (logLifecycle)
+        {
+            Debug.Log(
+                "SegmentPool comienza Preload.",
+                this
+            );
+        }
 
 
 
+        maxActiveSegments = Mathf.Max(1, maxActiveSegments);
         segments =
             new SegmentData[
                 maxActiveSegments
@@ -237,16 +244,51 @@ public class SegmentPool :  MonoBehaviour, IExperiencePreloadable, IExperienceRu
         nextShouldBeRotated = true;
 
 
-        // Permitimos que el primer
-        // segmento empiece a moverse
+        // Crear el resto durante Loading, distribuyendo las instancias por frame.
+        // Para cantidades impares hace falta una reserva de ambos tipos:
+        // al reciclar se alterna cual de ellos ocupa mas segmentos activos.
+        yield return null;
+        int instancesPerType = (maxActiveSegments + 1) / 2;
+        for (int i = 1; i < instancesPerType; i++)
+        {
+            SegmentData segment = CreateSegment(false);
+            if (segment == null)
+            {
+                yield break;
+            }
+
+            ReturnToPool(segment);
+            yield return null;
+        }
+
+        for (int i = 0; i < instancesPerType; i++)
+        {
+            SegmentData segment = CreateSegment(true);
+            if (segment == null)
+            {
+                yield break;
+            }
+
+            ReturnToPool(segment);
+            yield return null;
+        }
+
+        if (enemySpawnDirector != null)
+        {
+            yield return enemySpawnDirector.PreloadForSegments(maxActiveSegments);
+        }
+
         isInitialized = true;
 
 
-        Debug.Log(
-            "Primer segmento cargado. " +
-            "Esperando para cargar el segundo.",
-            this
-        );
+        if (logLifecycle)
+        {
+            Debug.Log(
+                "Primer segmento cargado. " +
+                "Esperando para cargar el segundo.",
+                this
+            );
+        }
 
 
 
@@ -293,12 +335,15 @@ public class SegmentPool :  MonoBehaviour, IExperiencePreloadable, IExperienceRu
         initialFillRoutine = null;
 
 
-        Debug.Log(
-            $"Carga inicial terminada. " +
-            $"Segmentos activos: " +
-            $"{activeSegmentCount}",
-            this
-        );
+        if (logLifecycle)
+        {
+            Debug.Log(
+                $"Carga inicial terminada. " +
+                $"Segmentos activos: " +
+                $"{activeSegmentCount}",
+                this
+            );
+        }
     }
 
 
@@ -360,13 +405,16 @@ public class SegmentPool :  MonoBehaviour, IExperiencePreloadable, IExperienceRu
             !nextShouldBeRotated;
 
 
-        Debug.Log(
-            $"Segmento agregado. " +
-            $"Tipo: " +
-            $"{(newSegment.IsRotated ? "ROTATED" : "NORMAL")} | " +
-            $"Activos: {activeSegmentCount}",
-            newSegment.GameObject
-        );
+        if (logLifecycle)
+        {
+            Debug.Log(
+                $"Segmento agregado. " +
+                $"Tipo: " +
+                $"{(newSegment.IsRotated ? "ROTATED" : "NORMAL")} | " +
+                $"Activos: {activeSegmentCount}",
+                newSegment.GameObject
+            );
+        }
     }
 
 
@@ -717,13 +765,16 @@ public class SegmentPool :  MonoBehaviour, IExperiencePreloadable, IExperienceRu
             difference;
 
 
-        Debug.Log(
-            $"Segmentos conectados. " +
-            $"End anterior: {targetPosition} | " +
-            $"Start nuevo: " +
-            $"{newSegment.Anchors.StartPoint.position}",
-            newSegment.GameObject
-        );
+        if (logLifecycle)
+        {
+            Debug.Log(
+                $"Segmentos conectados. " +
+                $"End anterior: {targetPosition} | " +
+                $"Start nuevo: " +
+                $"{newSegment.Anchors.StartPoint.position}",
+                newSegment.GameObject
+            );
+        }
     }
 
 
@@ -835,11 +886,14 @@ public class SegmentPool :  MonoBehaviour, IExperiencePreloadable, IExperienceRu
         }
 
 
-        Debug.Log(
-            $"Segmento físico creado: " +
-            $"{(isRotated ? "ROTATED" : "NORMAL")}",
-            segmentObject
-        );
+        if (logLifecycle)
+        {
+            Debug.Log(
+                $"Segmento físico creado: " +
+                $"{(isRotated ? "ROTATED" : "NORMAL")}",
+                segmentObject
+            );
+        }
 
 
         return data;
@@ -935,10 +989,13 @@ public class SegmentPool :  MonoBehaviour, IExperiencePreloadable, IExperienceRu
             );
 
 
-        Debug.Log(
-            "[SegmentPool] Gameplay iniciado.",
-            this
-        );
+        if (logLifecycle)
+        {
+            Debug.Log(
+                "[SegmentPool] Gameplay iniciado.",
+                this
+            );
+        }
     }
 
 
@@ -965,10 +1022,13 @@ public class SegmentPool :  MonoBehaviour, IExperiencePreloadable, IExperienceRu
         }
 
 
-        Debug.Log(
-            "[SegmentPool] Gameplay detenido.",
-            this
-        );
+        if (logLifecycle)
+        {
+            Debug.Log(
+                "[SegmentPool] Gameplay detenido.",
+                this
+            );
+        }
     }
     
 }

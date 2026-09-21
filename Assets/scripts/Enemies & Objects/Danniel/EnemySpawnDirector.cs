@@ -1,5 +1,6 @@
 using UnityEngine;
 using Unity.Profiling;
+using System.Collections;
 using System.Collections.Generic;
 
 public class EnemySpawnDirector : MonoBehaviour
@@ -18,6 +19,16 @@ public class EnemySpawnDirector : MonoBehaviour
     private readonly List<Transform> availablePoints =
         new List<Transform>(16);
 
+
+    public IEnumerator PreloadForSegments(int segmentCount)
+    {
+        if (enemyPool != null)
+        {
+            // Precalentar para el maximo simultaneo, no solo para el primer segmento.
+            int requiredCount = Mathf.Max(1, segmentCount) * Mathf.Max(0, enemiesPerSegment);
+            yield return enemyPool.EnsurePrewarmed(requiredCount);
+        }
+    }
 
     public void SpawnEnemiesOnSegment(
         SegmentEnemySpawns segmentSpawns
