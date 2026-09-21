@@ -225,6 +225,26 @@ public sealed class AppStateMachine : MonoBehaviour
     // =========================
     // BACK TO MAIN MENU REQUEST
     // =========================
+    public bool RequestMainMenu()
+    {
+        if (!isActiveAndEnabled || CurrentState != AppState.Experience || _isTransitioning)
+        {
+            return false;
+        }
+
+        // Use the same channel as the pause menu so equipment also receives the exit event.
+        if (_mainMenuRequested != null)
+        {
+            _mainMenuRequested.RaiseEvent();
+        }
+        else
+        {
+            HandleMainMenuRequested();
+        }
+
+        return true;
+    }
+
     private void HandleMainMenuRequested()
     {
         if (CurrentState != AppState.Experience)
