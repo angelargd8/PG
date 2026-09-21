@@ -256,9 +256,17 @@ public sealed class BeatLightController : MonoBehaviour
 
     private static bool IsUsableLight(Light light, Scene scene)
     {
-        return light != null && light.isActiveAndEnabled &&
-            light.gameObject.scene == scene && light.type == LightType.Directional &&
-            light.lightmapBakeType != LightmapBakeType.Baked;
+        if (light == null || !light.isActiveAndEnabled ||
+            light.gameObject.scene != scene || light.type != LightType.Directional)
+        {
+            return false;
+        }
+
+#if UNITY_EDITOR
+        return light.lightmapBakeType != LightmapBakeType.Baked;
+#else
+        return light.bakingOutput.lightmapBakeType != LightmapBakeType.Baked;
+#endif
     }
 
 
