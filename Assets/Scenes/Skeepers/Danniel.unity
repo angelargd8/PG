@@ -365,6 +365,7 @@ MonoBehaviour:
   currentSpeedMultiplier: 0
   enemySpawnDirector: {fileID: 1413581909}
   enemyPool: {fileID: 613208085}
+  logLifecycle: 0
 --- !u!1 &613208084
 GameObject:
   m_ObjectHideFlags: 0
@@ -424,6 +425,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 4752311941042380876, guid: 4d8de6316d12ef54698481aa31098f7e, type: 3}
+      propertyPath: bulletLifetime
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 4752311941042380876, guid: 4d8de6316d12ef54698481aa31098f7e, type: 3}
       propertyPath: hapticAmplitude
       value: 0.4
@@ -562,6 +567,10 @@ PrefabInstance:
       value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 4752311941042380876, guid: 4d8de6316d12ef54698481aa31098f7e, type: 3}
+      propertyPath: bulletLifetime
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4752311941042380876, guid: 4d8de6316d12ef54698481aa31098f7e, type: 3}
       propertyPath: hapticAmplitude
       value: 0.4
       objectReference: {fileID: 0}
@@ -687,7 +696,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemySpawnDirector
   enemyPool: {fileID: 613208085}
-  enemiesPerSegment: 6
+  enemiesPerSegment: 3
 --- !u!1 &1463065915
 GameObject:
   m_ObjectHideFlags: 0
