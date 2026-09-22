@@ -12,8 +12,37 @@ public class EnemySpawnDirector : MonoBehaviour
     [SerializeField]
     private EnemyPool enemyPool;
 
+    [Header("Enemies Per Platform")]
+    [Tooltip("Usar la cantidad de Android en Quest standalone y la de PC en el Editor o Quest Link.")]
+    [SerializeField] private bool usePlatformEnemyCount = true;
+
+    [Min(0)]
+    [SerializeField] private int desktopEnemiesPerSegment = 6;
+
+    [Tooltip("Cantidad para el APK que se ejecuta directamente en Quest, incluso conectado por USB.")]
+    [Min(0)]
+    [SerializeField] private int androidEnemiesPerSegment = 3;
+
+    [Tooltip("Cantidad manual. Solo se usa si Use Platform Enemy Count esta desactivado.")]
+    [Min(0)]
     [SerializeField]
     private int enemiesPerSegment = 3;
+
+    private int EffectiveEnemiesPerSegment
+    {
+        get
+        {
+            int amount = enemiesPerSegment;
+            if (usePlatformEnemyCount)
+            {
+                amount = Application.platform == RuntimePlatform.Android
+                    ? androidEnemiesPerSegment
+                    : desktopEnemiesPerSegment;
+            }
+
+            return Mathf.Max(0, amount);
+        }
+    }
 
 
     private readonly List<Transform> availablePoints =
@@ -25,7 +54,7 @@ public class EnemySpawnDirector : MonoBehaviour
         if (enemyPool != null)
         {
             // Precalentar para el maximo simultaneo, no solo para el primer segmento.
-            int requiredCount = Mathf.Max(1, segmentCount) * Mathf.Max(0, enemiesPerSegment);
+            int requiredCount = Mathf.Max(1, segmentCount) * EffectiveEnemiesPerSegment;
             yield return enemyPool.EnsurePrewarmed(requiredCount);
         }
     }
@@ -68,7 +97,7 @@ public class EnemySpawnDirector : MonoBehaviour
 
             int amount =
                 Mathf.Min(
-                    enemiesPerSegment,
+                    EffectiveEnemiesPerSegment,
                     availablePoints.Count
                 );
 
