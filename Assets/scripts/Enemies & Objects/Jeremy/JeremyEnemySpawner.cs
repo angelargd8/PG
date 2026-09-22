@@ -9,21 +9,20 @@ public sealed class JeremyEnemySpawner : MonoBehaviour
 
 
     [Header("Movement")]
-    [SerializeField] private float _movementSpeed = 2f;
     [SerializeField] private float _idealCutDistance = 1.3f;
 
 
-    [Header("Temporary")]
-    [SerializeField] private DifficultyLevel _difficulty = DifficultyLevel.Normal; // Esto lo voy a quitar cuando haga el sistema de DDA
-
-
     public Vector3 TargetPosition => _enemyTarget.position;
-    public float MovementSpeed => _movementSpeed;
     public float IdealCutDistance => _idealCutDistance;
 
 
-    public void SpawnAt(Transform spawnPoint, double expectedHitTime)
-    {
+    public void SpawnAt(
+        Transform spawnPoint, 
+        double expectedHitTime,
+        DifficultyLevel difficulty,
+        float movementSpeed,
+        float specificHandProbability
+    ){
         if (spawnPoint == null)
         {
             return;
@@ -50,7 +49,7 @@ public sealed class JeremyEnemySpawner : MonoBehaviour
         }
 
         JeremyCutDirection direction = (JeremyCutDirection)Random.Range(0, 4);
-        JeremyHand hand = (JeremyHand)Random.Range(0, 3);
+        JeremyHand hand = GetHand(specificHandProbability);
 
         _enemyPool.GetEnemy(
             spawnPoint.position,
@@ -58,10 +57,22 @@ public sealed class JeremyEnemySpawner : MonoBehaviour
             _enemyTarget.position,
             direction,
             hand,
-            _difficulty,
-            _movementSpeed,
+            difficulty,
+            movementSpeed,
             _idealCutDistance,
             expectedHitTime
         );
+    }
+
+    private JeremyHand GetHand(float specificHandProbability)
+    {
+        if (Random.value > specificHandProbability)
+        {
+            return JeremyHand.Any;
+        }
+
+        return Random.value < 0.5f
+            ? JeremyHand.Left
+            : JeremyHand.Right;
     }
 }

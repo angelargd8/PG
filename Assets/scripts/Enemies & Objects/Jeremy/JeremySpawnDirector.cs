@@ -12,6 +12,9 @@ public sealed class JeremySpawnDirector :
         public Transform SpawnPoint;
         public double ExpectedHitTime;
         public double SpawnTime;
+        public DifficultyLevel Difficulty;
+        public float MovementSpeed;
+        public float SpecificHandProbability;
     }
 
 
@@ -28,14 +31,17 @@ public sealed class JeremySpawnDirector :
     [SerializeField] private int _lookAheadBeats = 8;
 
 
-    [Header("Temporary Difficulty")]
-    [SerializeField] private int _spawnEveryNBeats = 2;
+    [Header("Difficulty")]
+    [SerializeField] private JeremyDifficultyConfigSO _difficultyConfig;
+    [SerializeField] private DifficultyLevel _startingDifficulty = DifficultyLevel.Normal;
 
 
     private readonly List<ScheduledSpawn> _scheduledSpawns = new List<ScheduledSpawn>();
     private ExperienceMusicClock _musicClock;
     private bool _isRunning;
     private int _nextBeatIndex;
+    private DifficultyLevel _currentDifficulty;
+    private JeremyDifficultyProfile _currentProfile;
 
 
     public void BeginExperience()
@@ -61,6 +67,9 @@ public sealed class JeremySpawnDirector :
 
             return;
         }
+
+        _currentDifficulty = _startingDifficulty;
+        _currentProfile = _difficultyConfig.GetProfile(_currentDifficulty);
 
         _isRunning = true;
         _nextBeatIndex = 0;
@@ -94,15 +103,16 @@ public sealed class JeremySpawnDirector :
     {
         while (
             _scheduledSpawns.Count < _lookAheadBeats &&
-            _nextBeatIndex < _beatMap.BeatTimes.Count)
+            _nextBeatIndex < _beatMap.Beats.Count)
         {
-            int beatIndex = _nextBeatIndex;
-            _nextBeatIndex++;
+            int beatCount = _currentProfile.SpawnEveryNBeats;
 
-            if (beatIndex % _spawnEveryNBeats != 0)
-            {
-                continue;
-            }
+            int beatIndex = GetMostIntenseBeatIndex(
+                _nextBeatIndex,
+                beatCount
+            );
+
+            _nextBeatIndex += beatCount;
 
             ScheduleBeat(beatIndex);
         }
@@ -111,7 +121,7 @@ public sealed class JeremySpawnDirector :
 
     private void ScheduleBeat(int beatIndex)
     {
-        double expectedHitTime = _beatMap.BeatTimes[beatIndex];
+        double expectedHitTime = _beatMap.Beats[beatIndex].Time;
 
         Transform spawnPoint = GetSpawnPointForSchedule();
 
@@ -119,8 +129,9 @@ public sealed class JeremySpawnDirector :
         {
             return;
         }
-
-        float travelTime = CalculateTravelTime(spawnPoint);
+        
+        float movementSpeed = _currentProfile.MovementSpeed;
+        float travelTime = CalculateTravelTime(spawnPoint, movementSpeed);
         double spawnTime = expectedHitTime - travelTime;
 
         if (spawnTime < 0.0)
@@ -133,7 +144,10 @@ public sealed class JeremySpawnDirector :
             BeatIndex = beatIndex,
             SpawnPoint = spawnPoint,
             ExpectedHitTime = expectedHitTime,
-            SpawnTime = spawnTime
+            SpawnTime = spawnTime,
+            Difficulty = _currentDifficulty,
+            MovementSpeed = movementSpeed,
+            SpecificHandProbability = _currentProfile.SpecificHandProbability
         };
 
         InsertSorted(scheduledSpawn);
@@ -160,7 +174,10 @@ public sealed class JeremySpawnDirector :
 
             _enemySpawner.SpawnAt(
                 scheduledSpawn.SpawnPoint,
-                scheduledSpawn.ExpectedHitTime
+                scheduledSpawn.ExpectedHitTime,
+                scheduledSpawn.Difficulty,
+                scheduledSpawn.MovementSpeed,
+                scheduledSpawn.SpecificHandProbability
             );
         }
     }
@@ -233,21 +250,40 @@ public sealed class JeremySpawnDirector :
     }
 
 
-    private float CalculateTravelTime(Transform spawnPoint)
+    private float CalculateTravelTime(Transform spawnPoint, float movementSpeed)
     {
-        float distanceToTarget = Vector3.Distance(
-            spawnPoint.position,
-            _enemySpawner.TargetPosition
-        );
+        float distanceToTarget = Vector3.Distance(spawnPoint.position, _enemySpawner.TargetPosition);
 
-        float travelDistance =
-            distanceToTarget - _enemySpawner.IdealCutDistance;
+        float travelDistance = distanceToTarget - _enemySpawner.IdealCutDistance;
 
         travelDistance = Mathf.Max(0f, travelDistance);
 
-        return travelDistance / _enemySpawner.MovementSpeed;
+        return travelDistance / movementSpeed;
     }
 
+    private int GetMostIntenseBeatIndex(int startIndex, int beatCount)
+    {
+        int endIndex = Mathf.Min(
+            startIndex + beatCount,
+            _beatMap.Beats.Count
+        );
+
+        int selectedIndex = startIndex;
+        float highestIntensity = _beatMap.Beats[startIndex].Intensity;
+
+        for (int i = startIndex + 1; i < endIndex; i++)
+        {
+            float intensity = _beatMap.Beats[i].Intensity;
+
+            if (intensity > highestIntensity)
+            {
+                highestIntensity = intensity;
+                selectedIndex = i;
+            }
+        }
+
+        return selectedIndex;
+    }
 
     private bool ValidateReferences()
     {
@@ -272,15 +308,9 @@ public sealed class JeremySpawnDirector :
             }
         }
 
-        if (_beatMap == null || _beatMap.BeatTimes.Count == 0)
+        if (_beatMap == null || _beatMap.Beats.Count == 0)
         {
             Debug.LogError("[JeremySpawnDirector] No se asignó un BeatMap válido.", this);
-            return false;
-        }
-
-        if (_spawnEveryNBeats <= 0)
-        {
-            Debug.LogError("[JeremySpawnDirector] Spawn Every N Beats debe ser mayor que 0.", this);
             return false;
         }
 
@@ -290,12 +320,22 @@ public sealed class JeremySpawnDirector :
             return false;
         }
 
-        if (_enemySpawner.MovementSpeed <= 0f)
+        return true;
+    }
+
+    public void SetDifficulty(DifficultyLevel difficulty)
+    {
+        if (_currentDifficulty == difficulty)
         {
-            Debug.LogError("[JeremySpawnDirector] Movement Speed debe ser mayor que 0.", this);
-            return false;
+            return;
         }
 
-        return true;
+        _currentDifficulty = difficulty;
+        _currentProfile = _difficultyConfig.GetProfile(_currentDifficulty);
+
+        Debug.Log(
+            $"[JeremySpawnDirector] Difficulty changed to {_currentDifficulty}.",
+            this
+        );
     }
 }

@@ -694,9 +694,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::JeremyEnemySpawner
   _enemyPool: {fileID: 1123466202}
   _enemyTarget: {fileID: 1287626505}
-  _movementSpeed: 2
   _idealCutDistance: 1.3
-  _difficulty: 1
 --- !u!4 &1340442702
 Transform:
   m_ObjectHideFlags: 0
@@ -892,7 +890,8 @@ MonoBehaviour:
   - {fileID: 450723778}
   _beatMap: {fileID: 11400000, guid: dde8e63a528c3a64aa8ef99df2dfc5c8, type: 2}
   _lookAheadBeats: 8
-  _spawnEveryNBeats: 4
+  _difficultyConfig: {fileID: 11400000, guid: 49bd20c2595e8cb429da796d667603ce, type: 2}
+  _startingDifficulty: 0
 --- !u!1 &1697949989
 GameObject:
   m_ObjectHideFlags: 0
@@ -954,6 +953,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::JeremyHitEvaluator
   _interactionRegistered: {fileID: 11400000, guid: 188abd6f30130bb42b4877604a6ce24f, type: 2}
+  _successHapticAmplitude: 0.4
+  _successHapticDuration: 0.06
+  _failureHapticAmplitude: 0.6
+  _failureHapticDuration: 0.1
 --- !u!4 &1885393297
 Transform:
   m_ObjectHideFlags: 0
