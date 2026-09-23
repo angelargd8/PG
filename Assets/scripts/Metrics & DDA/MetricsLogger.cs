@@ -85,6 +85,14 @@ public sealed class MetricsLogger : MonoBehaviour
         File.AppendAllText(_filePath, summary);
     }
 
+    public void LogPlayerState(PlayerState state)
+    {
+        string line =
+            $"{DateTime.Now:yyyy-MM-dd HH:mm:ss.fff} | " +
+            $"PlayerState: {state}";
+
+        File.AppendAllText(_filePath, line + Environment.NewLine);
+    }
 
     private void CreateLogFile()
     {

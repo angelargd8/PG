@@ -779,6 +779,62 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ExperienceMusicClock
   _playableDirector: {fileID: 1409625371}
+--- !u!1 &1164249865
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1164249867}
+  - component: {fileID: 1164249866}
+  m_Layer: 0
+  m_Name: PlayerStateSystem
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1164249866
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1164249865}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1fb02179030b15a47b458f83399fd424, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerStateSystem
+  _windowSize: 8
+  _minimumSamplesForOverload: 5
+  _idleSeconds: 5
+  _overloadEnterErrorRate: 0.6
+  _overloadExitErrorRate: 0.3
+  _consecutiveErrorsForOverload: 3
+  _interactionRegistered: {fileID: 11400000, guid: 188abd6f30130bb42b4877604a6ce24f, type: 2}
+  _gameplayPauseChanged: {fileID: 11400000, guid: 1415d9d465e8b3d43b5df09e48696b07, type: 2}
+  _experienceReady: {fileID: 11400000, guid: f4b8f7b73053533419eb97071978892d, type: 2}
+  _mainMenuRequested: {fileID: 11400000, guid: 79709713fbe723e48b79c6b3004f8758, type: 2}
+  _playerStateChanged: {fileID: 11400000, guid: 42b72f537b05ff0449f361b67485f7d1, type: 2}
+  _metricsLogger: {fileID: 128679736}
+--- !u!4 &1164249867
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1164249865}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.61223, y: 5.43561, z: -2.23263}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1241351817
 GameObject:
   m_ObjectHideFlags: 0
@@ -1472,3 +1528,4 @@ SceneRoots:
   - {fileID: 1155978204}
   - {fileID: 1370355480}
   - {fileID: 1241351818}
+  - {fileID: 1164249867}
