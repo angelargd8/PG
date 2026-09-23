@@ -94,6 +94,19 @@ public sealed class MetricsLogger : MonoBehaviour
         File.AppendAllText(_filePath, line + Environment.NewLine);
     }
 
+    public void LogDifficultyChange(
+        DifficultyLevel previousDifficulty,
+        DifficultyLevel newDifficulty,
+        string reason
+    ){
+        string line =
+            $"{DateTime.Now:yyyy-MM-dd HH:mm:ss.fff} | " +
+            $"DifficultyChanged: {previousDifficulty} -> {newDifficulty} | " +
+            $"Reason: {reason}";
+
+        File.AppendAllText(_filePath, line + Environment.NewLine);
+    }
+
     private void CreateLogFile()
     {
         string timestamp = DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss");

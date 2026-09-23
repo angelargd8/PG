@@ -33,7 +33,7 @@ public sealed class JeremySpawnDirector :
 
     [Header("Difficulty")]
     [SerializeField] private JeremyDifficultyConfigSO _difficultyConfig;
-    [SerializeField] private DifficultyLevel _startingDifficulty = DifficultyLevel.Normal;
+    [SerializeField] private DifficultyLevelEventChannelSO _difficultyChanged;
 
 
     private readonly List<ScheduledSpawn> _scheduledSpawns = new List<ScheduledSpawn>();
@@ -68,7 +68,16 @@ public sealed class JeremySpawnDirector :
             return;
         }
 
-        _currentDifficulty = _startingDifficulty;
+        if (_difficultyChanged != null)
+        {
+            _difficultyChanged.Raised += SetDifficulty;
+            _currentDifficulty = _difficultyChanged.CurrentDifficulty;
+        }
+        else
+        {
+            _currentDifficulty = DifficultyLevel.Normal;
+        }
+        
         _currentProfile = _difficultyConfig.GetProfile(_currentDifficulty);
 
         _isRunning = true;
@@ -82,6 +91,11 @@ public sealed class JeremySpawnDirector :
 
     public void EndExperience()
     {
+        if (_difficultyChanged != null)
+        {
+            _difficultyChanged.Raised -= SetDifficulty;
+        }
+
         _isRunning = false;
         _scheduledSpawns.Clear();
     }

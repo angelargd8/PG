@@ -403,14 +403,14 @@ public sealed class PlayerStateSystem : MonoBehaviour
 
         CurrentState = state;
 
-        if (_playerStateChanged != null)
-        {
-            _playerStateChanged.RaiseEvent(CurrentState);
-        }
-
         if (_metricsLogger != null)
         {
             _metricsLogger.LogPlayerState(CurrentState);
+        }
+
+        if (_playerStateChanged != null)
+        {
+            _playerStateChanged.RaiseEvent(CurrentState);
         }
 
         Debug.Log($"[PlayerStateSystem] State changed to {CurrentState}.", this);

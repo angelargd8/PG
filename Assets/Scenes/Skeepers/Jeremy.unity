@@ -891,7 +891,7 @@ MonoBehaviour:
   _beatMap: {fileID: 11400000, guid: dde8e63a528c3a64aa8ef99df2dfc5c8, type: 2}
   _lookAheadBeats: 8
   _difficultyConfig: {fileID: 11400000, guid: 49bd20c2595e8cb429da796d667603ce, type: 2}
-  _startingDifficulty: 0
+  _difficultyChanged: {fileID: 11400000, guid: 998849c379bbe114dbafefdb36ea08e9, type: 2}
 --- !u!1 &1697949989
 GameObject:
   m_ObjectHideFlags: 0
