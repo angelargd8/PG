@@ -921,9 +921,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DynamicDifficultySystem
   _initialDifficulty: 1
   _windowSize: 8
-  _minimumSamplesForIncrease: 5
-  _minimumPlayerActionsForIncrease: 4
+  _minimumSamplesForIncrease: 8
+  _minimumPlayerActionsForIncrease: 7
   _increaseSuccessRate: 0.8
+  _minimumSamplesForDecrease: 5
+  _minimumPlayerActionsForDecrease: 2
+  _decreaseErrorRate: 0.6
   _interactionRegistered: {fileID: 11400000, guid: 188abd6f30130bb42b4877604a6ce24f, type: 2}
   _playerStateChanged: {fileID: 11400000, guid: 42b72f537b05ff0449f361b67485f7d1, type: 2}
   _difficultyChanged: {fileID: 11400000, guid: 998849c379bbe114dbafefdb36ea08e9, type: 2}

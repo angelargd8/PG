@@ -131,7 +131,7 @@ GameObject:
   - component: {fileID: 26288878}
   - component: {fileID: 26288877}
   m_Layer: 5
-  m_Name: Header (1)
+  m_Name: Points
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -273,6 +273,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 157769635104997025, guid: 40af19270c08c1846a1d7b0d0e1a1e55, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 157769635104997025, guid: 40af19270c08c1846a1d7b0d0e1a1e55, type: 3}
       propertyPath: m_AnchoredPosition.x
       value: 0
       objectReference: {fileID: 0}
@@ -298,11 +302,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2077641819426116279, guid: 40af19270c08c1846a1d7b0d0e1a1e55, type: 3}
       propertyPath: m_text
-      value: Score
+      value: "Mejor Puntuaci\xF3n"
       objectReference: {fileID: 0}
     - target: {fileID: 2077641819426116279, guid: 40af19270c08c1846a1d7b0d0e1a1e55, type: 3}
       propertyPath: m_fontSize
-      value: 100
+      value: 90
       objectReference: {fileID: 0}
     - target: {fileID: 2077641819426116279, guid: 40af19270c08c1846a1d7b0d0e1a1e55, type: 3}
       propertyPath: m_fontAsset
@@ -310,7 +314,7 @@ PrefabInstance:
       objectReference: {fileID: 11400000, guid: 2ae77278a0fb16d449ffba50435b4ee9, type: 2}
     - target: {fileID: 2077641819426116279, guid: 40af19270c08c1846a1d7b0d0e1a1e55, type: 3}
       propertyPath: m_fontSizeBase
-      value: 100
+      value: 90
       objectReference: {fileID: 0}
     - target: {fileID: 2077641819426116279, guid: 40af19270c08c1846a1d7b0d0e1a1e55, type: 3}
       propertyPath: m_sharedMaterial
@@ -467,6 +471,14 @@ PrefabInstance:
     - target: {fileID: 4941219564456579801, guid: 40af19270c08c1846a1d7b0d0e1a1e55, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5709447589202147114, guid: 40af19270c08c1846a1d7b0d0e1a1e55, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 19
+      objectReference: {fileID: 0}
+    - target: {fileID: 5709447589202147114, guid: 40af19270c08c1846a1d7b0d0e1a1e55, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -43
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects:
