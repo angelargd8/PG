@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 [DisallowMultipleComponent]
@@ -5,9 +6,27 @@ public sealed class TimingFeedbackSystem : MonoBehaviour
 {
     [Header("References")]
     [SerializeField] private FloatingTimingFeedback _feedbackPrefab;
+    [SerializeField] private Transform _poolRoot;
+
+    [Header("Pool")]
+    [Min(1)]
+    [SerializeField] private int _initialPoolSize = 8;
+
+    [Min(1)]
+    [SerializeField] private int _maxPoolSize = 16;
 
     [Header("Events")]
     [SerializeField] private ScoreChangedEventChannelSO _scoreChanged;
+
+
+    private readonly List<FloatingTimingFeedback> _pool =
+        new List<FloatingTimingFeedback>();
+
+
+    private void Awake()
+    {
+        PrewarmPool();
+    }
 
 
     private void OnEnable()
@@ -28,35 +47,41 @@ public sealed class TimingFeedbackSystem : MonoBehaviour
     }
 
 
+    private void OnValidate()
+    {
+        _initialPoolSize = Mathf.Max(1, _initialPoolSize);
+        _maxPoolSize = Mathf.Max(_initialPoolSize, _maxPoolSize);
+    }
+
+
     private void HandleScoreChanged(ScoreChange scoreChange)
     {
-        Debug.Log(
-            $"[TimingFeedbackSystem] ScoreChanged received | " +
-            $"Judgement: {scoreChange.TimingJudgement} | " +
-            $"HasPosition: {scoreChange.FeedbackPosition.HasValue}",
-            this
-        );
-
         if (scoreChange.TimingJudgement == TimingJudgement.None)
         {
-            Debug.Log(
-                "[TimingFeedbackSystem] Ignored because judgement is None.",
-                this
-            );
-
             return;
         }
 
         if (!scoreChange.FeedbackPosition.HasValue)
         {
-            Debug.LogWarning(
-                "[TimingFeedbackSystem] Ignored because FeedbackPosition is null.",
-                this
-            );
-
             return;
         }
 
+        FloatingTimingFeedback feedback = GetAvailableFeedback();
+
+        if (feedback == null)
+        {
+            return;
+        }
+
+        feedback.Show(
+            scoreChange.TimingJudgement,
+            scoreChange.FeedbackPosition.Value
+        );
+    }
+
+
+    private void PrewarmPool()
+    {
         if (_feedbackPrefab == null)
         {
             Debug.LogError(
@@ -67,22 +92,52 @@ public sealed class TimingFeedbackSystem : MonoBehaviour
             return;
         }
 
-        Debug.Log(
-            $"[TimingFeedbackSystem] Creating feedback | " +
-            $"Judgement: {scoreChange.TimingJudgement} | " +
-            $"Position: {scoreChange.FeedbackPosition.Value}",
+        for (int i = 0; i < _initialPoolSize; i++)
+        {
+            CreateFeedback();
+        }
+    }
+
+
+    private FloatingTimingFeedback GetAvailableFeedback()
+    {
+        foreach (FloatingTimingFeedback feedback in _pool)
+        {
+            if (!feedback.gameObject.activeSelf)
+            {
+                return feedback;
+            }
+        }
+
+        if (_pool.Count < _maxPoolSize)
+        {
+            return CreateFeedback();
+        }
+
+        Debug.LogWarning(
+            "[TimingFeedbackSystem] Feedback pool reached maximum capacity.",
             this
         );
 
+        return null;
+    }
+
+
+    private FloatingTimingFeedback CreateFeedback()
+    {
+        Transform parent = _poolRoot != null
+            ? _poolRoot
+            : transform;
+
         FloatingTimingFeedback feedback = Instantiate(
             _feedbackPrefab,
-            scoreChange.FeedbackPosition.Value,
-            Quaternion.identity
+            parent
         );
 
-        feedback.Show(
-            scoreChange.TimingJudgement,
-            scoreChange.FeedbackPosition.Value
-        );
+        feedback.gameObject.SetActive(false);
+
+        _pool.Add(feedback);
+
+        return feedback;
     }
 }
