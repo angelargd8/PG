@@ -2,7 +2,7 @@ using UnityEngine;
 
 [CreateAssetMenu(
     fileName = "JeremyDifficultyConfig",
-    menuName = "Scriptable Objects/Jeremy/Difficulty Config"
+    menuName = "Scriptable Objects/Difficulty Config/Jeremy"
 )]
 public sealed class JeremyDifficultyConfigSO : ScriptableObject
 {

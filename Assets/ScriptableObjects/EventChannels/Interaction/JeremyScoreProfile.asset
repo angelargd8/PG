@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 713eaeeb77f194341938f88b54276767, type: 3}
+  m_Name: JeremyScoreProfile
+  m_EditorClassIdentifier: Assembly-CSharp::ScoreProfileSO
+  _successPoints: 100
+  _failedPoints: -50
+  _missedPoints: -75
+  _perfectTimingThreshold: 0.08
+  _goodTimingThreshold: 0.16
+  _niceTimingThreshold: 0.25
+  _perfectBonus: 50
+  _goodBonus: 30
+  _niceBonus: 15
+  _easyMultiplier: 1
+  _normalMultiplier: 1.25
+  _hardMultiplier: 1.5
