@@ -37,8 +37,12 @@ public sealed class JeremyHitEvaluator : MonoBehaviour
         }
     }
 
-    public void EvaluateHit(JeremyEnemy enemy, JeremyCutDirection actualDirection, JeremyHand actualHand)
-    {
+    public void EvaluateHit(
+        JeremyEnemy enemy, 
+        JeremyCutDirection actualDirection, 
+        JeremyHand actualHand,
+        Vector3? feedbackPosition = null
+    ){
         if (enemy == null)
         {
             return;
@@ -77,30 +81,14 @@ public sealed class JeremyHitEvaluator : MonoBehaviour
             actualTime: actualHitTime,
             // reactionTime: actualHitTime - enemy.ExpectedHitTime,
             directionAccuracy: correctDirection ? 1f : 0f,
-            usedCorrectHand: correctHand
+            usedCorrectHand: correctHand,
+            feedbackPosition: feedbackPosition
         );
 
         if (_interactionRegistered != null)
         {
             _interactionRegistered.RaiseEvent(result);
         }
-
-        // Debug.Log(
-        //     $"Jeremy Hit | Expected: {expectedHand} {expectedDirection} | " +
-        //     $"Actual: {actualHand} {actualDirection} | " +
-        //     $"Correct Hand: {correctHand} | " +
-        //     $"Correct Direction: {correctDirection} | " +
-        //     $"Outcome: {outcome}",
-        //     enemy
-        // );
-
-        Debug.Log(
-            $"[JeremyHitEvaluator] Hit | " +
-            $"Expected: {enemy.ExpectedHitTime:F3} | " +
-            $"Actual: {actualHitTime:F3} | " +
-            $"Offset: {actualHitTime - enemy.ExpectedHitTime:F3}",
-            this
-        );
     }
 
     private void PlayHapticFeedback(InteractionOutcome outcome, JeremyHand actualHand)

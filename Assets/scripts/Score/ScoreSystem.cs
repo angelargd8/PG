@@ -78,14 +78,13 @@ public sealed class ScoreSystem : MonoBehaviour
             return;
         }
 
-        ScoreEvaluation evaluation =
-            _currentProfile.Evaluate(result);
+        ScoreEvaluation evaluation = _currentProfile.Evaluate(result);
 
-        ApplyScore(evaluation);
+        ApplyScore(evaluation, result.FeedbackPosition);
     }
 
 
-    private void ApplyScore(ScoreEvaluation evaluation)
+    private void ApplyScore(ScoreEvaluation evaluation, Vector3? feedbackPosition)
     {
         int previousScore = CurrentScore;
 
@@ -100,20 +99,14 @@ public sealed class ScoreSystem : MonoBehaviour
             previousScore,
             CurrentScore,
             actualDelta,
-            evaluation.TimingJudgement
+            evaluation.TimingJudgement,
+            feedbackPosition
         );
 
         if (_scoreChanged != null)
         {
             _scoreChanged.RaiseEvent(scoreChange);
         }
-
-        Debug.Log(
-            $"[ScoreSystem] " +
-            $"{previousScore} -> {CurrentScore} " +
-            $"({actualDelta:+#;-#;0})",
-            this
-        );
     }
 
 
@@ -145,7 +138,8 @@ public sealed class ScoreSystem : MonoBehaviour
             0,
             0,
             0,
-            TimingJudgement.None
+            TimingJudgement.None,
+            null
         );
 
         if (_scoreChanged != null)

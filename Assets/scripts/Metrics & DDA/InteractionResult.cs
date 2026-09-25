@@ -14,10 +14,10 @@ public readonly struct InteractionResult
     public double? TimingOffset { get; }
     public double? TimingError { get; }
     public double? ReactionTime { get; }
-
     public float? SpatialAccuracy { get; }
     public float? DirectionAccuracy { get; }
     public bool? UsedCorrectHand { get; }
+    public Vector3? FeedbackPosition { get; }
 
     public bool WasSuccessful => Outcome == InteractionOutcome.Success;
 
@@ -32,7 +32,8 @@ public readonly struct InteractionResult
         double? reactionTime = null,
         float? spatialAccuracy = null,
         float? directionAccuracy = null,
-        bool? usedCorrectHand = null)
+        bool? usedCorrectHand = null,
+        Vector3? feedbackPosition = null)
     {
         MinigameId = minigameId;
 
@@ -62,5 +63,6 @@ public readonly struct InteractionResult
             : null;
 
         UsedCorrectHand = usedCorrectHand;
+        FeedbackPosition = feedbackPosition;
     }
 }

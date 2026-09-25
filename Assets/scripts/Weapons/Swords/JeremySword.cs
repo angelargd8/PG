@@ -49,7 +49,14 @@ public sealed class JeremySword : MonoBehaviour
 
         JeremyCutDirection direction = GetCutDirection(_velocity);
 
-        _hitEvaluator.EvaluateHit(enemy, direction, _hand);
+        Vector3 feedbackPosition = other.ClosestPoint(transform.position);
+
+        _hitEvaluator.EvaluateHit(
+            enemy,
+            direction,
+            _hand,
+            feedbackPosition
+        );
     }
 
 
