@@ -1763,6 +1763,7 @@ MonoBehaviour:
   playFullSequence: 1
   experienceSceneSelector: {fileID: 1359384402}
   experienceRequested: {fileID: 11400000, guid: 353f6e446ad125a4db12bb8da6eebe5c, type: 2}
+  _scoreRunStarted: {fileID: 11400000, guid: 059213f304ee5a24a8edf2a41a263211, type: 2}
 --- !u!1 &1069628018
 GameObject:
   m_ObjectHideFlags: 0
