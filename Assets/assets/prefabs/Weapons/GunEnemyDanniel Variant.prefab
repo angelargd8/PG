@@ -32,6 +32,10 @@ PrefabInstance:
       propertyPath: fireCooldown
       value: 0.4
       objectReference: {fileID: 0}
+    - target: {fileID: 6539832145797377789, guid: 4d8de6316d12ef54698481aa31098f7e, type: 3}
+      propertyPath: m_Size.x
+      value: 0.17
+      objectReference: {fileID: 0}
     - target: {fileID: 7142637515923658082, guid: 4d8de6316d12ef54698481aa31098f7e, type: 3}
       propertyPath: m_LocalPosition.x
       value: 1.5055101
