@@ -35,8 +35,8 @@ public sealed class ExperienceLaunchButton : MonoBehaviour
 
     [Header("Event")]
 
-    [SerializeField]
-    private ExperienceEventChannelSO experienceRequested;
+    [SerializeField] private ExperienceEventChannelSO experienceRequested;
+    [SerializeField] private ScoreRunEventChannelSO _scoreRunStarted;
 
 
     public void RequestExperience()
@@ -120,6 +120,16 @@ public sealed class ExperienceLaunchButton : MonoBehaviour
                 requestedFullSequence
             );
 
+        if (_scoreRunStarted != null)
+        {
+            ScoreRunContext scoreContext = ScoreRunContext.Create(
+                experience,
+                requestedStartScene,
+                requestedFullSequence
+            );
+
+            _scoreRunStarted.RaiseEvent(scoreContext);
+    }
 
         experienceRequested.RaiseEvent(
             request
