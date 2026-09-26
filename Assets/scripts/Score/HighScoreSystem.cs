@@ -9,6 +9,10 @@ public sealed class HighScoreSystem : MonoBehaviour
     [SerializeField] private FinalScoreEventChannelSO _finalScoreSubmitted;
     [SerializeField] private RunResultEventChannelSO _runResultReady;
 
+    
+    [Header("Storage")]
+    [SerializeField] private HighScoreStorage _storage;
+
 
     private readonly Dictionary<string, int> _highScores =
         new Dictionary<string, int>();
@@ -18,6 +22,19 @@ public sealed class HighScoreSystem : MonoBehaviour
 
     public ScoreRunContext? CurrentRun => _currentRun;
 
+
+    private void Awake()
+    {
+        if (_storage == null)
+        {
+            Debug.LogWarning(
+                "[HighScoreSystem] HighScoreStorage no está asignado. " +
+                "Los récords solo existirán durante esta sesión.",
+                this
+            );
+        }
+    }
+    
 
     private void OnEnable()
     {
@@ -54,9 +71,21 @@ public sealed class HighScoreSystem : MonoBehaviour
             return 0;
         }
 
-        return _highScores.TryGetValue(scoreId, out int highScore)
-            ? highScore
+        if (_highScores.TryGetValue(
+            scoreId,
+            out int cachedHighScore
+        ))
+        {
+            return cachedHighScore;
+        }
+
+        int storedHighScore = _storage != null
+            ? _storage.LoadHighScore(scoreId)
             : 0;
+
+        _highScores[scoreId] = storedHighScore;
+
+        return storedHighScore;
     }
 
 
@@ -78,7 +107,7 @@ public sealed class HighScoreSystem : MonoBehaviour
         //     this
         // );
     }
-    
+
 
     private void HandleFinalScoreSubmitted(int finalScore)
     {
@@ -93,20 +122,23 @@ public sealed class HighScoreSystem : MonoBehaviour
         }
 
         ScoreRunContext context = _currentRun.Value;
-
-        int previousHighScore =
-            GetHighScore(context.ScoreId);
-
-        bool isNewHighScore =
-            finalScore > previousHighScore;
+        int previousHighScore = GetHighScore(context.ScoreId);
+        bool isNewHighScore = finalScore > previousHighScore;
 
         if (isNewHighScore)
         {
             _highScores[context.ScoreId] = finalScore;
+
+            if (_storage != null)
+            {
+                _storage.SaveHighScore(
+                    context.ScoreId,
+                    finalScore
+                );
+            }
         }
 
-        int highScore =
-            GetHighScore(context.ScoreId);
+        int highScore = GetHighScore(context.ScoreId);
 
         RunResult result = new RunResult(
             context,
