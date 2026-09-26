@@ -74,8 +74,7 @@ public sealed class ResultsScreenController : MonoBehaviour
 
         if (_highScoreText != null)
         {
-            _highScoreText.text =
-                $"RÉCORD: {result.HighScore}";
+            _highScoreText.text = result.HighScore.ToString();
         }
 
         if (_newHighScoreText != null)

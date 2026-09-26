@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public sealed class ExperienceSceneSelector : MonoBehaviour
@@ -21,6 +22,9 @@ public sealed class ExperienceSceneSelector : MonoBehaviour
 
     [SerializeField]
     private ExperienceSceneDefinitionSO shipiScene;
+
+
+    public event Action SelectionChanged;
 
 
     public ExperienceSceneDefinitionSO SelectedScene
@@ -93,12 +97,12 @@ public sealed class ExperienceSceneSelector : MonoBehaviour
             "Selected: Full Experience",
             this
         );
+
+        SelectionChanged?.Invoke();
     }
 
 
-    private void SelectScene(
-        ExperienceSceneDefinitionSO scene
-    )
+    private void SelectScene(ExperienceSceneDefinitionSO scene)
     {
         if (scene == null)
         {
@@ -110,7 +114,6 @@ public sealed class ExperienceSceneSelector : MonoBehaviour
             return;
         }
 
-
         SelectedScene = scene;
         PlayFullSequence = false;
 
@@ -118,5 +121,7 @@ public sealed class ExperienceSceneSelector : MonoBehaviour
             $"Selected scene: {scene.DisplayName}",
             this
         );
+
+        SelectionChanged?.Invoke();
     }
 }
