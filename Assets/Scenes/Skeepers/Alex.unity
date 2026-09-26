@@ -2208,6 +2208,10 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5553878784085606701, guid: 6c8914013738a404585cd5c29275da5b, type: 3}
+      propertyPath: InitialModule.maxNumParticles
+      value: 50
+      objectReference: {fileID: 0}
     - target: {fileID: 7047787602172470782, guid: 6c8914013738a404585cd5c29275da5b, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0.357
