@@ -31,6 +31,29 @@ public sealed class AlexWaypointMotion : MonoBehaviour
     private double _lastSongTime;
     private double _departureTime = double.PositiveInfinity;
 
+
+    private void Start()
+    {
+        ExperienceBeatPlayer beatPlayer =
+            FindFirstObjectByType<ExperienceBeatPlayer>();
+
+        if (beatPlayer == null)
+        {
+            Debug.LogError(
+                "[AlexWaypointMotion] No se encontro ExperienceBeatPlayer.",
+                this
+            );
+            return;
+        }
+
+        Debug.Log(
+            "[AlexWaypointMotion] ExperienceBeatPlayer encontrado. Iniciando movimiento.",
+            this
+        );
+
+        Begin(beatPlayer);
+    }
+
     public bool Begin(ExperienceBeatPlayer beatPlayer)
     {
         if (_running) return true;
