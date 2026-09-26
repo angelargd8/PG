@@ -14,6 +14,7 @@ public class SequenceDirector : MonoBehaviour
 
     [Header("Event Channel")]
     [SerializeField] private VoidEventChannelSO experienceReady;
+    [SerializeField] private VoidEventChannelSO experienceCompleted;
 
 
     private bool sequenceStarted;
@@ -119,14 +120,18 @@ public class SequenceDirector : MonoBehaviour
         }
 
         // Reintentar en el siguiente frame si otra transicion aun esta terminando.
-        if (!appStateMachine.RequestMainMenu())
-        {
-            return;
-        }
-
         menuReturnRequested = true;
         playableDirector.Pause();
-        Debug.Log("[SequenceDirector] Cancion terminada. Regresando al MainMenu.", this);
+
+        if (experienceCompleted != null)
+        {
+            experienceCompleted.RaiseEvent();
+        }
+
+        Debug.Log(
+            "[SequenceDirector] Cancion terminada. ExperienceCompleted publicado.",
+            this
+        );
     }
 
 

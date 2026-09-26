@@ -9,6 +9,8 @@ public sealed class ScoreSystem : MonoBehaviour
     [SerializeField] private ScoreChangedEventChannelSO _scoreChanged;
     [SerializeField] private VoidEventChannelSO _experienceReady;
     [SerializeField] private VoidEventChannelSO _mainMenuRequested;
+    [SerializeField] private VoidEventChannelSO _experienceCompleted;
+    [SerializeField] private FinalScoreEventChannelSO _finalScoreSubmitted;
 
 
     private ScoreProfileSO _currentProfile;
@@ -39,6 +41,11 @@ public sealed class ScoreSystem : MonoBehaviour
         {
             _mainMenuRequested.Raised += HandleMainMenuRequested;
         }
+
+        if (_experienceCompleted != null)
+        {
+            _experienceCompleted.Raised += HandleExperienceCompleted;
+        }
     }
 
 
@@ -62,6 +69,11 @@ public sealed class ScoreSystem : MonoBehaviour
         if (_mainMenuRequested != null)
         {
             _mainMenuRequested.Raised -= HandleMainMenuRequested;
+        }
+
+        if (_experienceCompleted != null)
+        {
+            _experienceCompleted.Raised -= HandleExperienceCompleted;
         }
     }
 
@@ -145,6 +157,26 @@ public sealed class ScoreSystem : MonoBehaviour
         if (_scoreChanged != null)
         {
             _scoreChanged.RaiseEvent(scoreChange);
+        }
+    }
+
+    private void HandleExperienceCompleted()
+    {
+        if (!_isExperienceActive)
+        {
+            return;
+        }
+
+        _isExperienceActive = false;
+
+        Debug.Log(
+            $"[ScoreSystem] Run completed | Final Score: {CurrentScore}",
+            this
+        );
+
+        if (_finalScoreSubmitted != null)
+        {
+            _finalScoreSubmitted.RaiseEvent(CurrentScore);
         }
     }
 }

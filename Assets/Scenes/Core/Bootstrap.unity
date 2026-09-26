@@ -406,6 +406,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HighScoreSystem
   _scoreRunStarted: {fileID: 11400000, guid: 059213f304ee5a24a8edf2a41a263211, type: 2}
+  _finalScoreSubmitted: {fileID: 11400000, guid: d8cca13adfba7c7409a08d53f25e5bcd, type: 2}
+  _runResultReady: {fileID: 11400000, guid: ba6bafbdfb92fe245a344373a1a49418, type: 2}
 --- !u!1 &936606485
 GameObject:
   m_ObjectHideFlags: 0

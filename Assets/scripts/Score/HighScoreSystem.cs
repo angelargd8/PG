@@ -6,6 +6,8 @@ public sealed class HighScoreSystem : MonoBehaviour
 {
     [Header("Events")]
     [SerializeField] private ScoreRunEventChannelSO _scoreRunStarted;
+    [SerializeField] private FinalScoreEventChannelSO _finalScoreSubmitted;
+    [SerializeField] private RunResultEventChannelSO _runResultReady;
 
 
     private readonly Dictionary<string, int> _highScores =
@@ -23,6 +25,11 @@ public sealed class HighScoreSystem : MonoBehaviour
         {
             _scoreRunStarted.Raised += HandleScoreRunStarted;
         }
+
+        if (_finalScoreSubmitted != null)
+        {
+            _finalScoreSubmitted.Raised += HandleFinalScoreSubmitted;
+        }
     }
 
 
@@ -31,6 +38,11 @@ public sealed class HighScoreSystem : MonoBehaviour
         if (_scoreRunStarted != null)
         {
             _scoreRunStarted.Raised -= HandleScoreRunStarted;
+        }
+
+        if (_finalScoreSubmitted != null)
+        {
+            _finalScoreSubmitted.Raised -= HandleFinalScoreSubmitted;
         }
     }
 
@@ -54,16 +66,30 @@ public sealed class HighScoreSystem : MonoBehaviour
     }
 
 
-    public bool SubmitCurrentScore(int score)
+    private void HandleScoreRunStarted(ScoreRunContext context)
+    {
+        _currentRun = context;
+
+        // Debug.Log(
+        //     $"[HighScoreSystem] Run started | " +
+        //     $"Id: {context.ScoreId} | " +
+        //     $"Name: {context.DisplayName} | " +
+        //     $"HighScore: {GetHighScore(context)}",
+        //     this
+        // );
+    }
+    
+
+    private void HandleFinalScoreSubmitted(int finalScore)
     {
         if (!_currentRun.HasValue)
         {
             Debug.LogWarning(
-                "[HighScoreSystem] No active ScoreRunContext.",
+                "[HighScoreSystem] Final score received without active run.",
                 this
             );
 
-            return false;
+            return;
         }
 
         ScoreRunContext context = _currentRun.Value;
@@ -71,39 +97,38 @@ public sealed class HighScoreSystem : MonoBehaviour
         int previousHighScore =
             GetHighScore(context.ScoreId);
 
-        if (score <= previousHighScore)
-        {
-            Debug.Log(
-                $"[HighScoreSystem] Score {score} did not beat " +
-                $"high score {previousHighScore} for {context.ScoreId}.",
-                this
-            );
+        bool isNewHighScore =
+            finalScore > previousHighScore;
 
-            return false;
+        if (isNewHighScore)
+        {
+            _highScores[context.ScoreId] = finalScore;
         }
 
-        _highScores[context.ScoreId] = score;
+        int highScore =
+            GetHighScore(context.ScoreId);
 
-        Debug.Log(
-            $"[HighScoreSystem] New high score | " +
-            $"{context.ScoreId}: {previousHighScore} -> {score}",
-            this
+        RunResult result = new RunResult(
+            context,
+            finalScore,
+            previousHighScore,
+            highScore,
+            isNewHighScore
         );
 
-        return true;
-    }
-
-
-    private void HandleScoreRunStarted(ScoreRunContext context)
-    {
-        _currentRun = context;
-
         Debug.Log(
-            $"[HighScoreSystem] Run started | " +
+            $"[HighScoreSystem] Run result | " +
             $"Id: {context.ScoreId} | " +
-            $"Name: {context.DisplayName} | " +
-            $"HighScore: {GetHighScore(context)}",
+            $"Score: {finalScore} | " +
+            $"Previous High Score: {previousHighScore} | " +
+            $"High Score: {highScore} | " +
+            $"New High Score: {isNewHighScore}",
             this
         );
+
+        if (_runResultReady != null)
+        {
+            _runResultReady.RaiseEvent(result);
+        }
     }
 }
