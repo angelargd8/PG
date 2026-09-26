@@ -6,5 +6,7 @@ public enum InteractionType
     FoodClear = 3,
     GroomStroke = 4,
     GunShoot = 5,
-    GuitarHit = 6
+    GuitarHit = 6,
+    HammerTouch = 7,
+    HammerHit = 8
 }

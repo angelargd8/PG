@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 539b29cbd8d8d5d48a2b692ba0bf1468
+guid: 9ca33e3235b8155428c919c5ec58cc70
 ModelImporter:
   serializedVersion: 24200
   internalIDToNameTable: []
@@ -31,11 +31,11 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: Standing Idle 03
+      name: Standing Run Left
       takeName: mixamo.com
       internalID: -203655887218126122
       firstFrame: 0
-      lastFrame: 342
+      lastFrame: 23
       wrapMode: 0
       orientationOffsetY: 0
       level: 0

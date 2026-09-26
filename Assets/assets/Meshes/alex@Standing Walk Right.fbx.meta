@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 539b29cbd8d8d5d48a2b692ba0bf1468
+guid: d6547b2a678184a4c904397b5dea6ecb
 ModelImporter:
   serializedVersion: 24200
   internalIDToNameTable: []
@@ -31,11 +31,11 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: Standing Idle 03
+      name: Standing Walk Right
       takeName: mixamo.com
       internalID: -203655887218126122
       firstFrame: 0
-      lastFrame: 342
+      lastFrame: 36
       wrapMode: 0
       orientationOffsetY: 0
       level: 0

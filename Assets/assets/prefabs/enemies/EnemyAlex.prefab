@@ -9,6 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8444850649474187932}
+  - component: {fileID: 814500000000000001}
   m_Layer: 0
   m_Name: EnemyAlex
   m_TagString: Untagged
@@ -32,6 +33,24 @@ Transform:
   - {fileID: 2730808955793083617}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &814500000000000001
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3517171939276090356}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b0656853a83144cd9d45d18baad0bc59, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AlexThrowHands
+  _leftAnchor: {fileID: 8670297811329187529}
+  _rightAnchor: {fileID: 4313003624215483586}
+  _leftHandBoneName: mixamorig:LeftHand
+  _rightHandBoneName: mixamorig:RightHand
+  _leftLocalOffset: {x: 0, y: 0, z: 0}
+  _rightLocalOffset: {x: 0, y: 0, z: 0}
 --- !u!1001 &2481326420626631434
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -100,6 +119,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: alex
       objectReference: {fileID: 0}
+    - target: {fileID: 5866666021909216657, guid: e9d0a1b3f5f12dd4ba556441d7aa89bb, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 2cf0b469fa6c3e9448f4c5a4c081f86a, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -108,5 +131,15 @@ PrefabInstance:
 --- !u!4 &2730808955793083617 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: e9d0a1b3f5f12dd4ba556441d7aa89bb, type: 3}
+  m_PrefabInstance: {fileID: 2481326420626631434}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &4313003624215483586 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1852576806548013000, guid: e9d0a1b3f5f12dd4ba556441d7aa89bb, type: 3}
+  m_PrefabInstance: {fileID: 2481326420626631434}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &8670297811329187529 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6502182839619065283, guid: e9d0a1b3f5f12dd4ba556441d7aa89bb, type: 3}
   m_PrefabInstance: {fileID: 2481326420626631434}
   m_PrefabAsset: {fileID: 0}
