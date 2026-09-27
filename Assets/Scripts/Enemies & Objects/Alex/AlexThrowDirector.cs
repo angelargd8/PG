@@ -52,6 +52,19 @@ public sealed class AlexThrowDirector : MonoBehaviour, IExperienceRuntime
     [SerializeField]
     private DifficultyLevel _difficulty = DifficultyLevel.Normal;
 
+    [Tooltip("Ajusta la dificultad usando el score real de la experiencia.")]
+    [SerializeField] private bool _useScoreBasedDifficulty = true;
+
+    [Tooltip("Opcional: se busca automaticamente al comenzar la experiencia.")]
+    [SerializeField] private ScoreSystem _scoreSystem;
+
+    [Min(1)] [SerializeField] private int _normalScoreThreshold = 500;
+    [Min(2)] [SerializeField] private int _hardScoreThreshold = 1500;
+
+    [Header("Miss Penalty")]
+    [Tooltip("Puntos que se restan por cada calabaza que pasa sin contacto. Dollar no penaliza por omision.")]
+    [Min(1)] [SerializeField] private int _missedPumpkinPenalty = 75;
+
     [Tooltip(
         "Cada cuantos beats aparece un par de objetos " +
         "en dificultad facil."
@@ -75,6 +88,36 @@ public sealed class AlexThrowDirector : MonoBehaviour, IExperienceRuntime
     [Min(1)]
     [SerializeField]
     private int _hardThrowEveryBeats = 1;
+
+
+    // =========================================================
+    // DIFFICULTY SPACING
+    // =========================================================
+
+    [Header("Difficulty Spacing")]
+
+    [Tooltip(
+        "Multiplicador horizontal para Easy. " +
+        "0.55 significa 55% de la separacion de Hard."
+    )]
+    [Range(0.1f, 1f)]
+    [SerializeField]
+    private float _easyHorizontalMultiplier = 0.55f;
+
+    [Tooltip(
+        "Multiplicador horizontal para Normal. " +
+        "0.80 significa 80% de la separacion de Hard."
+    )]
+    [Range(0.1f, 1f)]
+    [SerializeField]
+    private float _normalHorizontalMultiplier = 0.8f;
+
+    [Tooltip(
+        "Hard conserva la separacion original."
+    )]
+    [Range(0.1f, 1.5f)]
+    [SerializeField]
+    private float _hardHorizontalMultiplier = 1f;
 
 
     // =========================================================
@@ -113,7 +156,7 @@ public sealed class AlexThrowDirector : MonoBehaviour, IExperienceRuntime
 
 
     // =========================================================
-    // INTENSITY
+    // MUSICAL INTENSITY
     // =========================================================
 
     [Header("Musical Intensity")]
@@ -128,7 +171,7 @@ public sealed class AlexThrowDirector : MonoBehaviour, IExperienceRuntime
 
     [Tooltip(
         "En modo intenso se divide el intervalo normal " +
-        "entre este valor. 2 significa el doble de frecuencia."
+        "entre este valor."
     )]
     [Min(1)]
     [SerializeField]
@@ -173,15 +216,16 @@ public sealed class AlexThrowDirector : MonoBehaviour, IExperienceRuntime
     private float _hitHeightOffset = -0.3f;
 
     [Tooltip(
-        "Separacion lateral normal. " +
-        "Recomiendo aproximadamente 0.55 - 0.65."
+        "Separacion del patron abierto en HARD. " +
+        "Normal y Easy se reducen automaticamente."
     )]
     [Min(0.1f)]
     [SerializeField]
     private float _wideLaneOffset = 0.6f;
 
     [Tooltip(
-        "Separacion utilizada para patrones cerrados."
+        "Separacion del patron cerrado en HARD. " +
+        "Normal y Easy se reducen automaticamente."
     )]
     [Min(0.1f)]
     [SerializeField]
@@ -209,8 +253,8 @@ public sealed class AlexThrowDirector : MonoBehaviour, IExperienceRuntime
     [Header("Hand Validation")]
 
     [Tooltip(
-        "Distancia minima lateral necesaria para decidir " +
-        "si un objeto pertenece al carril izquierdo o derecho."
+        "Zona central donde no se intenta decidir " +
+        "automaticamente izquierda o derecha."
     )]
     [Min(0.01f)]
     [SerializeField]
@@ -223,6 +267,9 @@ public sealed class AlexThrowDirector : MonoBehaviour, IExperienceRuntime
 
     private bool _running;
 
+    private ScoreProfileSO _runtimeScoreProfile;
+    private int _appliedMissPenalty;
+
     private int _throwCount;
     private int _patternIndex;
 
@@ -231,17 +278,8 @@ public sealed class AlexThrowDirector : MonoBehaviour, IExperienceRuntime
 
 
     // =========================================================
-    // INTENSITY REFLECTION
+    // BEAT INTENSITY
     // =========================================================
-
-    /*
-     * Esto permite que el director encuentre una propiedad
-     * como Intensity, Strength, Energy, Weight o Value
-     * dentro de Beat sin acoplar este script a un nombre exacto.
-     *
-     * Cuando confirmes como se llama realmente en BeatMapSO.Beat,
-     * puedes sustituir este sistema por acceso directo.
-     */
 
     private static readonly string[] IntensityMemberNames =
     {
@@ -268,10 +306,8 @@ public sealed class AlexThrowDirector : MonoBehaviour, IExperienceRuntime
     {
         Wide = 0,
         Narrow = 1,
-
         LeftHighRightLow = 2,
         LeftLowRightHigh = 3,
-
         BothHigh = 4,
         BothLow = 5
     }
@@ -388,9 +424,22 @@ public sealed class AlexThrowDirector : MonoBehaviour, IExperienceRuntime
         }
 
 
-        _scoreProfileChanged.RaiseEvent(
-            _scoreProfile
-        );
+        if (_scoreSystem == null)
+        {
+            _scoreSystem = FindFirstObjectByType<ScoreSystem>();
+        }
+
+        if (_useScoreBasedDifficulty && _scoreSystem == null)
+        {
+            Debug.LogWarning("[AlexThrowDirector] Falta ScoreSystem; se conserva la dificultad manual.", this);
+        }
+
+        // Keep the shared asset intact. Only Alex's runtime copy charges for misses.
+        _runtimeScoreProfile = Instantiate(_scoreProfile);
+        _runtimeScoreProfile.name = _scoreProfile.name + " (Alex Runtime)";
+        _appliedMissPenalty = 0;
+        UpdateMissPenalty();
+        _scoreProfileChanged.RaiseEvent(_runtimeScoreProfile);
 
 
         _throwCount = 0;
@@ -400,6 +449,8 @@ public sealed class AlexThrowDirector : MonoBehaviour, IExperienceRuntime
         _pendingIntenseBeat = false;
 
         _running = true;
+
+        UpdateDifficultyFromScore();
 
 
         _beatPlayer.BeatReached += OnBeat;
@@ -432,6 +483,15 @@ public sealed class AlexThrowDirector : MonoBehaviour, IExperienceRuntime
         {
             _pool.ReleaseAll();
         }
+
+        if (_runtimeScoreProfile != null)
+        {
+            // Stop using the temporary profile before destroying it.
+            if (_scoreProfileChanged != null)
+                _scoreProfileChanged.RaiseEvent(_scoreProfile);
+            Destroy(_runtimeScoreProfile);
+            _runtimeScoreProfile = null;
+        }
     }
 
 
@@ -443,11 +503,6 @@ public sealed class AlexThrowDirector : MonoBehaviour, IExperienceRuntime
 
     private void ResetPlayback()
     {
-        /*
-         * Pausas, reinicios y saltos del Timeline
-         * nunca penalizan objetos activos.
-         */
-
         if (_pool != null)
         {
             _pool.ReleaseAll();
@@ -458,6 +513,133 @@ public sealed class AlexThrowDirector : MonoBehaviour, IExperienceRuntime
 
         _pendingBeatIndex = -1;
         _pendingIntenseBeat = false;
+    }
+
+
+    // =========================================================
+    // DIFFICULTY
+    // =========================================================
+
+    private void Update()
+    {
+        if (!_running) return;
+        UpdateMissPenalty();
+        UpdateDifficultyFromScore();
+    }
+
+    private void UpdateMissPenalty()
+    {
+        int penalty = Mathf.Max(1, _missedPumpkinPenalty);
+        if (_runtimeScoreProfile == null || penalty == _appliedMissPenalty) return;
+
+        // ScoreProfileSO exposes evaluation only. Override its serialized miss
+        // value on our clone so ScoreSystem/HUD receive the usual Missed event.
+        JsonUtility.FromJsonOverwrite("{\"_missedPoints\":" + (-penalty) + "}", _runtimeScoreProfile);
+        _appliedMissPenalty = penalty;
+    }
+
+    private void UpdateDifficultyFromScore()
+    {
+        if (!_useScoreBasedDifficulty || _scoreSystem == null) return;
+        int normalThreshold = Mathf.Max(1, _normalScoreThreshold);
+        int hardThreshold = Mathf.Max(normalThreshold, _hardScoreThreshold);
+        if (hardThreshold <= normalThreshold && normalThreshold < int.MaxValue)
+            hardThreshold = normalThreshold + 1;
+        int score = _scoreSystem.CurrentScore;
+        _difficulty = score >= hardThreshold ? DifficultyLevel.Hard :
+            score >= normalThreshold ? DifficultyLevel.Normal : DifficultyLevel.Easy;
+    }
+
+    private int GetBaseThrowEveryBeats()
+    {
+        switch (_difficulty)
+        {
+            case DifficultyLevel.Easy:
+
+                return Mathf.Max(
+                    1,
+                    _easyThrowEveryBeats
+                );
+
+
+            case DifficultyLevel.Hard:
+
+                return Mathf.Max(
+                    1,
+                    _hardThrowEveryBeats
+                );
+
+
+            case DifficultyLevel.Normal:
+            default:
+
+                return Mathf.Max(
+                    1,
+                    _normalThrowEveryBeats
+                );
+        }
+    }
+
+
+    private float GetHorizontalDifficultyMultiplier()
+    {
+        switch (_difficulty)
+        {
+            case DifficultyLevel.Easy:
+
+                return Mathf.Max(
+                    0.1f,
+                    _easyHorizontalMultiplier
+                );
+
+
+            case DifficultyLevel.Hard:
+
+                return Mathf.Max(
+                    0.1f,
+                    _hardHorizontalMultiplier
+                );
+
+
+            case DifficultyLevel.Normal:
+            default:
+
+                return Mathf.Max(
+                    0.1f,
+                    _normalHorizontalMultiplier
+                );
+        }
+    }
+
+
+    private int GetThrowEveryBeats(
+        bool intense
+    )
+    {
+        int interval =
+            GetBaseThrowEveryBeats();
+
+
+        if (!intense)
+        {
+            return interval;
+        }
+
+
+        interval =
+            Mathf.CeilToInt(
+                interval /
+                (float)Mathf.Max(
+                    1,
+                    _intenseFrequencyMultiplier
+                )
+            );
+
+
+        return Mathf.Max(
+            1,
+            interval
+        );
     }
 
 
@@ -479,12 +661,16 @@ public sealed class AlexThrowDirector : MonoBehaviour, IExperienceRuntime
         float intensity =
             GetBeatIntensity(beat);
 
+
         bool intense =
-            intensity >= _intenseBeatThreshold;
+            intensity >=
+            _intenseBeatThreshold;
 
 
         int throwEveryBeats =
-            GetThrowEveryBeats(intense);
+            GetThrowEveryBeats(
+                intense
+            );
 
 
         if (index % throwEveryBeats != 0)
@@ -493,88 +679,11 @@ public sealed class AlexThrowDirector : MonoBehaviour, IExperienceRuntime
         }
 
 
-        _pendingBeatIndex = index;
-        _pendingIntenseBeat = intense;
-    }
+        _pendingBeatIndex =
+            index;
 
-
-    private int GetThrowEveryBeats(
-        bool intense
-    )
-    {
-        int interval;
-
-
-        switch (_difficulty)
-        {
-            case DifficultyLevel.Easy:
-
-                interval =
-                    Mathf.Max(
-                        1,
-                        _easyThrowEveryBeats
-                    );
-
-                break;
-
-
-            case DifficultyLevel.Hard:
-
-                interval =
-                    Mathf.Max(
-                        1,
-                        _hardThrowEveryBeats
-                    );
-
-                break;
-
-
-            case DifficultyLevel.Normal:
-            default:
-
-                interval =
-                    Mathf.Max(
-                        1,
-                        _normalThrowEveryBeats
-                    );
-
-                break;
-        }
-
-
-        if (!intense)
-        {
-            return interval;
-        }
-
-
-        /*
-         * Ejemplos con multiplier = 2:
-         *
-         * Easy:
-         * 4 -> 2
-         *
-         * Normal:
-         * 2 -> 1
-         *
-         * Hard:
-         * 1 -> 1
-         */
-
-        interval =
-            Mathf.CeilToInt(
-                interval /
-                (float)Mathf.Max(
-                    1,
-                    _intenseFrequencyMultiplier
-                )
-            );
-
-
-        return Mathf.Max(
-            1,
-            interval
-        );
+        _pendingIntenseBeat =
+            intense;
     }
 
 
@@ -584,12 +693,6 @@ public sealed class AlexThrowDirector : MonoBehaviour, IExperienceRuntime
 
     private void LateUpdate()
     {
-        /*
-         * El lanzamiento ocurre en LateUpdate para leer
-         * las posiciones finales de las manos despues
-         * de que Animator haya actualizado la pose.
-         */
-
         int index =
             _pendingBeatIndex;
 
@@ -671,26 +774,8 @@ public sealed class AlexThrowDirector : MonoBehaviour, IExperienceRuntime
 
 
         // =====================================================
-        // OBJECT TYPES
+        // VARIANTS
         // =====================================================
-
-        /*
-         * Se consumen dos tipos por cada lanzamiento.
-         *
-         * Ciclo:
-         *
-         * Pair 1:
-         * Left  -> Dollar
-         * Right -> Pumpkin A
-         *
-         * Pair 2:
-         * Left  -> Pumpkin F
-         * Right -> Pumpkin G
-         *
-         * Pair 3:
-         * Left  -> Dollar
-         * Right -> Pumpkin A
-         */
 
         AlexThrowKind leftKind =
             (AlexThrowKind)(
@@ -705,7 +790,7 @@ public sealed class AlexThrowDirector : MonoBehaviour, IExperienceRuntime
 
 
         // =====================================================
-        // LEFT
+        // LEFT HAND
         // =====================================================
 
         bool launchedLeft =
@@ -721,7 +806,7 @@ public sealed class AlexThrowDirector : MonoBehaviour, IExperienceRuntime
 
 
         // =====================================================
-        // RIGHT
+        // RIGHT HAND
         // =====================================================
 
         bool launchedRight =
@@ -753,28 +838,8 @@ public sealed class AlexThrowDirector : MonoBehaviour, IExperienceRuntime
         bool intense
     )
     {
-        /*
-         * En vez de Random usamos secuencias.
-         *
-         * En un juego musical normalmente se siente
-         * mejor porque los patrones parecen diseñados
-         * y no ruido aleatorio.
-         */
-
-
         if (intense)
         {
-            /*
-             * Seccion energetica:
-             *
-             * diagonal
-             * diagonal inversa
-             * arriba
-             * abierto
-             * abajo
-             * cerrado
-             */
-
             switch (_patternIndex % 6)
             {
                 case 0:
@@ -879,7 +944,7 @@ public sealed class AlexThrowDirector : MonoBehaviour, IExperienceRuntime
 
 
     // =========================================================
-    // PATTERN POSITION
+    // PATTERN POSITIONS
     // =========================================================
 
     private void CalculatePatternPositions(
@@ -891,12 +956,27 @@ public sealed class AlexThrowDirector : MonoBehaviour, IExperienceRuntime
         out Vector3 rightPosition
     )
     {
+        /*
+         * IMPORTANTE:
+         *
+         * _wideLaneOffset y _narrowLaneOffset ahora representan
+         * las distancias de HARD.
+         *
+         * Normal y Easy reducen automaticamente esas distancias.
+         */
+
+        float difficultyMultiplier =
+            GetHorizontalDifficultyMultiplier();
+
+
         float wide =
-            _wideLaneOffset;
+            _wideLaneOffset *
+            difficultyMultiplier;
 
 
         float narrow =
-            _narrowLaneOffset;
+            _narrowLaneOffset *
+            difficultyMultiplier;
 
 
         float vertical =
@@ -905,8 +985,23 @@ public sealed class AlexThrowDirector : MonoBehaviour, IExperienceRuntime
 
         if (intense)
         {
+            /*
+             * El bonus intenso tambien respeta
+             * la dificultad horizontal.
+             */
+
+            float horizontalBonus =
+                _intenseLaneBonus *
+                difficultyMultiplier;
+
+
             wide +=
-                _intenseLaneBonus;
+                horizontalBonus;
+
+
+            narrow +=
+                horizontalBonus;
+
 
             vertical +=
                 _intenseVerticalBonus;
@@ -1069,11 +1164,6 @@ public sealed class AlexThrowDirector : MonoBehaviour, IExperienceRuntime
         out Vector3 right
     )
     {
-        /*
-         * Direccion horizontal desde el jugador
-         * hacia Alex.
-         */
-
         forward =
             Vector3.ProjectOnPlane(
                 _hands.transform.position -
@@ -1103,14 +1193,6 @@ public sealed class AlexThrowDirector : MonoBehaviour, IExperienceRuntime
         center =
             target.position;
 
-
-        /*
-         * Si existe Hit Target explicito,
-         * su posicion ya representa el centro.
-         *
-         * Si usamos la camara, desplazamos
-         * la zona delante del jugador.
-         */
 
         if (_hitTarget == null)
         {
@@ -1147,12 +1229,6 @@ public sealed class AlexThrowDirector : MonoBehaviour, IExperienceRuntime
 
         if (target == null)
         {
-            /*
-             * Si no podemos calcular el carril,
-             * evitamos invalidar accidentalmente
-             * una interaccion.
-             */
-
             return true;
         }
 
@@ -1165,14 +1241,6 @@ public sealed class AlexThrowDirector : MonoBehaviour, IExperienceRuntime
         );
 
 
-        /*
-         * Usamos la posicion actual del objeto
-         * respecto al centro de la zona.
-         *
-         * Negativo = carril izquierdo
-         * Positivo = carril derecho
-         */
-
         float side =
             Vector3.Dot(
                 item.transform.position -
@@ -1180,14 +1248,6 @@ public sealed class AlexThrowDirector : MonoBehaviour, IExperienceRuntime
                 right
             );
 
-
-        /*
-         * Ninguno de los patrones actuales
-         * deberia pasar por esta zona.
-         *
-         * Es una seguridad por si luego reduces
-         * mucho Narrow Lane Offset.
-         */
 
         if (Mathf.Abs(side) <
             _handLaneDeadZone)
@@ -1224,7 +1284,7 @@ public sealed class AlexThrowDirector : MonoBehaviour, IExperienceRuntime
 
 
         // =====================================================
-        // HAND
+        // CORRECT HAND
         // =====================================================
 
         bool correctHand =
@@ -1235,17 +1295,48 @@ public sealed class AlexThrowDirector : MonoBehaviour, IExperienceRuntime
 
 
         // =====================================================
-        // ORIGINAL RULES
+        // DOLLAR
         // =====================================================
 
-        bool rulesSuccess =
-            AlexThrowRules.IsSuccess(
-                item.Kind,
-                strike,
-                now -
-                item.ExpectedHitTime,
-                _beatWindow
-            );
+        /*
+         * NUEVA REGLA:
+         *
+         * Dollar SIEMPRE cuenta como exito al tocarlo
+         * con la mano correcta.
+         *
+         * No importa:
+         *
+         * - si fue touch
+         * - si fue strike
+         * - si iba rapido el martillo
+         * - si estaba dentro del beat
+         *
+         * El Dollar no exige timing.
+         */
+
+        bool isDollar =
+            item.Kind ==
+            AlexThrowKind.Dollar;
+
+
+        bool rulesSuccess;
+
+
+        if (isDollar)
+        {
+            rulesSuccess = true;
+        }
+        else
+        {
+            rulesSuccess =
+                AlexThrowRules.IsSuccess(
+                    item.Kind,
+                    strike,
+                    now -
+                    item.ExpectedHitTime,
+                    _beatWindow
+                );
+        }
 
 
         // =====================================================
@@ -1257,15 +1348,18 @@ public sealed class AlexThrowDirector : MonoBehaviour, IExperienceRuntime
             rulesSuccess;
 
 
-        /*
-         * Siempre vibra el control que realmente
-         * hizo contacto, incluso si fue incorrecto.
-         */
+        // =====================================================
+        // HAPTICS
+        // =====================================================
 
         hammer.Pulse(
             strike
         );
 
+
+        // =====================================================
+        // SCORE EVENT
+        // =====================================================
 
         _interactionRegistered.RaiseEvent(
             new InteractionResult(
@@ -1288,13 +1382,16 @@ public sealed class AlexThrowDirector : MonoBehaviour, IExperienceRuntime
                     item.ExpectedHitTime,
 
                 /*
-                 * Dollar y touches no reciben
-                 * bonus de timing.
+                 * Dollar nunca recibe bonus de timing.
+                 *
+                 * Touch de calabaza tampoco.
+                 *
+                 * Solo los golpes de calabaza utilizan
+                 * actualTime para calcular timing.
                  */
 
                 actualTime:
-                    item.Kind ==
-                    AlexThrowKind.Dollar ||
+                    isDollar ||
                     !strike
                         ? (double?)null
                         : now,
@@ -1305,6 +1402,7 @@ public sealed class AlexThrowDirector : MonoBehaviour, IExperienceRuntime
         );
 
 
+        UpdateDifficultyFromScore();
         return success;
     }
 
@@ -1317,6 +1415,8 @@ public sealed class AlexThrowDirector : MonoBehaviour, IExperienceRuntime
         AlexThrownObject item
     )
     {
+        if (!IsPlaying || item == null || item.Kind == AlexThrowKind.Dollar) return;
+        UpdateMissPenalty();
         _interactionRegistered.RaiseEvent(
             new InteractionResult(
                 "Alex",
@@ -1333,6 +1433,7 @@ public sealed class AlexThrowDirector : MonoBehaviour, IExperienceRuntime
                     item.transform.position
             )
         );
+        UpdateDifficultyFromScore();
     }
 
 
@@ -1405,18 +1506,6 @@ public sealed class AlexThrowDirector : MonoBehaviour, IExperienceRuntime
         BeatMapSO.Beat beat
     )
     {
-        /*
-         * Tu codigo compartido no muestra BeatMapSO.Beat,
-         * asi que no puedo asumir que el campo realmente
-         * se llama Intensity.
-         *
-         * Buscamos nombres comunes sin producir
-         * dependencia de compilacion.
-         *
-         * Esto se ejecuta unas pocas veces por segundo,
-         * no por frame.
-         */
-
         object boxedBeat =
             beat;
 
