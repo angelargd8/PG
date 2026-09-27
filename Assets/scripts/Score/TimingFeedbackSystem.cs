@@ -17,6 +17,7 @@ public sealed class TimingFeedbackSystem : MonoBehaviour
 
     [Header("Events")]
     [SerializeField] private ScoreChangedEventChannelSO _scoreChanged;
+    [SerializeField] private ScoreBonusEventChannelSO _scoreBonusAwarded;
 
 
     private readonly List<FloatingTimingFeedback> _pool =
@@ -35,6 +36,11 @@ public sealed class TimingFeedbackSystem : MonoBehaviour
         {
             _scoreChanged.Raised += HandleScoreChanged;
         }
+
+        if (_scoreBonusAwarded != null)
+        {
+            _scoreBonusAwarded.Raised += HandleScoreBonus;
+        }
     }
 
 
@@ -43,6 +49,11 @@ public sealed class TimingFeedbackSystem : MonoBehaviour
         if (_scoreChanged != null)
         {
             _scoreChanged.Raised -= HandleScoreChanged;
+        }
+
+        if (_scoreBonusAwarded != null)
+        {
+            _scoreBonusAwarded.Raised -= HandleScoreBonus;
         }
     }
 
@@ -139,5 +150,18 @@ public sealed class TimingFeedbackSystem : MonoBehaviour
         _pool.Add(feedback);
 
         return feedback;
+    }
+
+    private void HandleScoreBonus(ScoreBonus bonus)
+    {
+        FloatingTimingFeedback feedback =
+            GetAvailableFeedback();
+
+        if (feedback == null)
+        {
+            return;
+        }
+
+        feedback.ShowBonus(bonus.Position);
     }
 }

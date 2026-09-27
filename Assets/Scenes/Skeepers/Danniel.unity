@@ -839,6 +839,7 @@ MonoBehaviour:
   _difficultyChanged: {fileID: 11400000, guid: 998849c379bbe114dbafefdb36ea08e9, type: 2}
   _scoreProfile: {fileID: 11400000, guid: e472d08ea2a84cc4da4efb3b0cb5c5d1, type: 2}
   _scoreProfileChanged: {fileID: 11400000, guid: c8e1d8ffc14710a459ba601e5db3f7d7, type: 2}
+  _scoreBonusAwarded: {fileID: 11400000, guid: d6eb6c7f73648e145bc4bfbe0e1e7e03, type: 2}
 --- !u!4 &1676405014
 Transform:
   m_ObjectHideFlags: 0

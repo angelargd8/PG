@@ -24,3 +24,4 @@ MonoBehaviour:
   _easyMultiplier: 1
   _normalMultiplier: 1.25
   _hardMultiplier: 1.5
+  _bonusPoints: 50

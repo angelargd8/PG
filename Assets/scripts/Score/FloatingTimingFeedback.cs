@@ -17,6 +17,7 @@ public sealed class FloatingTimingFeedback : MonoBehaviour
     [SerializeField] private Color _perfectColor = new Color32(255, 215, 0, 255);
     [SerializeField] private Color _goodColor = new Color32(192, 192, 192, 255);
     [SerializeField] private Color _niceColor = new Color32(205, 127, 50, 255);
+    [SerializeField] private Color _bonusColor = new Color32(200, 0, 255, 255);
     [SerializeField] private Color _outlineColor = Color.black;
     [Range(0f, 1f)]
     [SerializeField] private float _outlineWidth = 0.2f;
@@ -58,6 +59,29 @@ public sealed class FloatingTimingFeedback : MonoBehaviour
         gameObject.SetActive(true);
 
         Renderer textRenderer = _text.GetComponent<Renderer>();
+
+        StopAllCoroutines();
+        StartCoroutine(Animate());
+    }
+
+
+    public void ShowBonus(Vector3 position)
+    {
+        if (_text == null)
+        {
+            Debug.LogError("[FloatingTimingFeedback] TMP_Text is not assigned.", this);
+            return;
+        }
+
+        transform.position = position;
+
+        _text.text = "BONUS";
+        _text.color = _bonusColor;
+
+        _text.outlineColor = _outlineColor;
+        _text.outlineWidth = _outlineWidth;
+
+        gameObject.SetActive(true);
 
         StopAllCoroutines();
         StartCoroutine(Animate());

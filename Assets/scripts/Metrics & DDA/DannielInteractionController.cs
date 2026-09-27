@@ -32,20 +32,20 @@ public sealed class DannielInteractionController :
     [Header("Score")]
     [SerializeField] private ScoreProfileSO _scoreProfile;
     [SerializeField] private ScoreProfileEventChannelSO _scoreProfileChanged;
+    [SerializeField] private ScoreBonusEventChannelSO _scoreBonusAwarded;
 
 
-    private readonly Dictionary<PooledBullet, PendingShot> _pendingShots =
-        new Dictionary<PooledBullet, PendingShot>();
-
+    private readonly Dictionary<PooledBullet, PendingShot> _pendingShots = new Dictionary<PooledBullet, PendingShot>();
     private ExperienceMusicClock _musicClock;
-
-    private DifficultyLevel _currentDifficulty =
-        DifficultyLevel.Normal;
-
+    private DifficultyLevel _currentDifficulty = DifficultyLevel.Normal;
     private int _missedShotCount;
-
     private bool _isRunning;
+    private int _enemyProjectileLayer;
 
+    private void Awake()
+    {
+        _enemyProjectileLayer = LayerMask.NameToLayer("EnemyProjectile");
+    }
 
     public void BeginExperience()
     {
@@ -201,6 +201,12 @@ public sealed class DannielInteractionController :
             return;
         }
 
+        if (other.gameObject.layer == _enemyProjectileLayer)
+        {
+            RegisterBonus(bullet, other);
+            return;
+        }
+
         EnemyController enemy =
             other.GetComponentInParent<EnemyController>();
 
@@ -350,6 +356,40 @@ public sealed class DannielInteractionController :
                 result
             );
         }
+    }
+
+
+    private void RegisterBonus(PooledBullet bullet, Collider enemyProjectile)
+    {
+        if (!_pendingShots.ContainsKey(bullet))
+        {
+            return;
+        }
+
+        Vector3 feedbackPosition =
+            enemyProjectile.bounds.center;
+
+        UntrackShot(bullet);
+
+        if (_scoreProfile.BonusPoints <= 0)
+        {
+            return;
+        }
+
+        ScoreBonus bonus =
+            new ScoreBonus(
+                _scoreProfile.BonusPoints,
+                feedbackPosition
+            );
+
+        _scoreBonusAwarded.RaiseEvent(bonus);
+
+        Debug.Log(
+            $"[DannielInteractionController] " +
+            $"Enemy projectile destroyed | " +
+            $"Bonus: +{_scoreProfile.BonusPoints}",
+            this
+        );
     }
 
 
@@ -509,6 +549,18 @@ public sealed class DannielInteractionController :
                 this
             );
 
+            return false;
+        }
+
+        if (_scoreBonusAwarded == null)
+        {
+            Debug.LogError("[DannielInteractionController] ScoreBonusAwarded no está asignado.", this);
+            return false;
+        }
+
+        if (_enemyProjectileLayer < 0)
+        {
+            Debug.LogError("[DannielInteractionController] No existe la layer EnemyProjectile.", this);
             return false;
         }
 
