@@ -290,6 +290,7 @@ MonoBehaviour:
   _initialPoolSize: 8
   _maxPoolSize: 16
   _scoreChanged: {fileID: 11400000, guid: 3e3199f7ef76d0d47b52605bfddd1d2b, type: 2}
+  _scoreBonusAwarded: {fileID: 11400000, guid: d6eb6c7f73648e145bc4bfbe0e1e7e03, type: 2}
 --- !u!4 &98284173
 Transform:
   m_ObjectHideFlags: 0
@@ -1234,6 +1235,7 @@ MonoBehaviour:
   _mainMenuRequested: {fileID: 11400000, guid: 79709713fbe723e48b79c6b3004f8758, type: 2}
   _experienceCompleted: {fileID: 11400000, guid: d0711fd40f6603a4f8f8bf3ae2315306, type: 2}
   _finalScoreSubmitted: {fileID: 11400000, guid: d8cca13adfba7c7409a08d53f25e5bcd, type: 2}
+  _scoreBonusAwarded: {fileID: 11400000, guid: d6eb6c7f73648e145bc4bfbe0e1e7e03, type: 2}
 --- !u!4 &807246435
 Transform:
   m_ObjectHideFlags: 0
