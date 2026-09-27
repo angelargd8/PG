@@ -1,6 +1,5 @@
 using UnityEngine;
 
-// Sample after the weapon followers have applied the current controller poses.
 [DefaultExecutionOrder(200)]
 [DisallowMultipleComponent]
 public sealed class WeaponClashHaptics : MonoBehaviour
@@ -31,7 +30,6 @@ public sealed class WeaponClashHaptics : MonoBehaviour
         bool entered = touching && !_touching;
         _touching = touching;
 
-        // Track contact during pause, but never queue feedback for resuming.
         if (!entered || Time.timeScale <= 0f || AudioListener.pause ||
             Time.unscaledTime < _nextPulseTime) return;
 
@@ -56,8 +54,6 @@ public sealed class WeaponClashHaptics : MonoBehaviour
             {
                 if (left == right || !CanDetect(right)) continue;
 
-                // Explicit poses work with LateUpdate tracking, solid colliders,
-                // triggers and kinematic bodies without changing their physics.
                 if (Physics.ComputePenetration(
                     left, left.transform.position, left.transform.rotation,
                     right, right.transform.position, right.transform.rotation,
