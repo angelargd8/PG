@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
 using UnityEngine.XR;
 
@@ -33,11 +32,6 @@ public sealed class GuitarDamage : MonoBehaviour
     [Min(1)]
     [SerializeField] private int maxMultiplier = 4;
 
-    [Min(0)]
-    [SerializeField] private int perfectPoints = 100;
-
-    [Min(0)]
-    [SerializeField] private int goodPoints = 50;
 
     [Header("Combo Knockback")]
     [SerializeField] private bool enableComboKnockback = true;
@@ -57,10 +51,9 @@ public sealed class GuitarDamage : MonoBehaviour
     [Tooltip("Pausa adicional antes de reanudar la persecucion.")]
     [Min(0f)]
     [SerializeField] private float knockbackRecoveryDuration = 0.2f;
+    
 
-    [Header("Rhythm Feedback (Optional)")]
-    [Tooltip("Texto TMP para mostrar juicio, combo, multiplicador y puntos. En VR, usa un Canvas World Space.")]
-    [SerializeField] private TMP_Text rhythmFeedbackText;
+    [Header("Rhythm Feedback")]
     [SerializeField] private ParticleSystem onBeatParticles;
     [SerializeField] private bool logRhythmHits = true;
 
@@ -98,13 +91,11 @@ public sealed class GuitarDamage : MonoBehaviour
     public int Combo => rhythmCombo.Combo;
     public int BestCombo => rhythmCombo.BestCombo;
     public int Multiplier => rhythmCombo.Multiplier;
-    public int Score => rhythmCombo.Score;
     public event Action<GuitarRhythmHit, Vector3> RhythmHitEvaluated;
 
     private void Start()
     {
         ResolveDependencies();
-        ShowFeedback("LISTO", 0);
     }
 
     private void OnValidate()
@@ -115,8 +106,6 @@ public sealed class GuitarDamage : MonoBehaviour
         goodWindowSeconds = Mathf.Max(perfectWindowSeconds, goodWindowSeconds);
         hitsPerMultiplier = Mathf.Max(1, hitsPerMultiplier);
         maxMultiplier = Mathf.Max(1, maxMultiplier);
-        perfectPoints = Mathf.Max(0, perfectPoints);
-        goodPoints = Mathf.Max(0, goodPoints);
         knockbackEveryHits = Mathf.Max(1, knockbackEveryHits);
         knockbackSpeed = Mathf.Max(0f, knockbackSpeed);
         knockbackDuration = Mathf.Max(0.01f, knockbackDuration);
@@ -180,7 +169,6 @@ public sealed class GuitarDamage : MonoBehaviour
     {
         rhythmCombo.Reset();
         hasSongTime = false;
-        ShowFeedback("LISTO", 0);
     }
 
     private void OnTriggerEnter(Collider other)
@@ -276,8 +264,6 @@ public sealed class GuitarDamage : MonoBehaviour
             beatPlayer.SongTime,
             perfectWindowSeconds,
             goodWindowSeconds,
-            perfectPoints,
-            goodPoints,
             hitsPerMultiplier,
             maxMultiplier,
             out hit
@@ -308,38 +294,21 @@ public sealed class GuitarDamage : MonoBehaviour
             return;
         }
 
-        string label = hit.Grade == GuitarHitGrade.Perfect
-            ? "PERFECTO"
-            : hit.Grade == GuitarHitGrade.Good
-                ? "BUENO"
-                : "FUERA DE TIEMPO";
-
-        if (hit.IsOnBeat && !hit.AddedToCombo)
-        {
-            label = "BEAT YA CONTADO";
-        }
-        else if (knockedBack)
-        {
-            label += " + EMPUJE";
-        }
-
         if (hit.AddedToCombo && onBeatParticles != null)
         {
             onBeatParticles.Play(true);
         }
 
-        ShowFeedback(label, hit.PointsAwarded);
-
         if (logRhythmHits)
         {
             Debug.Log(
-                $"[GuitarDamage] {label} | " +
+                $"[GuitarDamage] " +
+                $"Grade: {hit.Grade} | " +
                 $"Beat {hit.BeatIndex + 1} | " +
                 $"Desfase: {hit.TimingOffset * 1000.0:F0} ms | " +
                 $"Combo: {Combo} | " +
                 $"x{Multiplier} | " +
-                $"+{hit.PointsAwarded} | " +
-                $"Puntos: {Score}",
+                $"Knockback: {knockedBack}",
                 this
             );
         }
@@ -365,14 +334,6 @@ public sealed class GuitarDamage : MonoBehaviour
         EnemyMeleeAI meleeAI = enemy.GetComponent<EnemyMeleeAI>();
         return meleeAI != null && meleeAI.TryApplyKnockback(
             transform.position, knockbackSpeed, knockbackDuration, knockbackRecoveryDuration);
-    }
-
-    private void ShowFeedback(string label, int points)
-    {
-        if (rhythmFeedbackText != null)
-        {
-            rhythmFeedbackText.text = $"{label}  +{points}\nCombo {Combo}  x{Multiplier}\nPuntos {Score}";
-        }
     }
 
     private void PlayHaptic(GuitarHitGrade grade)
