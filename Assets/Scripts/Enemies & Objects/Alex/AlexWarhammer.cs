@@ -5,7 +5,7 @@ using UnityEngine;
 [DisallowMultipleComponent]
 public sealed class AlexWarhammer : MonoBehaviour
 {
-    [SerializeField] private SceneWeaponEquipController.Hand _hand;
+    [SerializeField] public SceneWeaponEquipController.Hand _hand;
     [SerializeField] private Collider _headCollider;
     [Min(0.01f)] [SerializeField] private float _minimumStrikeSpeed = 1.2f;
     [Tooltip("Descarta saltos de tracking o teletransportes mayores a esta distancia por frame.")]
@@ -19,6 +19,7 @@ public sealed class AlexWarhammer : MonoBehaviour
     private bool _sampled;
     public bool CanContact { get; private set; }
     public bool IsStrike { get; private set; }
+    public SceneWeaponEquipController.Hand Hand => _hand;
 
     private void Awake()
     {
