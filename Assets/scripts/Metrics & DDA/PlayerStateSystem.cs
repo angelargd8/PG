@@ -37,22 +37,21 @@ public sealed class PlayerStateSystem : MonoBehaviour
     [SerializeField] private VoidEventChannelSO _experienceReady;
     [SerializeField] private VoidEventChannelSO _mainMenuRequested;
     [SerializeField] private PlayerStateEventChannelSO _playerStateChanged;
+    [SerializeField] private DifficultyLevelEventChannelSO _difficultyChanged;
 
 
     [Header("Logging")]
     [SerializeField] private MetricsLogger _metricsLogger;
 
 
-    private readonly Queue<InteractionResult> _recentResults =
-        new Queue<InteractionResult>();
-
+    private readonly Queue<InteractionResult> _recentResults = new Queue<InteractionResult>();
     private bool _isPaused;
     private bool _isExperienceActive;
     private bool _hasPlayerAction;
-
     private float _lastPlayerActionTime;
     private int _consecutiveErrors;
     private string _currentMinigameId;
+    private DifficultyLevel _currentDifficulty = DifficultyLevel.Normal;
 
 
     public PlayerState CurrentState { get; private set; } =
@@ -83,6 +82,12 @@ public sealed class PlayerStateSystem : MonoBehaviour
         {
             _mainMenuRequested.Raised += HandleMainMenuRequested;
         }
+
+        if (_difficultyChanged != null)
+        {
+            _difficultyChanged.Raised += HandleDifficultyChanged;
+            _currentDifficulty = _difficultyChanged.CurrentDifficulty;
+        }
     }
 
 
@@ -106,6 +111,11 @@ public sealed class PlayerStateSystem : MonoBehaviour
         if (_mainMenuRequested != null)
         {
             _mainMenuRequested.Raised -= HandleMainMenuRequested;
+        }
+
+        if (_difficultyChanged != null)
+        {
+            _difficultyChanged.Raised -= HandleDifficultyChanged;
         }
     }
 
@@ -159,6 +169,11 @@ public sealed class PlayerStateSystem : MonoBehaviour
         }
 
         HandleMinigameChange(result.MinigameId);
+
+        if (result.Difficulty != _currentDifficulty)
+        {
+            return;
+        }
 
         bool isPlayerAction = IsPlayerAction(result);
 
@@ -370,9 +385,33 @@ public sealed class PlayerStateSystem : MonoBehaviour
     }
 
 
+    private void HandleDifficultyChanged(DifficultyLevel difficulty)
+    {
+        if (_currentDifficulty == difficulty)
+        {
+            return;
+        }
+
+        _currentDifficulty = difficulty;
+
+        ClearPerformanceWindow();
+
+        Debug.Log(
+            $"[PlayerStateSystem] Difficulty changed to {_currentDifficulty}. " +
+            $"Performance window cleared.",
+            this
+        );
+    }
+
+
     private void HandleExperienceReady()
     {
         _isExperienceActive = true;
+
+        if (_difficultyChanged != null)
+        {
+            _currentDifficulty = _difficultyChanged.CurrentDifficulty;
+        }
 
         ResetStateData();
 
