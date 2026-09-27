@@ -1,7 +1,5 @@
 using UnityEngine;
 
-//consumidor del evento
-
 [DisallowMultipleComponent]
 public sealed class SceneWeaponEquipController : MonoBehaviour
 {
@@ -11,21 +9,30 @@ public sealed class SceneWeaponEquipController : MonoBehaviour
         Left = 1
     }
 
+
     [Header("Attachment")]
     [Tooltip("Mano que seguira esta arma. Es independiente del input y de la vibracion.")]
-    [SerializeField]
-    private Hand hand = Hand.Right;
+    [SerializeField] private Hand hand = Hand.Right;
 
     [Header("Event Channels")]
-
-    [SerializeField]
-    private VoidEventChannelSO equipRequested;
-
+    [SerializeField] private VoidEventChannelSO equipRequested;
+    [SerializeField] private BoolEventChannelSO _gameplayPauseChanged;
+    [SerializeField] private VoidEventChannelSO _mainMenuRequested;
 
     [Header("Dependencies")]
+    [SerializeField] private SceneWeaponFollower weaponFollower;
 
-    [SerializeField]
-    private SceneWeaponFollower weaponFollower;
+
+    private Renderer[] _renderers;
+    private bool _isEquipped;
+
+
+    private void Awake()
+    {
+        _renderers = GetComponentsInChildren<Renderer>(true);
+
+        SetWeaponVisible(false);
+    }
 
 
     private void OnEnable()
@@ -37,9 +44,19 @@ public sealed class SceneWeaponEquipController : MonoBehaviour
         else
         {
             Debug.LogWarning(
-                "[SceneWeaponEquipController] No se asignó Equip Requested.",
+                "[SceneWeaponEquipController] No se asignÃ³ Equip Requested.",
                 this
             );
+        }
+
+        if (_gameplayPauseChanged != null)
+        {
+            _gameplayPauseChanged.Raised += HandlePauseChanged;
+        }
+
+        if (_mainMenuRequested != null)
+        {
+            _mainMenuRequested.Raised += HandleMainMenuRequested;
         }
     }
 
@@ -49,6 +66,16 @@ public sealed class SceneWeaponEquipController : MonoBehaviour
         if (equipRequested != null)
         {
             equipRequested.Raised -= HandleEquipRequested;
+        }
+
+        if (_gameplayPauseChanged != null)
+        {
+            _gameplayPauseChanged.Raised -= HandlePauseChanged;
+        }
+
+        if (_mainMenuRequested != null)
+        {
+            _mainMenuRequested.Raised -= HandleMainMenuRequested;
         }
     }
 
@@ -63,7 +90,7 @@ public sealed class SceneWeaponEquipController : MonoBehaviour
         if (weaponFollower == null)
         {
             Debug.LogError(
-                "[SceneWeaponEquipController] No se asignó SceneWeaponFollower.",
+                "[SceneWeaponEquipController] No se asignÃ³ SceneWeaponFollower.",
                 this
             );
 
@@ -85,29 +112,68 @@ public sealed class SceneWeaponEquipController : MonoBehaviour
         {
             RightWeaponAnchor rightAnchor =
                 FindFirstObjectByType<RightWeaponAnchor>();
-            anchor = rightAnchor != null ? rightAnchor.transform : null;
+
+            anchor = rightAnchor != null
+                ? rightAnchor.transform
+                : null;
         }
 
         if (anchor == null)
         {
             Debug.LogError(
-                $"[SceneWeaponEquipController] No se encontró {anchorName} en Bootstrap. Comprueba que esté activo.",
+                $"[SceneWeaponEquipController] No se encontrÃ³ {anchorName} en Bootstrap. Comprueba que estÃ© activo.",
                 this
             );
 
             return;
         }
 
-        Debug.Log(
-            $"[SceneWeaponEquipController] {anchorName} encontrado: {anchor.name}.",
-            this
-        );
-
         weaponFollower.Bind(anchor);
+
+        _isEquipped = true;
+        SetWeaponVisible(true);
 
         Debug.Log(
             $"[SceneWeaponEquipController] {name} equipada correctamente.",
             this
         );
+    }
+
+
+    private void HandlePauseChanged(bool isPaused)
+    {
+        SetWeaponVisible(
+            _isEquipped && !isPaused
+        );
+    }
+
+
+    private void HandleMainMenuRequested()
+    {
+        _isEquipped = false;
+
+        SetWeaponVisible(false);
+
+        if (weaponFollower != null)
+        {
+            weaponFollower.Unbind();
+        }
+    }
+
+
+    private void SetWeaponVisible(bool isVisible)
+    {
+        if (_renderers == null)
+        {
+            return;
+        }
+
+        for (int i = 0; i < _renderers.Length; i++)
+        {
+            if (_renderers[i] != null)
+            {
+                _renderers[i].enabled = isVisible;
+            }
+        }
     }
 }

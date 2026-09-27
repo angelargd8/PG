@@ -499,6 +499,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1765954792}
     m_Modifications:
+    - target: {fileID: 2751502501105510331, guid: 4d8de6316d12ef54698481aa31098f7e, type: 3}
+      propertyPath: _mainMenuRequested
+      value: 
+      objectReference: {fileID: 11400000, guid: 79709713fbe723e48b79c6b3004f8758, type: 2}
+    - target: {fileID: 2751502501105510331, guid: 4d8de6316d12ef54698481aa31098f7e, type: 3}
+      propertyPath: _gameplayPauseChanged
+      value: 
+      objectReference: {fileID: 11400000, guid: 1415d9d465e8b3d43b5df09e48696b07, type: 2}
     - target: {fileID: 4752311941042380876, guid: 4d8de6316d12ef54698481aa31098f7e, type: 3}
       propertyPath: bulletLifetime
       value: 5
@@ -697,6 +705,14 @@ PrefabInstance:
       propertyPath: hand
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 2751502501105510331, guid: 4d8de6316d12ef54698481aa31098f7e, type: 3}
+      propertyPath: _mainMenuRequested
+      value: 
+      objectReference: {fileID: 11400000, guid: 79709713fbe723e48b79c6b3004f8758, type: 2}
+    - target: {fileID: 2751502501105510331, guid: 4d8de6316d12ef54698481aa31098f7e, type: 3}
+      propertyPath: _gameplayPauseChanged
+      value: 
+      objectReference: {fileID: 11400000, guid: 1415d9d465e8b3d43b5df09e48696b07, type: 2}
     - target: {fileID: 4752311941042380876, guid: 4d8de6316d12ef54698481aa31098f7e, type: 3}
       propertyPath: hapticHand
       value: 4

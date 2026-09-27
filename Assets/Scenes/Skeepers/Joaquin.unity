@@ -510,6 +510,7 @@ MonoBehaviour:
   prewarmCount: 3
   enemyBulletPool: {fileID: 0}
   rhythmDirector: {fileID: 0}
+  playerTargetOverride: {fileID: 0}
 --- !u!4 &631068416
 Transform:
   m_ObjectHideFlags: 0
@@ -631,6 +632,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SceneWeaponEquipController
   hand: 0
   equipRequested: {fileID: 11400000, guid: f4b8f7b73053533419eb97071978892d, type: 2}
+  _gameplayPauseChanged: {fileID: 11400000, guid: 1415d9d465e8b3d43b5df09e48696b07, type: 2}
+  _mainMenuRequested: {fileID: 11400000, guid: 79709713fbe723e48b79c6b3004f8758, type: 2}
   weaponFollower: {fileID: 697290356}
 --- !u!114 &697290356
 MonoBehaviour:
@@ -2258,6 +2261,7 @@ MonoBehaviour:
   prewarmCount: 3
   enemyBulletPool: {fileID: 0}
   rhythmDirector: {fileID: 0}
+  playerTargetOverride: {fileID: 0}
 --- !u!1 &1675018889
 GameObject:
   m_ObjectHideFlags: 0
