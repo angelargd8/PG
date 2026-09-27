@@ -58,11 +58,6 @@ public sealed class GuitarDamage : MonoBehaviour
     [Min(0f)]
     [SerializeField] private float knockbackRecoveryDuration = 0.2f;
 
-    [Header("Metrics (Optional)")]
-    [Tooltip("Si se deja vacio, los resultados se registran directamente en MetricsSystem de ExperienceCore.")]
-    [SerializeField] private InteractionResultEventChannelSO interactionRegistered;
-    [SerializeField] private DifficultyLevel difficulty = DifficultyLevel.Normal;
-
     [Header("Rhythm Feedback (Optional)")]
     [Tooltip("Texto TMP para mostrar juicio, combo, multiplicador y puntos. En VR, usa un Canvas World Space.")]
     [SerializeField] private TMP_Text rhythmFeedbackText;
@@ -93,7 +88,6 @@ public sealed class GuitarDamage : MonoBehaviour
     private readonly Dictionary<EnemyController, EnemyContact> contacts =
         new Dictionary<EnemyController, EnemyContact>();
     private readonly List<EnemyController> expiredContacts = new List<EnemyController>();
-    private MetricsSystem metricsSystem;
     private BeatMapSO observedBeatMap;
     private double lastSongTime;
     private bool hasSongTime;
@@ -105,7 +99,7 @@ public sealed class GuitarDamage : MonoBehaviour
     public int BestCombo => rhythmCombo.BestCombo;
     public int Multiplier => rhythmCombo.Multiplier;
     public int Score => rhythmCombo.Score;
-    public event Action<GuitarRhythmHit> RhythmHitEvaluated;
+    public event Action<GuitarRhythmHit, Vector3> RhythmHitEvaluated;
 
     private void Start()
     {
@@ -161,11 +155,6 @@ public sealed class GuitarDamage : MonoBehaviour
         if (beatPlayer == null)
         {
             beatPlayer = FindFirstObjectByType<ExperienceBeatPlayer>();
-        }
-
-        if (interactionRegistered == null && metricsSystem == null)
-        {
-            metricsSystem = FindFirstObjectByType<MetricsSystem>();
         }
     }
 
@@ -236,57 +225,95 @@ public sealed class GuitarDamage : MonoBehaviour
         }
 
         EnemyController enemy = other.GetComponentInParent<EnemyController>();
+
         if (enemy == null || !enemy.IsAlive)
         {
             return;
         }
 
+        Vector3 feedbackPosition = other.ClosestPoint(transform.position);
+
         ResolveDependencies();
+
         if (beatPlayer != null && !beatPlayer.IsPlaying)
         {
             return;
         }
 
-        if (!contacts.TryGetValue(enemy, out EnemyContact contact) || contact.SpawnVersion != enemy.SpawnVersion)
+        if (!contacts.TryGetValue(enemy, out EnemyContact contact) ||
+            contact.SpawnVersion != enemy.SpawnVersion)
         {
-            contact = new EnemyContact { SpawnVersion = enemy.SpawnVersion };
+            contact = new EnemyContact
+            {
+                SpawnVersion = enemy.SpawnVersion
+            };
+
             contacts[enemy] = contact;
         }
 
         contact.Colliders.RemoveWhere(collider =>
-            collider == null || !collider.enabled || !collider.gameObject.activeInHierarchy);
+            collider == null ||
+            !collider.enabled ||
+            !collider.gameObject.activeInHierarchy);
+
         bool alreadyTouching = contact.Colliders.Count > 0;
-        if (!contact.Colliders.Add(other) || alreadyTouching ||
+
+        if (!contact.Colliders.Add(other) ||
+            alreadyTouching ||
             Time.timeAsDouble - contact.LastHitTime < repeatHitCooldown)
         {
             return;
         }
 
         contact.LastHitTime = Time.timeAsDouble;
+
         ObserveTimeline();
 
         GuitarRhythmHit hit = default;
-        bool evaluated = beatPlayer != null && rhythmCombo.TryEvaluate(
-            beatPlayer.BeatMap, beatPlayer.SongTime, perfectWindowSeconds, goodWindowSeconds,
-            perfectPoints, goodPoints, hitsPerMultiplier, maxMultiplier, out hit);
 
-        // Resolve damage first, so a finisher never pushes an enemy already returned to its pool.
+        bool evaluated = beatPlayer != null && rhythmCombo.TryEvaluate(
+            beatPlayer.BeatMap,
+            beatPlayer.SongTime,
+            perfectWindowSeconds,
+            goodWindowSeconds,
+            perfectPoints,
+            goodPoints,
+            hitsPerMultiplier,
+            maxMultiplier,
+            out hit
+        );
+
         enemy.TakeDamage(damage);
+
         bool knockedBack = evaluated && TryApplyComboKnockback(enemy, hit);
-        PlayHaptic(evaluated && hit.AddedToCombo ? hit.Grade : GuitarHitGrade.OffBeat);
+
+        PlayHaptic(
+            evaluated && hit.AddedToCombo
+                ? hit.Grade
+                : GuitarHitGrade.OffBeat
+        );
 
         if (!evaluated)
         {
             if (!warnedMissingMusic)
             {
-                Debug.LogWarning("[GuitarDamage] No se encontro el reloj/BeatMap de ExperienceCore. Este golpe solo aplica dano normal.", this);
+                Debug.LogWarning(
+                    "[GuitarDamage] No se encontro el reloj/BeatMap de ExperienceCore. Este golpe solo aplica dano normal.",
+                    this
+                );
+
                 warnedMissingMusic = true;
             }
+
             return;
         }
 
-        string label = hit.Grade == GuitarHitGrade.Perfect ? "PERFECTO" :
-            hit.Grade == GuitarHitGrade.Good ? "BUENO" : "FUERA DE TIEMPO";
+        string label = hit.Grade == GuitarHitGrade.Perfect
+            ? "PERFECTO"
+            : hit.Grade == GuitarHitGrade.Good
+                ? "BUENO"
+                : "FUERA DE TIEMPO";
+
         if (hit.IsOnBeat && !hit.AddedToCombo)
         {
             label = "BEAT YA CONTADO";
@@ -301,19 +328,30 @@ public sealed class GuitarDamage : MonoBehaviour
             onBeatParticles.Play(true);
         }
 
-        // Multiple enemies hit on one beat must not inflate the musical success metrics.
-        if (hit.AddedToCombo || !hit.IsOnBeat)
-        {
-            RegisterMetrics(hit);
-        }
-
         ShowFeedback(label, hit.PointsAwarded);
+
         if (logRhythmHits)
         {
-            Debug.Log($"[GuitarDamage] {label} | Beat {hit.BeatIndex + 1} | Desfase: {hit.TimingOffset * 1000.0:F0} ms | Combo: {Combo} | x{Multiplier} | +{hit.PointsAwarded} | Puntos: {Score}", this);
+            Debug.Log(
+                $"[GuitarDamage] {label} | " +
+                $"Beat {hit.BeatIndex + 1} | " +
+                $"Desfase: {hit.TimingOffset * 1000.0:F0} ms | " +
+                $"Combo: {Combo} | " +
+                $"x{Multiplier} | " +
+                $"+{hit.PointsAwarded} | " +
+                $"Puntos: {Score}",
+                this
+            );
         }
 
-        RhythmHitEvaluated?.Invoke(hit);
+        bool shouldReportInteraction =
+            hit.AddedToCombo ||
+            !hit.IsOnBeat;
+
+        if (shouldReportInteraction)
+        {
+            RhythmHitEvaluated?.Invoke(hit, feedbackPosition);
+        }
     }
 
     private bool TryApplyComboKnockback(EnemyController enemy, GuitarRhythmHit hit)
@@ -327,26 +365,6 @@ public sealed class GuitarDamage : MonoBehaviour
         EnemyMeleeAI meleeAI = enemy.GetComponent<EnemyMeleeAI>();
         return meleeAI != null && meleeAI.TryApplyKnockback(
             transform.position, knockbackSpeed, knockbackDuration, knockbackRecoveryDuration);
-    }
-
-    private void RegisterMetrics(GuitarRhythmHit hit)
-    {
-        InteractionResult result = new InteractionResult(
-            minigameId: "Joaquin",
-            interactionType: InteractionType.GuitarHit,
-            outcome: hit.IsOnBeat ? InteractionOutcome.Success : InteractionOutcome.Failed,
-            difficulty: difficulty,
-            expectedTime: hit.ExpectedTime,
-            actualTime: hit.ActualTime);
-
-        if (interactionRegistered != null)
-        {
-            interactionRegistered.RaiseEvent(result);
-        }
-        else if (metricsSystem != null)
-        {
-            metricsSystem.RegisterInteraction(result);
-        }
     }
 
     private void ShowFeedback(string label, int points)
