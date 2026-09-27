@@ -15,7 +15,7 @@ public sealed class DannielInteractionController :
     }
 
 
-    private const int MissedShotsPerFailure = 5;
+    private const int MissedShotsPerFailure = 6;
 
 
     [Header("Gameplay")]
