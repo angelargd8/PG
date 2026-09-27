@@ -19,7 +19,13 @@ Ejecutar desde el flujo normal de Bootstrap/menu para cargar ExperienceCore, el 
 
 El primer contacto resuelve el objeto. No vuelve a puntuar al tocar otro collider, el otro martillo ni al regresar al enemigo. Cualquier contacto resuelto vibra en el mando que lo hizo.
 
-`AlexScoreProfile.asset` reutiliza el sistema de puntuacion de Jeremy con un perfil independiente: 100 puntos base por exito, -50 por fallo, multiplicador normal 1.25 y los mismos bonos de timing. Un toque suma 125 con esta dificultad. Un golpe correcto de calabaza suma ademas el bono de timing. Dejar pasar un objeto da 0 puntos; se puede cambiar `Missed Points` en el perfil. El sistema compartido mantiene el puntaje minimo en cero.
+`Assets/ScriptableObjects/EventChannels/Interaction/AlexScoreProfile.asset` reutiliza el sistema de puntuacion de Jeremy con un perfil independiente: 100 puntos base por exito, -50 por fallo, multiplicador normal 1.25 y los mismos bonos de timing. Un toque suma 125 con esta dificultad. Un golpe correcto de calabaza suma ademas el bono de timing. El director aplica `Missed Pumpkin Penalty` (75) sobre una copia del perfil durante la experiencia; dejar pasar un Dollar no penaliza. El sistema compartido mantiene el puntaje minimo en cero.
+
+## Configuracion de dificultad
+
+`Assets/ScriptableObjects/DifficultyConfigurations/AlexDifficultyConfig.asset` contiene los perfiles Easy, Normal y Hard, siguiendo la estructura de Jeremy. Cada perfil permite ajustar `Throw Every Beats`, `Horizontal Multiplier`, `Limit Low Targets`, `Max Drop`, `Patterns` e `Intense Patterns`. Las secuencias se repiten; una secuencia intensa vacia usa la normal, y si ambas estan vacias se usa Wide.
+
+La configuracion migrada conserva los intervalos 4/2/1 beats y los multiplicadores horizontales 0.35/0.6/1. Easy limita el descenso a 0.1 m y Normal a 0.2 m bajo el centro de impacto, incluso en beats intensos. Hard conserva el descenso completo del patron. `AlexThrowDirector` tiene asignados `Difficulty Config` y el canal `Difficulty Changed` de ExperienceCore; cambia de perfil cuando DynamicDifficultySystem lo indica segun PlayerStateSystem. La puntuacion y la intensidad musical siguen usando sus ajustes independientes.
 
 ## Manos y trayectoria
 

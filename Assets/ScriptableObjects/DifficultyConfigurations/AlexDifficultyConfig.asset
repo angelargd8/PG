@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7e68e604583f40f4988aeb29a4295dd9, type: 3}
+  m_Name: AlexDifficultyConfig
+  m_EditorClassIdentifier: Assembly-CSharp::AlexDifficultyConfigSO
+  _easy:
+    _throwEveryBeats: 4
+    _horizontalMultiplier: 0.35
+    _limitLowTargets: 1
+    _maxDrop: 0.1
+    _patterns: 00000000020000000000000003000000
+    _intensePatterns: 020000000300000004000000000000000500000001000000
+  _normal:
+    _throwEveryBeats: 2
+    _horizontalMultiplier: 0.6
+    _limitLowTargets: 1
+    _maxDrop: 0.2
+    _patterns: 0000000002000000010000000300000000000000
+    _intensePatterns: 020000000300000004000000000000000500000001000000
+  _hard:
+    _throwEveryBeats: 1
+    _horizontalMultiplier: 1
+    _limitLowTargets: 0
+    _maxDrop: 0.5
+    _patterns: 020000000300000001000000040000000000000005000000
+    _intensePatterns: 020000000300000004000000000000000500000001000000

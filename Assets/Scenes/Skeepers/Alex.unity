@@ -2133,17 +2133,9 @@ MonoBehaviour:
   _interactionRegistered: {fileID: 11400000, guid: 188abd6f30130bb42b4877604a6ce24f, type: 2}
   _scoreProfile: {fileID: 11400000, guid: 1e512bca3df7416b8b51b6d82b18c04e, type: 2}
   _scoreProfileChanged: {fileID: 11400000, guid: c8e1d8ffc14710a459ba601e5db3f7d7, type: 2}
-  _difficulty: 1
+  _difficultyConfig: {fileID: 11400000, guid: ce5b60215e0ff714abd04dd880048be7, type: 2}
   _difficultyChanged: {fileID: 11400000, guid: 998849c379bbe114dbafefdb36ea08e9, type: 2}
   _missedPumpkinPenalty: 75
-  _easyThrowEveryBeats: 4
-  _normalThrowEveryBeats: 2
-  _hardThrowEveryBeats: 1
-  _easyHorizontalMultiplier: 0.35
-  _normalHorizontalMultiplier: 0.6
-  _hardHorizontalMultiplier: 1
-  _easyMaxDrop: 0.1
-  _normalMaxDrop: 0.2
   _travelBeats: 2
   _returnBeats: 2
   _beatWindow: 0.16

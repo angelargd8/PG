@@ -43,7 +43,10 @@ public sealed class AlexThrowDirector : MonoBehaviour, IExperienceRuntime
     [Header("Difficulty")]
 
     [SerializeField]
+    private AlexDifficultyConfigSO _difficultyConfig;
+
     private DifficultyLevel _difficulty = DifficultyLevel.Normal;
+    private AlexDifficultyProfile _currentProfile;
 
     [Tooltip("Canal de DynamicDifficultySystem en ExperienceCore. PlayerStateSystem determina Overloaded/Engaged.")]
     [SerializeField] private DifficultyLevelEventChannelSO _difficultyChanged;
@@ -51,63 +54,6 @@ public sealed class AlexThrowDirector : MonoBehaviour, IExperienceRuntime
     [Header("Miss Penalty")]
     [Tooltip("Puntos que se restan por cada calabaza que pasa sin contacto. Dollar no penaliza por omision.")]
     [Min(1)] [SerializeField] private int _missedPumpkinPenalty = 75;
-
-    [Tooltip(
-        "Cada cuantos beats aparece un par de objetos " +
-        "en dificultad facil."
-    )]
-    [Min(1)]
-    [SerializeField]
-    private int _easyThrowEveryBeats = 4;
-
-    [Tooltip(
-        "Cada cuantos beats aparece un par de objetos " +
-        "en dificultad normal."
-    )]
-    [Min(1)]
-    [SerializeField]
-    private int _normalThrowEveryBeats = 2;
-
-    [Tooltip(
-        "Cada cuantos beats aparece un par de objetos " +
-        "en dificultad dificil."
-    )]
-    [Min(1)]
-    [SerializeField]
-    private int _hardThrowEveryBeats = 1;
-
-    [Header("Difficulty Spacing")]
-
-    [Tooltip(
-        "Multiplicador horizontal para Easy. " +
-        "0.55 significa 55% de la separacion de Hard."
-    )]
-    [Range(0.1f, 1f)]
-    [SerializeField]
-    private float _easyHorizontalMultiplier = 0.55f;
-
-    [Tooltip(
-        "Multiplicador horizontal para Normal. " +
-        "0.80 significa 80% de la separacion de Hard."
-    )]
-    [Range(0.1f, 1f)]
-    [SerializeField]
-    private float _normalHorizontalMultiplier = 0.8f;
-
-    [Tooltip(
-        "Hard conserva la separacion original."
-    )]
-    [Range(0.1f, 1.5f)]
-    [SerializeField]
-    private float _hardHorizontalMultiplier = 1f;
-
-    [Header("Low Target Height")]
-    [Tooltip("Descenso maximo en metros bajo el centro de impacto en Facil, incluso en beats intensos.")]
-    [Min(0f)] [SerializeField] private float _easyMaxDrop = 0.1f;
-
-    [Tooltip("Descenso maximo en metros bajo el centro de impacto en Normal, incluso en beats intensos.")]
-    [Min(0f)] [SerializeField] private float _normalMaxDrop = 0.2f;
-
 
     // =========================================================
     // RHYTHM
@@ -270,16 +216,6 @@ public sealed class AlexThrowDirector : MonoBehaviour, IExperienceRuntime
     private bool _intensityWarningShown;
 
 
-    private enum ThrowPattern
-    {
-        Wide = 0,
-        Narrow = 1,
-        LeftHighRightLow = 2,
-        LeftLowRightHigh = 3,
-        BothHigh = 4,
-        BothLow = 5
-    }
-
     public bool IsPlaying =>
         _running &&
         isActiveAndEnabled &&
@@ -358,11 +294,12 @@ public sealed class AlexThrowDirector : MonoBehaviour, IExperienceRuntime
             _interactionRegistered == null ||
             _scoreProfile == null ||
             _scoreProfileChanged == null ||
-            _difficultyChanged == null)
+            _difficultyChanged == null ||
+            _difficultyConfig == null)
         {
             Debug.LogError(
                 "[AlexThrowDirector] Faltan pool, manos, " +
-                "beat player o eventos de puntuacion/dificultad.",
+                "beat player, configuracion o eventos de puntuacion/dificultad.",
                 this
             );
 
@@ -488,69 +425,12 @@ public sealed class AlexThrowDirector : MonoBehaviour, IExperienceRuntime
     {
         if (!_running) return;
         _difficulty = difficulty;
+        _currentProfile = _difficultyConfig.GetProfile(difficulty);
     }
 
-    private int GetBaseThrowEveryBeats()
-    {
-        switch (_difficulty)
-        {
-            case DifficultyLevel.Easy:
+    private int GetBaseThrowEveryBeats() => _currentProfile.ThrowEveryBeats;
 
-                return Mathf.Max(
-                    1,
-                    _easyThrowEveryBeats
-                );
-
-
-            case DifficultyLevel.Hard:
-
-                return Mathf.Max(
-                    1,
-                    _hardThrowEveryBeats
-                );
-
-
-            case DifficultyLevel.Normal:
-            default:
-
-                return Mathf.Max(
-                    1,
-                    _normalThrowEveryBeats
-                );
-        }
-    }
-
-
-    private float GetHorizontalDifficultyMultiplier()
-    {
-        switch (_difficulty)
-        {
-            case DifficultyLevel.Easy:
-
-                return Mathf.Max(
-                    0.1f,
-                    _easyHorizontalMultiplier
-                );
-
-
-            case DifficultyLevel.Hard:
-
-                return Mathf.Max(
-                    0.1f,
-                    _hardHorizontalMultiplier
-                );
-
-
-            case DifficultyLevel.Normal:
-            default:
-
-                return Mathf.Max(
-                    0.1f,
-                    _normalHorizontalMultiplier
-                );
-        }
-    }
-
+    private float GetHorizontalDifficultyMultiplier() => _currentProfile.HorizontalMultiplier;
 
     private int GetThrowEveryBeats(
         bool intense
@@ -688,7 +568,7 @@ public sealed class AlexThrowDirector : MonoBehaviour, IExperienceRuntime
         );
 
 
-        ThrowPattern pattern =
+        AlexThrowPattern pattern =
             GetNextPattern(
                 intense
             );
@@ -753,105 +633,11 @@ public sealed class AlexThrowDirector : MonoBehaviour, IExperienceRuntime
     }
 
 
-    private ThrowPattern GetNextPattern(
-        bool intense
-    )
-    {
-        if (intense)
-        {
-            switch (_patternIndex % 6)
-            {
-                case 0:
-                    return ThrowPattern.LeftHighRightLow;
-
-                case 1:
-                    return ThrowPattern.LeftLowRightHigh;
-
-                case 2:
-                    return ThrowPattern.BothHigh;
-
-                case 3:
-                    return ThrowPattern.Wide;
-
-                case 4:
-                    return ThrowPattern.BothLow;
-
-                default:
-                    return ThrowPattern.Narrow;
-            }
-        }
-
-
-        switch (_difficulty)
-        {
-
-            case DifficultyLevel.Easy:
-
-                switch (_patternIndex % 4)
-                {
-                    case 0:
-                        return ThrowPattern.Wide;
-
-                    case 1:
-                        return ThrowPattern.LeftHighRightLow;
-
-                    case 2:
-                        return ThrowPattern.Wide;
-
-                    default:
-                        return ThrowPattern.LeftLowRightHigh;
-                }
-
-
-            case DifficultyLevel.Hard:
-
-                switch (_patternIndex % 6)
-                {
-                    case 0:
-                        return ThrowPattern.LeftHighRightLow;
-
-                    case 1:
-                        return ThrowPattern.LeftLowRightHigh;
-
-                    case 2:
-                        return ThrowPattern.Narrow;
-
-                    case 3:
-                        return ThrowPattern.BothHigh;
-
-                    case 4:
-                        return ThrowPattern.Wide;
-
-                    default:
-                        return ThrowPattern.BothLow;
-                }
-
-
-            case DifficultyLevel.Normal:
-            default:
-
-                switch (_patternIndex % 5)
-                {
-                    case 0:
-                        return ThrowPattern.Wide;
-
-                    case 1:
-                        return ThrowPattern.LeftHighRightLow;
-
-                    case 2:
-                        return ThrowPattern.Narrow;
-
-                    case 3:
-                        return ThrowPattern.LeftLowRightHigh;
-
-                    default:
-                        return ThrowPattern.Wide;
-                }
-        }
-    }
+    private AlexThrowPattern GetNextPattern(bool intense) =>
+        _currentProfile.GetPattern(_patternIndex, intense);
 
     private void CalculatePatternPositions(
-        ThrowPattern pattern,
+        AlexThrowPattern pattern,
         bool intense,
         Vector3 center,
         Vector3 right,
@@ -900,17 +686,12 @@ public sealed class AlexThrowDirector : MonoBehaviour, IExperienceRuntime
 
 
         // Limit only the low side of a pattern, including the intense-beat bonus.
-        float downwardOffset = _difficulty switch
-        {
-            DifficultyLevel.Easy => Mathf.Min(vertical, Mathf.Max(0f, _easyMaxDrop)),
-            DifficultyLevel.Normal => Mathf.Min(vertical, Mathf.Max(0f, _normalMaxDrop)),
-            _ => vertical
-        };
+        float downwardOffset = _currentProfile.GetDownwardOffset(vertical);
 
         switch (pattern)
         {
 
-            case ThrowPattern.Wide:
+            case AlexThrowPattern.Wide:
 
                 leftPosition =
                     center -
@@ -924,7 +705,7 @@ public sealed class AlexThrowDirector : MonoBehaviour, IExperienceRuntime
 
 
 
-            case ThrowPattern.Narrow:
+            case AlexThrowPattern.Narrow:
 
                 leftPosition =
                     center -
@@ -936,7 +717,7 @@ public sealed class AlexThrowDirector : MonoBehaviour, IExperienceRuntime
 
                 break;
 
-            case ThrowPattern.LeftHighRightLow:
+            case AlexThrowPattern.LeftHighRightLow:
 
                 leftPosition =
                     center -
@@ -951,7 +732,7 @@ public sealed class AlexThrowDirector : MonoBehaviour, IExperienceRuntime
                 break;
 
 
-            case ThrowPattern.LeftLowRightHigh:
+            case AlexThrowPattern.LeftLowRightHigh:
 
                 leftPosition =
                     center -
@@ -966,7 +747,7 @@ public sealed class AlexThrowDirector : MonoBehaviour, IExperienceRuntime
                 break;
 
 
-            case ThrowPattern.BothHigh:
+            case AlexThrowPattern.BothHigh:
 
                 leftPosition =
                     center -
@@ -981,7 +762,7 @@ public sealed class AlexThrowDirector : MonoBehaviour, IExperienceRuntime
                 break;
 
 
-            case ThrowPattern.BothLow:
+            case AlexThrowPattern.BothLow:
 
                 leftPosition =
                     center -
