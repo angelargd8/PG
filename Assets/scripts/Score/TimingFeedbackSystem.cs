@@ -20,9 +20,17 @@ public sealed class TimingFeedbackSystem : MonoBehaviour
     [SerializeField] private ScoreBonusEventChannelSO _scoreBonusAwarded;
 
 
-    private readonly List<FloatingTimingFeedback> _pool =
-        new List<FloatingTimingFeedback>();
+    [Header("Placement")]
+    [Min(0f)]
+    [SerializeField] private float _simultaneousBonusVerticalOffset = 0.18f;
 
+    [Min(0f)]
+    [SerializeField] private float _simultaneousFeedbackDistance = 0.2f;
+
+
+    private readonly List<FloatingTimingFeedback> _pool = new List<FloatingTimingFeedback>();
+    private int _lastTimingFeedbackFrame = -1;
+    private Vector3 _lastTimingFeedbackPosition;
 
     private void Awake()
     {
@@ -55,6 +63,8 @@ public sealed class TimingFeedbackSystem : MonoBehaviour
         {
             _scoreBonusAwarded.Raised -= HandleScoreBonus;
         }
+
+        _lastTimingFeedbackFrame = -1;
     }
 
 
@@ -88,6 +98,12 @@ public sealed class TimingFeedbackSystem : MonoBehaviour
             scoreChange.TimingJudgement,
             scoreChange.FeedbackPosition.Value
         );
+
+        _lastTimingFeedbackFrame =
+            Time.frameCount;
+
+        _lastTimingFeedbackPosition =
+            scoreChange.FeedbackPosition.Value;
     }
 
 
@@ -162,6 +178,26 @@ public sealed class TimingFeedbackSystem : MonoBehaviour
             return;
         }
 
-        feedback.ShowBonus(bonus.Position);
+        Vector3 position =
+            bonus.Position;
+
+        bool isSimultaneous =
+            _lastTimingFeedbackFrame ==
+            Time.frameCount;
+
+        bool isNearby =
+            Vector3.Distance(
+                _lastTimingFeedbackPosition,
+                bonus.Position
+            ) <= _simultaneousFeedbackDistance;
+
+        if (isSimultaneous && isNearby)
+        {
+            position +=
+                Vector3.up *
+                _simultaneousBonusVerticalOffset;
+        }
+
+        feedback.ShowBonus(position);
     }
 }
