@@ -392,6 +392,11 @@ public sealed class DynamicDifficultySystem : MonoBehaviour
 
     private bool IsPlayerAction(InteractionResult result)
     {
+        if (result.InteractionType == InteractionType.PlayerHit)
+        {
+            return false;
+        }
+        
         return
             result.Outcome == InteractionOutcome.Success ||
             result.Outcome == InteractionOutcome.Failed;

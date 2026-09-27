@@ -38,6 +38,14 @@ public sealed class ScoreProfileSO : ScriptableObject
     [SerializeField] private float _hardMultiplier = 1.5f;
 
 
+    [Header("Bonus")]
+    [Min(0)]
+    [SerializeField] private int _bonusPoints;
+
+    
+    public int BonusPoints => _bonusPoints;
+
+
     private void OnValidate()
     {
         _perfectTimingThreshold =

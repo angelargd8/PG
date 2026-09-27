@@ -15,6 +15,9 @@ public sealed class DannielInteractionController :
     }
 
 
+    private const int MissedShotsPerFailure = 5;
+
+
     [Header("Gameplay")]
     [SerializeField] private GunShooter[] _guns;
     [SerializeField] private SegmentPool _segmentPool;
@@ -38,6 +41,8 @@ public sealed class DannielInteractionController :
 
     private DifficultyLevel _currentDifficulty =
         DifficultyLevel.Normal;
+
+    private int _missedShotCount;
 
     private bool _isRunning;
 
@@ -72,6 +77,8 @@ public sealed class DannielInteractionController :
             _difficultyChanged != null
                 ? _difficultyChanged.CurrentDifficulty
                 : DifficultyLevel.Normal;
+
+        _missedShotCount = 0;
 
         if (_difficultyChanged != null)
         {
@@ -137,6 +144,8 @@ public sealed class DannielInteractionController :
 
         _pendingShots.Clear();
 
+        _missedShotCount = 0;
+
         _isRunning = false;
     }
 
@@ -185,10 +194,7 @@ public sealed class DannielInteractionController :
     }
 
 
-    private void HandleBulletTriggerEntered(
-        PooledBullet bullet,
-        Collider other
-    )
+    private void HandleBulletTriggerEntered(PooledBullet bullet, Collider other)
     {
         if (!_pendingShots.ContainsKey(bullet))
         {
@@ -205,20 +211,15 @@ public sealed class DannielInteractionController :
                     bullet.transform.position
                 );
 
-            ResolveShot(
+            ResolveSuccessfulShot(
                 bullet,
-                InteractionOutcome.Success,
                 feedbackPosition
             );
 
             return;
         }
 
-        ResolveShot(
-            bullet,
-            InteractionOutcome.Failed,
-            null
-        );
+        RegisterMissedShot(bullet);
     }
 
 
@@ -229,19 +230,11 @@ public sealed class DannielInteractionController :
             return;
         }
 
-        ResolveShot(
-            bullet,
-            InteractionOutcome.Failed,
-            null
-        );
+        RegisterMissedShot(bullet);
     }
 
 
-    private void ResolveShot(
-        PooledBullet bullet,
-        InteractionOutcome outcome,
-        Vector3? feedbackPosition
-    )
+    private void ResolveSuccessfulShot(PooledBullet bullet, Vector3 feedbackPosition)
     {
         if (!_pendingShots.TryGetValue(
             bullet,
@@ -257,7 +250,7 @@ public sealed class DannielInteractionController :
             new InteractionResult(
                 minigameId: "Danniel",
                 interactionType: InteractionType.GunShoot,
-                outcome: outcome,
+                outcome: InteractionOutcome.Success,
                 difficulty: shot.Difficulty,
                 expectedTime: shot.ExpectedTime,
                 actualTime: shot.ActualTime,
@@ -270,10 +263,67 @@ public sealed class DannielInteractionController :
     }
 
 
-    private void HandleEnemiesMissed(
-        int count,
-        DifficultyLevel difficulty
-    )
+    private void RegisterMissedShot(PooledBullet bullet)
+    {
+        if (!_pendingShots.TryGetValue(
+            bullet,
+            out PendingShot shot
+        ))
+        {
+            return;
+        }
+
+        UntrackShot(bullet);
+
+        if (shot.Difficulty != _currentDifficulty)
+        {
+            return;
+        }
+
+        _missedShotCount++;
+
+        Debug.Log(
+            $"[DannielInteractionController] " +
+            $"Missed shot: {_missedShotCount}/{MissedShotsPerFailure}",
+            this
+        );
+
+        if (_missedShotCount < MissedShotsPerFailure)
+        {
+            return;
+        }
+
+        _missedShotCount = 0;
+
+        RegisterFailure(
+            InteractionType.GunShoot
+        );
+    }
+
+
+    private void RegisterFailure(InteractionType interactionType)
+    {
+        double eventTime =
+            _musicClock != null
+                ? _musicClock.SongTime
+                : 0.0;
+
+        InteractionResult result =
+            new InteractionResult(
+                minigameId: "Danniel",
+                interactionType: interactionType,
+                outcome: InteractionOutcome.Failed,
+                difficulty: _currentDifficulty,
+                expectedTime: eventTime
+            );
+
+        _interactionRegistered.RaiseEvent(
+            result
+        );
+    }
+
+
+    private void HandleEnemiesMissed(int count, DifficultyLevel difficulty)
     {
         if (!_isRunning ||
             count <= 0 ||
@@ -305,7 +355,21 @@ public sealed class DannielInteractionController :
 
     private void HandleDifficultyChanged(DifficultyLevel difficulty)
     {
+        if (_currentDifficulty == difficulty)
+        {
+            return;
+        }
+
         _currentDifficulty = difficulty;
+
+        _missedShotCount = 0;
+
+        Debug.Log(
+            $"[DannielInteractionController] " +
+            $"Difficulty changed to {_currentDifficulty}. " +
+            $"Missed shot counter reset.",
+            this
+        );
     }
 
 

@@ -8,5 +8,6 @@ public enum InteractionType
     GunShoot = 5,
     GuitarHit = 6,
     HammerTouch = 7,
-    HammerHit = 8
+    HammerHit = 8,
+    PlayerHit = 9
 }
