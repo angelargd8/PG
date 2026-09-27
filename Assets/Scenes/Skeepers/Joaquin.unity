@@ -2067,12 +2067,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::JoaquinInteractionController
   _guitarDamage: {fileID: 697290357}
+  _enemyWaveSpawner: {fileID: 486055939}
   _interactionRegistered: {fileID: 11400000, guid: 188abd6f30130bb42b4877604a6ce24f, type: 2}
   _difficultyChanged: {fileID: 11400000, guid: 998849c379bbe114dbafefdb36ea08e9, type: 2}
   _scoreProfile: {fileID: 11400000, guid: 92282dd41f806d647b55524144a03b45, type: 2}
   _scoreProfileChanged: {fileID: 11400000, guid: c8e1d8ffc14710a459ba601e5db3f7d7, type: 2}
   _scoreBonusAwarded: {fileID: 11400000, guid: d6eb6c7f73648e145bc4bfbe0e1e7e03, type: 2}
   _offBeatMergeWindow: 0.05
+  _hitsPerFailure: 3
 --- !u!4 &1135356047
 Transform:
   m_ObjectHideFlags: 0

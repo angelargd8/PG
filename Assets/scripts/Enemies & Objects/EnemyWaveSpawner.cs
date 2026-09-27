@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 [DisallowMultipleComponent]
 public sealed class EnemyWaveSpawner : MonoBehaviour, IExperienceRuntime
@@ -63,6 +64,8 @@ public sealed class EnemyWaveSpawner : MonoBehaviour, IExperienceRuntime
     public bool IsRunning { get; private set; }
     public int SpawnedCount { get; private set; }
     public float RecentIntensity { get; private set; }
+    public event Action<EnemyMeleeAI> EnemySpawned;
+
 
     public int ActiveEnemyCount
     {
@@ -224,6 +227,15 @@ public sealed class EnemyWaveSpawner : MonoBehaviour, IExperienceRuntime
             }
 
             activeEnemies.Add(enemy);
+
+            EnemyMeleeAI meleeAI =
+                enemy.GetComponent<EnemyMeleeAI>();
+
+            if (meleeAI != null)
+            {
+                EnemySpawned?.Invoke(meleeAI);
+}
+
             SpawnedCount++;
             spawned++;
         }

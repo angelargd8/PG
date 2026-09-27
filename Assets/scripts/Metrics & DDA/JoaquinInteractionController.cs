@@ -1,13 +1,22 @@
 using System;
 using UnityEngine;
+using System.Collections.Generic;
 
 [DisallowMultipleComponent]
 public sealed class JoaquinInteractionController :
     MonoBehaviour,
     IExperienceRuntime
 {
+    private sealed class EnemyAttackProgress
+    {
+        public uint SpawnVersion;
+        public int Hits;
+    }
+
+
     [Header("Gameplay")]
     [SerializeField] private GuitarDamage _guitarDamage;
+    [SerializeField] private EnemyWaveSpawner _enemyWaveSpawner;
 
     [Header("Metrics")]
     [SerializeField] private InteractionResultEventChannelSO _interactionRegistered;
@@ -24,6 +33,17 @@ public sealed class JoaquinInteractionController :
     [SerializeField] private float _offBeatMergeWindow = 0.05f;
 
 
+    [Header("Failure")]
+    [Min(1)]
+    [SerializeField] private int _hitsPerFailure = 3;
+
+
+    [Header("Success Rate Limit")]
+    [Tooltip("Cantidad de beats completos que deben pasar después de un Success antes de permitir otro.")]
+    [Min(0)]
+    [SerializeField] private int _successCooldownBeats = 5;
+
+
     private DifficultyLevel _currentDifficulty =
         DifficultyLevel.Normal;
 
@@ -33,6 +53,14 @@ public sealed class JoaquinInteractionController :
     private int _lastComboMultiplier = 1;
 
     private bool _isRunning;
+    private readonly Dictionary<EnemyMeleeAI, EnemyAttackProgress> _enemyAttackProgress =
+        new Dictionary<EnemyMeleeAI, EnemyAttackProgress>();
+
+    private readonly HashSet<EnemyMeleeAI> _subscribedEnemies =
+        new HashSet<EnemyMeleeAI>();
+
+    private ExperienceBeatPlayer _beatPlayer;
+    private int _lastRegisteredSuccessBeat = -1;
 
 
     public void BeginExperience()
@@ -50,8 +78,13 @@ public sealed class JoaquinInteractionController :
         _currentDifficulty =
             _difficultyChanged.CurrentDifficulty;
 
+        _beatPlayer =
+            FindFirstObjectByType<ExperienceBeatPlayer>();
+
         _lastOffBeatHitTime =
             double.NegativeInfinity;
+
+        _lastRegisteredSuccessBeat = -1;
 
         _lastComboMultiplier = 1;
 
@@ -60,6 +93,9 @@ public sealed class JoaquinInteractionController :
 
         _guitarDamage.RhythmHitEvaluated +=
             HandleRhythmHitEvaluated;
+
+        _enemyWaveSpawner.EnemySpawned +=
+            HandleEnemySpawned;
 
         _scoreProfileChanged.RaiseEvent(
             _scoreProfile
@@ -83,8 +119,30 @@ public sealed class JoaquinInteractionController :
                 HandleRhythmHitEvaluated;
         }
 
+        if (_enemyWaveSpawner != null)
+        {
+            _enemyWaveSpawner.EnemySpawned -=
+                HandleEnemySpawned;
+        }
+
+        foreach (EnemyMeleeAI enemy in _subscribedEnemies)
+        {
+            if (enemy != null)
+            {
+                enemy.AttackPerformed -=
+                    HandleEnemyAttackPerformed;
+            }
+        }
+
+        _subscribedEnemies.Clear();
+        _enemyAttackProgress.Clear();
+
+        _beatPlayer = null;
+
         _lastOffBeatHitTime =
             double.NegativeInfinity;
+
+        _lastRegisteredSuccessBeat = -1;
 
         _lastComboMultiplier = 1;
 
@@ -110,15 +168,12 @@ public sealed class JoaquinInteractionController :
             return;
         }
 
-        RegisterSuccess(
-            hit,
-            feedbackPosition
-        );
+        if (CanRegisterSuccess(hit))
+        {
+            RegisterSuccess(hit, feedbackPosition);
+        }
 
-        RegisterComboBonus(
-            hit,
-            feedbackPosition
-        );
+        RegisterComboBonus(hit, feedbackPosition);
 
         _lastComboMultiplier =
             hit.Multiplier;
@@ -209,6 +264,170 @@ public sealed class JoaquinInteractionController :
 
         _lastOffBeatHitTime =
             double.NegativeInfinity;
+
+        _lastRegisteredSuccessBeat = -1;
+
+        _enemyAttackProgress.Clear();
+    }
+
+
+    private void HandleEnemySpawned(EnemyMeleeAI enemy)
+    {
+        if (!_isRunning || enemy == null)
+        {
+            return;
+        }
+
+        EnemyController enemyController =
+            enemy.GetComponent<EnemyController>();
+
+        if (enemyController == null)
+        {
+            return;
+        }
+
+        if (_subscribedEnemies.Add(enemy))
+        {
+            enemy.AttackPerformed +=
+                HandleEnemyAttackPerformed;
+        }
+
+        _enemyAttackProgress[enemy] =
+            new EnemyAttackProgress
+            {
+                SpawnVersion =
+                    enemyController.SpawnVersion,
+
+                Hits = 0
+            };
+    }
+
+
+    private void HandleEnemyAttackPerformed(EnemyMeleeAI enemy)
+    {
+        if (!_isRunning || enemy == null)
+        {
+            return;
+        }
+
+        EnemyController enemyController =
+            enemy.GetComponent<EnemyController>();
+
+        if (enemyController == null ||
+            !enemyController.IsAlive)
+        {
+            return;
+        }
+
+        if (!_enemyAttackProgress.TryGetValue(
+            enemy,
+            out EnemyAttackProgress progress
+        ) ||
+            progress.SpawnVersion !=
+            enemyController.SpawnVersion)
+        {
+            progress =
+                new EnemyAttackProgress
+                {
+                    SpawnVersion =
+                        enemyController.SpawnVersion,
+
+                    Hits = 0
+                };
+
+            _enemyAttackProgress[enemy] =
+                progress;
+        }
+
+        progress.Hits++;
+
+        Debug.Log(
+            $"[JoaquinInteractionController] " +
+            $"Enemy hit player: " +
+            $"{progress.Hits}/{_hitsPerFailure}",
+            this
+        );
+
+        if (progress.Hits < _hitsPerFailure)
+        {
+            return;
+        }
+
+        progress.Hits = 0;
+
+        RegisterPlayerHit();
+    }
+
+
+    private void RegisterPlayerHit()
+    {
+        double eventTime =
+            _beatPlayer != null
+                ? _beatPlayer.SongTime
+                : 0.0;
+
+        InteractionResult result =
+            new InteractionResult(
+                minigameId: "Joaquin",
+                interactionType: InteractionType.PlayerHit,
+                outcome: InteractionOutcome.Failed,
+                difficulty: _currentDifficulty,
+                expectedTime: eventTime
+            );
+
+        _interactionRegistered.RaiseEvent(
+            result
+        );
+
+        Debug.Log(
+            $"[JoaquinInteractionController] " +
+            $"PlayerHit registered | " +
+            $"Difficulty: {_currentDifficulty}",
+            this
+        );
+    }
+
+
+    private bool CanRegisterSuccess(GuitarRhythmHit hit)
+    {
+        if (_lastRegisteredSuccessBeat < 0)
+        {
+            _lastRegisteredSuccessBeat =
+                hit.BeatIndex;
+
+            return true;
+        }
+
+        if (hit.BeatIndex < _lastRegisteredSuccessBeat)
+        {
+            _lastRegisteredSuccessBeat =
+                hit.BeatIndex;
+
+            return true;
+        }
+
+        int beatsSinceSuccess =
+            hit.BeatIndex -
+            _lastRegisteredSuccessBeat;
+
+        if (beatsSinceSuccess <= _successCooldownBeats)
+        {
+            return false;
+        }
+
+        _lastRegisteredSuccessBeat =
+            hit.BeatIndex;
+
+        return true;
+    }
+
+
+    public void SetHitsPerFailure(int hitsPerFailure)
+    {
+        _hitsPerFailure =
+            Mathf.Max(1, hitsPerFailure);
+
+        _enemyAttackProgress.Clear();
     }
 
 
@@ -268,6 +487,17 @@ public sealed class JoaquinInteractionController :
         {
             Debug.LogError(
                 "[JoaquinInteractionController] ScoreBonusAwarded no está asignado.",
+                this
+            );
+
+            return false;
+        }
+
+
+        if (_enemyWaveSpawner == null)
+        {
+            Debug.LogError(
+                "[JoaquinInteractionController] EnemyWaveSpawner no está asignado.",
                 this
             );
 

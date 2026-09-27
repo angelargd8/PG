@@ -1,4 +1,5 @@
 using UnityEngine;
+using System;
 
 [DisallowMultipleComponent]
 [RequireComponent(typeof(Rigidbody))]
@@ -51,6 +52,7 @@ public sealed class EnemyMeleeAI : MonoBehaviour
     private float knockbackRecoveryRemaining;
 
     public bool IsKnockedBack => knockbackActive;
+    public event Action<EnemyMeleeAI> AttackPerformed;
 
 
     private static readonly int IsMovingHash =
@@ -512,10 +514,11 @@ public sealed class EnemyMeleeAI : MonoBehaviour
             return;
         }
 
-
         animator.SetTrigger(
             AttackHash
         );
+
+        AttackPerformed?.Invoke(this);
     }
 
 
