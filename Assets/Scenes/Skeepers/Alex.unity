@@ -1359,6 +1359,10 @@ PrefabInstance:
       propertyPath: m_StaticEditorFlags
       value: 126
       objectReference: {fileID: 0}
+    - target: {fileID: 3032208365379181953, guid: e8e65b316850a2344940a0fc46967b5a, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -1.9971209
+      objectReference: {fileID: 0}
     - target: {fileID: 3073207321505447502, guid: e8e65b316850a2344940a0fc46967b5a, type: 3}
       propertyPath: m_StaticEditorFlags
       value: 126
@@ -1459,6 +1463,10 @@ PrefabInstance:
       propertyPath: m_StaticEditorFlags
       value: 126
       objectReference: {fileID: 0}
+    - target: {fileID: 4042641185747779600, guid: e8e65b316850a2344940a0fc46967b5a, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -2.475997
+      objectReference: {fileID: 0}
     - target: {fileID: 4078350807688940610, guid: e8e65b316850a2344940a0fc46967b5a, type: 3}
       propertyPath: m_CastShadows
       value: 0
@@ -1470,6 +1478,10 @@ PrefabInstance:
     - target: {fileID: 4245030197761946835, guid: e8e65b316850a2344940a0fc46967b5a, type: 3}
       propertyPath: m_Enabled
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4280833680592517726, guid: e8e65b316850a2344940a0fc46967b5a, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -2.21
       objectReference: {fileID: 0}
     - target: {fileID: 4359935421603435399, guid: e8e65b316850a2344940a0fc46967b5a, type: 3}
       propertyPath: m_CastShadows
@@ -1599,6 +1611,10 @@ PrefabInstance:
       propertyPath: m_CastShadows
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5400277730374713872, guid: e8e65b316850a2344940a0fc46967b5a, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -1.7618608
+      objectReference: {fileID: 0}
     - target: {fileID: 5403469057494372300, guid: e8e65b316850a2344940a0fc46967b5a, type: 3}
       propertyPath: m_StaticEditorFlags
       value: 126
@@ -1658,6 +1674,10 @@ PrefabInstance:
     - target: {fileID: 5863185363976030777, guid: e8e65b316850a2344940a0fc46967b5a, type: 3}
       propertyPath: m_Enabled
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5864479435971990354, guid: e8e65b316850a2344940a0fc46967b5a, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -2.791792
       objectReference: {fileID: 0}
     - target: {fileID: 5867075020645893657, guid: e8e65b316850a2344940a0fc46967b5a, type: 3}
       propertyPath: m_IsActive
@@ -1887,6 +1907,10 @@ PrefabInstance:
       propertyPath: m_StaticEditorFlags
       value: 126
       objectReference: {fileID: 0}
+    - target: {fileID: 8894655119629549532, guid: e8e65b316850a2344940a0fc46967b5a, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -2.6468349
+      objectReference: {fileID: 0}
     - target: {fileID: 8929001588656662184, guid: e8e65b316850a2344940a0fc46967b5a, type: 3}
       propertyPath: m_Enabled
       value: 0
@@ -2031,16 +2055,25 @@ MonoBehaviour:
   _interactionRegistered: {fileID: 11400000, guid: 188abd6f30130bb42b4877604a6ce24f, type: 2}
   _scoreProfile: {fileID: 11400000, guid: 1e512bca3df7416b8b51b6d82b18c04e, type: 2}
   _scoreProfileChanged: {fileID: 11400000, guid: c8e1d8ffc14710a459ba601e5db3f7d7, type: 2}
-  _throwEveryBeats: 2
+  _difficulty: 1
+  _easyThrowEveryBeats: 4
+  _normalThrowEveryBeats: 2
+  _hardThrowEveryBeats: 1
   _travelBeats: 2
   _returnBeats: 2
   _beatWindow: 0.16
   _missGrace: 0.3
-  _difficulty: 1
+  _intenseBeatThreshold: 0.7
+  _intenseFrequencyMultiplier: 2
+  _intenseVerticalBonus: 0.15
+  _intenseLaneBonus: 0.08
   _hitForwardDistance: 0.65
   _hitHeightOffset: -0.3
-  _laneOffset: 0.25
+  _wideLaneOffset: 0.6
+  _narrowLaneOffset: 0.35
+  _verticalPatternOffset: 0.35
   _arcHeight: 0.2
+  _handLaneDeadZone: 0.08
 --- !u!114 &2100000003 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 814500000000000001, guid: 6c8914013738a404585cd5c29275da5b, type: 3}
