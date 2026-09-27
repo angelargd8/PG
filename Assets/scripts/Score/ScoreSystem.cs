@@ -11,6 +11,7 @@ public sealed class ScoreSystem : MonoBehaviour
     [SerializeField] private VoidEventChannelSO _mainMenuRequested;
     [SerializeField] private VoidEventChannelSO _experienceCompleted;
     [SerializeField] private FinalScoreEventChannelSO _finalScoreSubmitted;
+    [SerializeField] private ScoreBonusEventChannelSO _scoreBonusAwarded;
 
 
     private ScoreProfileSO _currentProfile;
@@ -46,6 +47,11 @@ public sealed class ScoreSystem : MonoBehaviour
         {
             _experienceCompleted.Raised += HandleExperienceCompleted;
         }
+
+        if (_scoreBonusAwarded != null)
+        {
+            _scoreBonusAwarded.Raised += HandleScoreBonus;
+        }
     }
 
 
@@ -74,6 +80,11 @@ public sealed class ScoreSystem : MonoBehaviour
         if (_experienceCompleted != null)
         {
             _experienceCompleted.Raised -= HandleExperienceCompleted;
+        }
+
+        if (_scoreBonusAwarded != null)
+        {
+            _scoreBonusAwarded.Raised -= HandleScoreBonus;
         }
     }
 
@@ -113,6 +124,37 @@ public sealed class ScoreSystem : MonoBehaviour
             actualDelta,
             evaluation.TimingJudgement,
             feedbackPosition
+        );
+
+        if (_scoreChanged != null)
+        {
+            _scoreChanged.RaiseEvent(scoreChange);
+        }
+    }
+    
+
+    private void HandleScoreBonus(ScoreBonus bonus)
+    {
+        if (!_isExperienceActive)
+        {
+            return;
+        }
+
+        if (bonus.Points <= 0)
+        {
+            return;
+        }
+
+        int previousScore = CurrentScore;
+
+        CurrentScore += bonus.Points;
+
+        ScoreChange scoreChange = new ScoreChange(
+            previousScore,
+            CurrentScore,
+            bonus.Points,
+            TimingJudgement.None,
+            bonus.Position
         );
 
         if (_scoreChanged != null)

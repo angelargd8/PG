@@ -22,6 +22,8 @@ public sealed class ScoreHUD : MonoBehaviour
     [SerializeField] private float _feedbackDuration = 0.6f;
 
     private Coroutine _feedbackCoroutine;
+    private int _feedbackFrame = -1;
+    private int _accumulatedDelta;
 
 
     private void OnEnable()
@@ -45,6 +47,9 @@ public sealed class ScoreHUD : MonoBehaviour
             StopCoroutine(_feedbackCoroutine);
             _feedbackCoroutine = null;
         }
+
+        _feedbackFrame = -1;
+        _accumulatedDelta = 0;
     }
 
 
@@ -68,13 +73,23 @@ public sealed class ScoreHUD : MonoBehaviour
             return;
         }
 
+        if (_feedbackFrame == Time.frameCount)
+        {
+            _accumulatedDelta += scoreChange.Delta;
+        }
+        else
+        {
+            _feedbackFrame = Time.frameCount;
+            _accumulatedDelta = scoreChange.Delta;
+        }
+
         if (_feedbackCoroutine != null)
         {
             StopCoroutine(_feedbackCoroutine);
         }
 
         _feedbackCoroutine = StartCoroutine(
-            ShowScoreFeedback(scoreChange.Delta)
+            ShowScoreFeedback(_accumulatedDelta)
         );
     }
 
