@@ -52,6 +52,10 @@ public class EnemyPool :
     private DannielRhythmDirector rhythmDirector;
 
 
+    [Header("Player Target")]
+    [Tooltip("Objetivo opcional específico para esta escena. Si está vacío se usa PlayerTargetProvider.")]
+    [SerializeField] private Transform playerTargetOverride;
+
     private Transform playerTarget;
 
 
@@ -115,6 +119,12 @@ public class EnemyPool :
 
     private bool TryResolvePlayerTarget()
     {
+        if (playerTargetOverride != null)
+        {
+            playerTarget = playerTargetOverride;
+            return true;
+        }
+
         if (playerTarget != null)
         {
             return true;
