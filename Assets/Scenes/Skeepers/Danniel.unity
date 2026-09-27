@@ -474,6 +474,7 @@ MonoBehaviour:
   prewarmCount: 12
   enemyBulletPool: {fileID: 23601735}
   rhythmDirector: {fileID: 689917742}
+  playerTargetOverride: {fileID: 1940432731}
 --- !u!4 &613208086
 Transform:
   m_ObjectHideFlags: 0
@@ -880,6 +881,7 @@ MonoBehaviour:
   - {fileID: 613208085}
   - {fileID: 419797356}
   runtimeSystems:
+  - {fileID: 1940432729}
   - {fileID: 1676405013}
   - {fileID: 998151777}
   - {fileID: 419797356}
@@ -933,6 +935,7 @@ MonoBehaviour:
   - {fileID: 315991426}
   - {fileID: 1145782709}
   _segmentPool: {fileID: 419797356}
+  _playerHitbox: {fileID: 1940432729}
   _beatMap: {fileID: 11400000, guid: 5399c0f14c7917840b01cac5d893b357, type: 2}
   _interactionRegistered: {fileID: 11400000, guid: 188abd6f30130bb42b4877604a6ce24f, type: 2}
   _difficultyChanged: {fileID: 11400000, guid: 998849c379bbe114dbafefdb36ea08e9, type: 2}
@@ -988,6 +991,73 @@ Transform:
   - {fileID: 230100001}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1940432728
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1940432731}
+  - component: {fileID: 1940432730}
+  - component: {fileID: 1940432729}
+  m_Layer: 9
+  m_Name: PlayerHitbox
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1940432729
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1940432728}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 757a6a3d82cc68e4eb9d6dcfeff6909c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DannielPlayerHitbox
+  _verticalOffset: -0.15
+--- !u!135 &1940432730
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1940432728}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 0.28
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!4 &1940432731
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1940432728}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.92041, y: -0.5721, z: 0.41805}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -1001,3 +1071,4 @@ SceneRoots:
   - {fileID: 689917741}
   - {fileID: 998151778}
   - {fileID: 1676405014}
+  - {fileID: 1940432731}

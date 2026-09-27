@@ -21,6 +21,7 @@ public sealed class DannielInteractionController :
     [Header("Gameplay")]
     [SerializeField] private GunShooter[] _guns;
     [SerializeField] private SegmentPool _segmentPool;
+    [SerializeField] private DannielPlayerHitbox _playerHitbox;
 
     [Header("Music")]
     [SerializeField] private BeatMapSO _beatMap;
@@ -91,8 +92,9 @@ public sealed class DannielInteractionController :
             gun.ShotFired += HandleShotFired;
         }
 
-        _segmentPool.EnemiesMissed +=
-            HandleEnemiesMissed;
+        _segmentPool.EnemiesMissed += HandleEnemiesMissed;
+
+        _playerHitbox.HitByEnemyProjectile += HandlePlayerHit;
 
         _scoreProfileChanged.RaiseEvent(
             _scoreProfile
@@ -124,8 +126,12 @@ public sealed class DannielInteractionController :
 
         if (_segmentPool != null)
         {
-            _segmentPool.EnemiesMissed -=
-                HandleEnemiesMissed;
+            _segmentPool.EnemiesMissed -= HandleEnemiesMissed;
+        }
+
+        if (_playerHitbox != null)
+        {
+            _playerHitbox.HitByEnemyProjectile -= HandlePlayerHit;
         }
 
         foreach (PooledBullet bullet in _pendingShots.Keys)
@@ -237,6 +243,39 @@ public sealed class DannielInteractionController :
         }
 
         RegisterMissedShot(bullet);
+    }
+
+
+    private void HandlePlayerHit(Vector3 hitPosition)
+    {
+        if (!_isRunning ||
+            _musicClock == null)
+        {
+            return;
+        }
+
+        double eventTime =
+            _musicClock.SongTime;
+
+        InteractionResult result =
+            new InteractionResult(
+                minigameId: "Danniel",
+                interactionType: InteractionType.PlayerHit,
+                outcome: InteractionOutcome.Failed,
+                difficulty: _currentDifficulty,
+                expectedTime: eventTime
+            );
+
+        _interactionRegistered.RaiseEvent(
+            result
+        );
+
+        Debug.Log(
+            $"[DannielInteractionController] " +
+            $"Player hit by enemy projectile | " +
+            $"Difficulty: {_currentDifficulty}",
+            this
+        );
     }
 
 
