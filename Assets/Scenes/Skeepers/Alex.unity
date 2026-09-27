@@ -2118,17 +2118,16 @@ MonoBehaviour:
   _scoreProfile: {fileID: 11400000, guid: 1e512bca3df7416b8b51b6d82b18c04e, type: 2}
   _scoreProfileChanged: {fileID: 11400000, guid: c8e1d8ffc14710a459ba601e5db3f7d7, type: 2}
   _difficulty: 1
-  _useScoreBasedDifficulty: 1
-  _scoreSystem: {fileID: 0}
-  _normalScoreThreshold: 500
-  _hardScoreThreshold: 1500
+  _difficultyChanged: {fileID: 11400000, guid: 998849c379bbe114dbafefdb36ea08e9, type: 2}
   _missedPumpkinPenalty: 75
   _easyThrowEveryBeats: 4
   _normalThrowEveryBeats: 2
   _hardThrowEveryBeats: 1
-  _easyHorizontalMultiplier: 0.55
-  _normalHorizontalMultiplier: 0.8
+  _easyHorizontalMultiplier: 0.35
+  _normalHorizontalMultiplier: 0.6
   _hardHorizontalMultiplier: 1
+  _easyMaxDrop: 0.1
+  _normalMaxDrop: 0.2
   _travelBeats: 2
   _returnBeats: 2
   _beatWindow: 0.16
