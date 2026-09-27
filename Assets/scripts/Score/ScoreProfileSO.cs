@@ -15,10 +15,8 @@ public sealed class ScoreProfileSO : ScriptableObject
     [Header("Timing Thresholds")]
     [Min(0f)]
     [SerializeField] private float _perfectTimingThreshold = 0.08f;
-
     [Min(0f)]
     [SerializeField] private float _goodTimingThreshold = 0.16f;
-
     [Min(0f)]
     [SerializeField] private float _niceTimingThreshold = 0.25f;
 

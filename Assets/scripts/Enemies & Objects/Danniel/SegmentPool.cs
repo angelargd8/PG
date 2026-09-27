@@ -1,6 +1,6 @@
 using UnityEngine;
 using Unity.Profiling;
-
+using System;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -34,6 +34,7 @@ public class SegmentPool :  MonoBehaviour, IExperiencePreloadable, IExperienceRu
 
     [SerializeField]
     private float speed = 1f;
+    private float _difficultySpeedScale = 1f;
 
     [Tooltip("Multiplicador fijo, o final cuando Use Progressive Speed esta activado.")]
     [Min(0f)]
@@ -46,7 +47,7 @@ public class SegmentPool :  MonoBehaviour, IExperiencePreloadable, IExperienceRu
 
 
     [Tooltip(
-        "Posición inicial del primer segmento."
+        "Posiciï¿½n inicial del primer segmento."
     )]
     [SerializeField]
     private float firstSpawnZ = 0f;
@@ -90,6 +91,7 @@ public class SegmentPool :  MonoBehaviour, IExperiencePreloadable, IExperienceRu
     private bool hasSpeedStartSongTime;
 
     public float CurrentSpeedMultiplier => currentSpeedMultiplier;
+    public event Action<int, DifficultyLevel> EnemiesMissed;
 
 
     // =========================
@@ -507,6 +509,13 @@ public class SegmentPool :  MonoBehaviour, IExperiencePreloadable, IExperienceRu
     }
 
 
+    public void SetDifficultySpeedScale(float speedScale)
+    {
+        _difficultySpeedScale =
+            Mathf.Max(0f, speedScale);
+    }
+
+
     private bool UpdateSpeedProgression()
     {
         if (Time.timeScale <= 0f || AudioListener.pause)
@@ -555,6 +564,7 @@ public class SegmentPool :  MonoBehaviour, IExperiencePreloadable, IExperienceRu
             float movement =
                 speed *
                 currentSpeedMultiplier *
+                _difficultySpeedScale *
                 Time.deltaTime;
 
 
@@ -614,10 +624,20 @@ public class SegmentPool :  MonoBehaviour, IExperiencePreloadable, IExperienceRu
                     ClearEnemiesMarker.Auto()
                 )
                 {
-                    oldSegment.Content
-                        .ClearEnemies(
-                            enemyPool
+                    int missedEnemies =
+                        oldSegment.Content.ActiveEnemyCount;
+
+                    if (missedEnemies > 0)
+                    {
+                        EnemiesMissed?.Invoke(
+                            missedEnemies,
+                            oldSegment.Content.SpawnDifficulty
                         );
+                    }
+
+                    oldSegment.Content.ClearEnemies(
+                        enemyPool
+                    );
                 }
             }
 
@@ -828,15 +848,15 @@ public class SegmentPool :  MonoBehaviour, IExperiencePreloadable, IExperienceRu
         {
             Debug.LogError(
                 isRotated
-                    ? "Rotated Segment Prefab no está asignado."
-                    : "Normal Segment Prefab no está asignado.",
+                    ? "Rotated Segment Prefab no estï¿½ asignado."
+                    : "Normal Segment Prefab no estï¿½ asignado.",
                 this
             );
 
             return null;
         }
 
-        // usar la rotación propia
+        // usar la rotaciï¿½n propia
         // del prefab.
 
         GameObject segmentObject =
@@ -889,7 +909,7 @@ public class SegmentPool :  MonoBehaviour, IExperiencePreloadable, IExperienceRu
         if (logLifecycle)
         {
             Debug.Log(
-                $"Segmento físico creado: " +
+                $"Segmento fï¿½sico creado: " +
                 $"{(isRotated ? "ROTATED" : "NORMAL")}",
                 segmentObject
             );
@@ -953,7 +973,7 @@ public class SegmentPool :  MonoBehaviour, IExperiencePreloadable, IExperienceRu
         if (!isInitialized)
         {
             Debug.LogError(
-                "[SegmentPool] No está preparado.",
+                "[SegmentPool] No estï¿½ preparado.",
                 this
             );
 

@@ -550,6 +550,54 @@ MonoBehaviour:
   _maxAttackersPerBeat: 1
   _maxBeatLateness: 0.1
   _logBeats: 0
+--- !u!1 &998151776
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 998151778}
+  - component: {fileID: 998151777}
+  m_Layer: 0
+  m_Name: DannielDifficultyController
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &998151777
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 998151776}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 791cccd2ebd8f1f468ed13194d952a69, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DannielDifficultyController
+  _enemySpawnDirector: {fileID: 1413581909}
+  _segmentPool: {fileID: 419797356}
+  _difficultyConfig: {fileID: 11400000, guid: 4c529a911d601e44b8f0266f23c5fe02, type: 2}
+  _difficultyChanged: {fileID: 11400000, guid: 998849c379bbe114dbafefdb36ea08e9, type: 2}
+--- !u!4 &998151778
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 998151776}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.07135, y: -0.03499, z: 0.62357}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1145782708
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -696,6 +744,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemySpawnDirector
   enemyPool: {fileID: 613208085}
+  usePlatformEnemyCount: 1
+  desktopEnemiesPerSegment: 6
+  androidEnemiesPerSegment: 3
   enemiesPerSegment: 3
 --- !u!1 &1463065915
 GameObject:
@@ -730,6 +781,8 @@ MonoBehaviour:
   - {fileID: 613208085}
   - {fileID: 419797356}
   runtimeSystems:
+  - {fileID: 1676405013}
+  - {fileID: 998151777}
   - {fileID: 419797356}
   - {fileID: 689917742}
   experienceReady: {fileID: 11400000, guid: f4b8f7b73053533419eb97071978892d, type: 2}
@@ -748,15 +801,70 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1676405012
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1676405014}
+  - component: {fileID: 1676405013}
+  m_Layer: 0
+  m_Name: DannielInteractionController
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1676405013
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1676405012}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4051a045ac100254c814844af90cc4c4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DannielInteractionController
+  _guns:
+  - {fileID: 315991426}
+  - {fileID: 1145782709}
+  _segmentPool: {fileID: 419797356}
+  _beatMap: {fileID: 11400000, guid: 5399c0f14c7917840b01cac5d893b357, type: 2}
+  _interactionRegistered: {fileID: 11400000, guid: 188abd6f30130bb42b4877604a6ce24f, type: 2}
+  _difficultyChanged: {fileID: 11400000, guid: 998849c379bbe114dbafefdb36ea08e9, type: 2}
+  _scoreProfile: {fileID: 11400000, guid: e472d08ea2a84cc4da4efb3b0cb5c5d1, type: 2}
+  _scoreProfileChanged: {fileID: 11400000, guid: c8e1d8ffc14710a459ba601e5db3f7d7, type: 2}
+--- !u!4 &1676405014
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1676405012}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.07135, y: -0.03499, z: 0.62357}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
+  - {fileID: 1463065917}
   - {fileID: 299639869}
   - {fileID: 629252049}
   - {fileID: 1145782708}
   - {fileID: 419797355}
   - {fileID: 1413581908}
   - {fileID: 613208086}
-  - {fileID: 1463065917}
   - {fileID: 689917741}
+  - {fileID: 998151778}
+  - {fileID: 1676405014}

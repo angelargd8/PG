@@ -1,4 +1,5 @@
 using UnityEngine;
+using System;
 
 [DisallowMultipleComponent]
 [RequireComponent(typeof(Rigidbody))]
@@ -12,6 +13,11 @@ public sealed class PooledBullet : MonoBehaviour
     private BulletPool ownerPool;
     private float remainingLifetime;
     private bool isInUse;
+
+
+    public event Action<PooledBullet, Collider> TriggerEntered;
+    public event Action<PooledBullet> Despawned;
+
 
     private void Reset()
     {
@@ -51,7 +57,7 @@ public sealed class PooledBullet : MonoBehaviour
 
         bulletRigidbody.WakeUp();
 
-        // La dirección de disparo es el eje Z azul de Bullet Point.
+        // La direcciï¿½n de disparo es el eje Z azul de Bullet Point.
         bulletRigidbody.linearVelocity = transform.forward * speed;
     }
 
@@ -77,11 +83,12 @@ public sealed class PooledBullet : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        TriggerEntered?.Invoke(this, other);
         ReturnToPool();
     }
 
     /// <summary>
-    /// Limpia el estado físico antes de devolver la bala al pool.
+    /// Limpia el estado fï¿½sico antes de devolver la bala al pool.
     /// </summary>
     public void PrepareForPool()
     {
@@ -108,6 +115,8 @@ public sealed class PooledBullet : MonoBehaviour
         }
 
         isInUse = false;
+
+        Despawned?.Invoke(this);
 
         BulletPool pool = ownerPool;
         ownerPool = null;

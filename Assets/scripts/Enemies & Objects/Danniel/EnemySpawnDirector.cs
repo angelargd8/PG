@@ -28,19 +28,29 @@ public class EnemySpawnDirector : MonoBehaviour
     [SerializeField]
     private int enemiesPerSegment = 3;
 
+    private DifficultyLevel _spawnDifficulty =
+        DifficultyLevel.Normal;
+
+    private float _difficultyEnemyDensity = 1f;
+
+
     private int EffectiveEnemiesPerSegment
     {
         get
         {
-            int amount = enemiesPerSegment;
-            if (usePlatformEnemyCount)
+            int baseAmount = BaseEnemiesPerSegment;
+
+            if (baseAmount <= 0 ||
+                _difficultyEnemyDensity <= 0f)
             {
-                amount = Application.platform == RuntimePlatform.Android
-                    ? androidEnemiesPerSegment
-                    : desktopEnemiesPerSegment;
+                return 0;
             }
 
-            return Mathf.Max(0, amount);
+            int amount = Mathf.RoundToInt(
+                baseAmount * _difficultyEnemyDensity
+            );
+
+            return Mathf.Clamp(amount, 1, baseAmount);
         }
     }
 
@@ -87,6 +97,14 @@ public class EnemySpawnDirector : MonoBehaviour
             SegmentContent segmentContent = segmentSpawns.Content;
 
 
+            if (segmentContent != null)
+            {
+                segmentContent.SetSpawnDifficulty(
+                    _spawnDifficulty
+                );
+            }
+
+
             // Reutilizamos la misma lista
             availablePoints.Clear();
 
@@ -115,7 +133,7 @@ public class EnemySpawnDirector : MonoBehaviour
                     availablePoints[randomIndex];
 
 
-                // Remove rápido
+                // Remove rï¿½pido
                 int lastIndex =
                     availablePoints.Count - 1;
 
@@ -143,5 +161,29 @@ public class EnemySpawnDirector : MonoBehaviour
                 }
             }
         }
+    }
+
+    private int BaseEnemiesPerSegment
+    {
+        get
+        {
+            int amount = enemiesPerSegment;
+
+            if (usePlatformEnemyCount)
+            {
+                amount = Application.platform == RuntimePlatform.Android
+                    ? androidEnemiesPerSegment
+                    : desktopEnemiesPerSegment;
+            }
+
+            return Mathf.Max(0, amount);
+        }
+    }
+
+
+    public void SetDifficulty(DifficultyLevel difficulty, float enemyDensity)
+    {
+        _spawnDifficulty = difficulty;
+        _difficultyEnemyDensity = Mathf.Clamp01(enemyDensity);
     }
 }

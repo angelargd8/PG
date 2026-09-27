@@ -32,7 +32,7 @@ public sealed class BulletPool : MonoBehaviour
         if (bulletPrefab == null)
         {
             Debug.LogError(
-                "[BulletPool] No se asignó el prefab de la bala.",
+                "[BulletPool] No se asignï¿½ el prefab de la bala.",
                 this);
 
             enabled = false;
@@ -62,7 +62,7 @@ public sealed class BulletPool : MonoBehaviour
     /// <summary>
     /// Obtiene una bala del pool y la dispara.
     /// </summary>
-    public void Spawn(
+    public PooledBullet Spawn(
         Vector3 position,
         Quaternion rotation,
         float speed,
@@ -71,10 +71,10 @@ public sealed class BulletPool : MonoBehaviour
         if (pool == null)
         {
             Debug.LogWarning(
-                "[BulletPool] El pool todavía no está inicializado.",
+                "[BulletPool] El pool todavÃ­a no estÃ¡ inicializado.",
                 this);
 
-            return;
+            return null;
         }
 
         PooledBullet bullet = pool.Get();
@@ -86,6 +86,8 @@ public sealed class BulletPool : MonoBehaviour
             speed,
             lifetime
         );
+        
+        return bullet;
     }
 
     /// <summary>
@@ -116,8 +118,8 @@ public sealed class BulletPool : MonoBehaviour
     private void OnTakeFromPool(PooledBullet bullet)
     {
         /*
-         * No se activa aquí porque primero debemos colocar
-         * la bala en Bullet Point. Launch() la activará.
+         * No se activa aquï¿½ porque primero debemos colocar
+         * la bala en Bullet Point. Launch() la activarï¿½.
          */
     }
 

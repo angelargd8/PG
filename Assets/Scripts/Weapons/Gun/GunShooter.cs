@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.XR;
+using System;
 
 [DisallowMultipleComponent]
 public sealed class GunShooter : MonoBehaviour
@@ -73,6 +74,9 @@ public sealed class GunShooter : MonoBehaviour
     }
 
 
+    public event Action<PooledBullet> ShotFired;
+
+
     public void Fire()
     {
         if (Time.time < nextAllowedFireTime)
@@ -100,12 +104,19 @@ public sealed class GunShooter : MonoBehaviour
 
         nextAllowedFireTime = Time.time + fireCooldown;
 
-        bulletPool.Spawn(
+        PooledBullet bullet = bulletPool.Spawn(
             bulletPoint.position,
             bulletPoint.rotation,
             muzzleSpeed,
             bulletLifetime
         );
+
+        if (bullet == null)
+        {
+            return;
+        }
+
+        ShotFired?.Invoke(bullet);
 
         PlayShotHaptic();
 

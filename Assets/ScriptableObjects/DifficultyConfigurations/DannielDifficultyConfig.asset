@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c750b82324b54ca4cb99c83f00f72987, type: 3}
+  m_Name: DannielDifficultyConfig
+  m_EditorClassIdentifier: Assembly-CSharp::DannielDifficultyConfigSO
+  _easy:
+    _enemyDensity: 0.34
+    _speedScale: 0.85
+  _normal:
+    _enemyDensity: 0.67
+    _speedScale: 1
+  _hard:
+    _enemyDensity: 1
+    _speedScale: 1.15

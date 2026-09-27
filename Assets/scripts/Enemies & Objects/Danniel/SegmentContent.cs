@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 public class SegmentContent : MonoBehaviour
 {
-    // por el momento habrá pocos enemigos
+    // por el momento habrï¿½ pocos enemigos
     // Damos capacidad inicial para evitar crecimiento interno
     private readonly List<GameObject> activeEnemies =
         new List<GameObject>(4);
@@ -11,7 +11,8 @@ public class SegmentContent : MonoBehaviour
 
     public int ActiveEnemyCount =>
         activeEnemies.Count;
-
+    public DifficultyLevel SpawnDifficulty { get; private set; } =
+        DifficultyLevel.Normal;
 
     public void RegisterEnemy(GameObject enemy)
     {
@@ -59,7 +60,7 @@ public class SegmentContent : MonoBehaviour
             return;
 
 
-        // Recorremos hacia atrás para poder
+        // Recorremos hacia atrï¿½s para poder
         // modificar la lista de forma segura
         for (int i = activeEnemies.Count - 1; i >= 0; i--)
         {
@@ -88,5 +89,10 @@ public class SegmentContent : MonoBehaviour
                 enemyPool.ReleaseEnemy(enemy);
             }
         }
+    }
+
+    public void SetSpawnDifficulty(DifficultyLevel difficulty)
+    {
+        SpawnDifficulty = difficulty;
     }
 }
