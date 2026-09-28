@@ -1,7 +1,7 @@
 using UnityEngine;
 
 [DisallowMultipleComponent]
-public sealed class SceneWeaponEquipController : MonoBehaviour
+public sealed class SceneWeaponEquipController : MonoBehaviour, IExperienceRuntime
 {
     public enum Hand
     {
@@ -82,6 +82,7 @@ public sealed class SceneWeaponEquipController : MonoBehaviour
 
     private void HandleEquipRequested()
     {
+        if (_isEquipped) return;
         Debug.Log(
             $"[SceneWeaponEquipController] Evento recibido para equipar {name}.",
             this
@@ -160,6 +161,9 @@ public sealed class SceneWeaponEquipController : MonoBehaviour
         }
     }
 
+
+    public void BeginExperience() => HandleEquipRequested();
+    public void EndExperience() => HandleMainMenuRequested();
 
     private void SetWeaponVisible(bool isVisible)
     {

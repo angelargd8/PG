@@ -42,6 +42,7 @@ public sealed class PooledBullet : MonoBehaviour
         float speed,
         float lifetime)
     {
+        if (bulletRigidbody == null) bulletRigidbody = GetComponent<Rigidbody>();
         ownerPool = pool;
         remainingLifetime = Mathf.Max(0.01f, lifetime);
         isInUse = true;
@@ -92,6 +93,7 @@ public sealed class PooledBullet : MonoBehaviour
     /// </summary>
     public void PrepareForPool()
     {
+        if (bulletRigidbody == null) bulletRigidbody = GetComponent<Rigidbody>();
         isInUse = false;
         remainingLifetime = 0f;
         ownerPool = null;

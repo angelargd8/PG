@@ -17,14 +17,14 @@ MonoBehaviour:
     _horizontalMultiplier: 0.35
     _limitLowTargets: 1
     _maxDrop: 0.1
-    _patterns: 00000000020000000000000003000000
-    _intensePatterns: 020000000300000004000000000000000500000001000000
+    _patterns: 0000000002000000
+    _intensePatterns: 02000000030000000400000001000000
   _normal:
     _throwEveryBeats: 2
     _horizontalMultiplier: 0.6
     _limitLowTargets: 1
     _maxDrop: 0.2
-    _patterns: 0000000002000000010000000300000000000000
+    _patterns: 00000000010000000400000002000000
     _intensePatterns: 020000000300000004000000000000000500000001000000
   _hard:
     _throwEveryBeats: 1

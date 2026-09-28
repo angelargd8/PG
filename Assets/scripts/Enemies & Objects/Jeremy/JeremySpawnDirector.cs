@@ -82,6 +82,9 @@ public sealed class JeremySpawnDirector :
 
         _isRunning = true;
         _nextBeatIndex = 0;
+        while (_nextBeatIndex < _beatMap.Beats.Count &&
+               _beatMap.Beats[_nextBeatIndex].Time < _musicClock.SongTime)
+            _nextBeatIndex++;
 
         _scheduledSpawns.Clear();
 
@@ -103,7 +106,7 @@ public sealed class JeremySpawnDirector :
 
     private void Update()
     {
-        if (!_isRunning)
+        if (!_isRunning || !_musicClock.IsPlaying || Time.timeScale <= 0 || AudioListener.pause)
         {
             return;
         }
@@ -148,7 +151,7 @@ public sealed class JeremySpawnDirector :
         float travelTime = CalculateTravelTime(spawnPoint, movementSpeed);
         double spawnTime = expectedHitTime - travelTime;
 
-        if (spawnTime < 0.0)
+        if (spawnTime < _musicClock.SongTime)
         {
             return;
         }
@@ -178,6 +181,8 @@ public sealed class JeremySpawnDirector :
         {
             ScheduledSpawn scheduledSpawn = _scheduledSpawns[0];
             _scheduledSpawns.RemoveAt(0);
+            // A late activation/seek must not replay the preceding song's spawn queue.
+            if (songTime - scheduledSpawn.SpawnTime > 0.1) continue;
 
             // Debug.Log(
             //     $"[JeremySpawnDirector] Spawn | SongTime: {songTime:F3} | " +

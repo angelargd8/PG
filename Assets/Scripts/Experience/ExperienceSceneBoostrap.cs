@@ -1,288 +1,110 @@
-using System.Collections;
+ï»¿using System.Collections;
 using UnityEngine;
+using System.Collections.Generic;
 
-public sealed class ExperienceSceneBootstrap :
-    MonoBehaviour
+public sealed class ExperienceSceneBootstrap : MonoBehaviour
 {
-    // =========================
-    // PRELOAD
-    // =========================
-
-    [Header("Preloaders")]
-
-    [Tooltip(
-        "Los componentes se preparan " +
-        "en este orden."
-    )]
-    [SerializeField]
-    private MonoBehaviour[] preloaders;
-
-
-    // =========================
-    // RUNTIME
-    // =========================
-
-    [Header("Runtime Systems")]
-
-    [Tooltip(
-        "Sistemas que comienzan cuando " +
-        "la experiencia inicia."
-    )]
-    [SerializeField]
-    private MonoBehaviour[] runtimeSystems;
-
-    //========================
-    // events
-    // ==========================
-
+    [Header("Preloaders (ordered)")]
+    [SerializeField] private MonoBehaviour[] preloaders;
+    [Header("Runtime Systems (ordered)")]
+    [SerializeField] private MonoBehaviour[] runtimeSystems;
+    [Header("Staged activation")]
+    [Tooltip("Contenido de la escena, guardado INACTIVO. El bootstrap debe quedar fuera de este root.")]
+    [SerializeField] private GameObject gameplayRoot;
+    [SerializeField] private ExperienceSceneActivationEventChannelSO sceneActivation;
     [Header("Events")]
+    [SerializeField] private VoidEventChannelSO experienceReady;
 
-    [SerializeField]
-    private VoidEventChannelSO experienceReady;
-
+    private bool externallyControlled;
+    private readonly List<MonoBehaviour> preparedRuntimes = new();
+    public bool IsPrepared { get; private set; }
+    public bool IsRunning { get; private set; }
+    public bool SupportsStagedActivation => gameplayRoot != null && sceneActivation != null &&
+        !transform.IsChildOf(gameplayRoot.transform);
 
     private void OnEnable()
     {
-        if (experienceReady != null)
-        {
-            experienceReady.Raised +=
-                HandleExperienceReady;
-        }
+        if (experienceReady != null) experienceReady.Raised += HandleExperienceReady;
+        if (sceneActivation != null) sceneActivation.Raised += HandleSceneActivation;
     }
-
 
     private void OnDisable()
     {
-        if (experienceReady != null)
-        {
-            experienceReady.Raised -=
-                HandleExperienceReady;
-        }
-
-
+        if (experienceReady != null) experienceReady.Raised -= HandleExperienceReady;
+        if (sceneActivation != null) sceneActivation.Raised -= HandleSceneActivation;
         EndExperience();
     }
 
-
-    private void HandleExperienceReady()
+    public void SetExternallyControlled(bool value) => externallyControlled = value;
+    private void HandleExperienceReady() { if (!externallyControlled) BeginExperience(); }
+    private void HandleSceneActivation(string sceneName, bool active)
     {
-        BeginExperience();
+        if (!externallyControlled || gameObject.scene.name != sceneName) return;
+        if (active) BeginExperience(); else EndExperience();
     }
-
-    // =========================
-    // STATE
-    // =========================
-
-    private bool isPrepared;
-
-    private bool isRunning;
-
-
-    public bool IsPrepared =>
-        isPrepared;
-
-    public bool IsRunning =>
-        isRunning;
-
-
-    // =========================
-    // PREPARE
-    // =========================
 
     public IEnumerator Prepare()
     {
-        if (isPrepared)
+        if (IsPrepared) yield break;
+        if (gameplayRoot != null && gameplayRoot.activeSelf)
         {
+            Debug.LogError("El Gameplay Root debe estar guardado inactivo para precargar sin gameplay.", this);
             yield break;
         }
-
-
-        Debug.Log(
-            $"Preparando escena " +
-            $"'{gameObject.scene.name}'.",
-            this
-        );
-
-
-        if (preloaders != null)
-        {
-            for (
-                int i = 0;
-                i < preloaders.Length;
-                i++
-            )
+        var orderedPreloaders = new List<MonoBehaviour>();
+        if (preloaders != null) orderedPreloaders.AddRange(preloaders);
+        preparedRuntimes.Clear();
+        if (runtimeSystems != null) preparedRuntimes.AddRange(runtimeSystems);
+        // Explicit lists preserve dependency order. Include prefab-local weapons/pools too.
+        if (gameplayRoot != null)
+            foreach (MonoBehaviour behaviour in gameplayRoot.GetComponentsInChildren<MonoBehaviour>(true))
             {
-                MonoBehaviour behaviour =
-                    preloaders[i];
-
-
-                if (behaviour == null)
+                if (behaviour == null || !behaviour.enabled) continue;
+                if (behaviour is IExperiencePreloadable && !orderedPreloaders.Contains(behaviour))
+                    orderedPreloaders.Add(behaviour);
+                if (behaviour is IExperienceRuntime && !preparedRuntimes.Contains(behaviour))
+                    preparedRuntimes.Add(behaviour);
+            }
+        if (orderedPreloaders.Count > 0)
+        {
+            foreach (MonoBehaviour behaviour in orderedPreloaders)
+            {
+                if (behaviour is not IExperiencePreloadable preloadable)
                 {
-                    continue;
+                    Debug.LogError("Preloader ausente o sin IExperiencePreloadable.", this);
+                    yield break;
                 }
-
-
-                if (
-                    behaviour
-                    is not IExperiencePreloadable preloadable
-                )
-                {
-                    Debug.LogError(
-                        $"{behaviour.name} no implementa " +
-                        $"IExperiencePreloadable.",
-                        behaviour
-                    );
-
-                    continue;
-                }
-
-
-                Debug.Log(
-                    $"Preloading: " +
-                    $"{behaviour.GetType().Name}",
-                    behaviour
-                );
-
-
-                yield return
-                    preloadable.Preload();
-
-
+                yield return preloadable.Preload();
                 yield return null;
             }
         }
-
-
-        isPrepared = true;
-
-
-        Debug.Log(
-            $"Escena '{gameObject.scene.name}' preparada.",
-            this
-        );
+        IsPrepared = true;
     }
-
-
-    // =========================
-    // BEGIN
-    // =========================
 
     public void BeginExperience()
     {
-        if (!isPrepared)
+        if (IsRunning) return;
+        if (!IsPrepared)
         {
-            Debug.LogError(
-                "[ExperienceSceneBootstrap] " +
-                "La escena todavía no está preparada.",
-                this
-            );
-
+            Debug.LogError("La escena todavia no esta preparada.", this);
             return;
         }
-
-
-        if (isRunning)
-        {
-            return;
-        }
-
-
-        isRunning = true;
-
-
-        if (runtimeSystems != null)
-        {
-            for (
-                int i = 0;
-                i < runtimeSystems.Length;
-                i++
-            )
-            {
-                MonoBehaviour behaviour =
-                    runtimeSystems[i];
-
-
-                if (behaviour == null)
-                {
-                    continue;
-                }
-
-
-                if (
-                    behaviour
-                    is not IExperienceRuntime runtime
-                )
-                {
-                    Debug.LogError(
-                        $"{behaviour.name} no implementa " +
-                        $"IExperienceRuntime.",
-                        behaviour
-                    );
-
-                    continue;
-                }
-
-
-                runtime.BeginExperience();
-            }
-        }
-
-
-        Debug.Log(
-            $"Experiencia " +
-            $"'{gameObject.scene.name}' iniciada.",
-            this
-        );
+        IsRunning = true;
+        if (gameplayRoot != null) gameplayRoot.SetActive(true);
+        if (preparedRuntimes.Count > 0)
+            foreach (MonoBehaviour behaviour in preparedRuntimes)
+                if (behaviour is IExperienceRuntime runtime) runtime.BeginExperience();
+                else Debug.LogError("Runtime ausente o sin IExperienceRuntime.", this);
+        Debug.Log($"[ExperienceSceneBootstrap] Activada: {gameObject.scene.name}", this);
     }
-
-    // =========================
-    // END
-    // =========================
 
     public void EndExperience()
     {
-        if (!isRunning)
-        {
-            return;
-        }
-
-
-        if (runtimeSystems != null)
-        {
-            for (
-                int i = runtimeSystems.Length - 1;
-                i >= 0;
-                i--
-            )
-            {
-                MonoBehaviour behaviour =
-                    runtimeSystems[i];
-
-
-                if (behaviour == null)
-                {
-                    continue;
-                }
-
-
-                if (
-                    behaviour
-                    is IExperienceRuntime runtime
-                )
-                {
-                    runtime.EndExperience();
-                }
-            }
-        }
-
-
-        isRunning = false;
-
-
-        Debug.Log(
-            $"Experiencia " +
-            $"'{gameObject.scene.name}' detenida.",
-            this
-        );
+        if (!IsRunning) return;
+        IsRunning = false;
+        for (int i = preparedRuntimes.Count - 1; i >= 0; i--)
+            if (preparedRuntimes[i] is IExperienceRuntime runtime) runtime.EndExperience();
+        if (gameplayRoot != null) gameplayRoot.SetActive(false);
+        Debug.Log($"[ExperienceSceneBootstrap] Desactivada: {gameObject.scene.name}", this);
     }
 }

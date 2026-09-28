@@ -6,6 +6,10 @@ using UnityEngine;
 )]
 public sealed class ExperienceDefinitionSO : ScriptableObject
 {
+    [Header("Full Experience")]
+    [SerializeField] private ExperienceSequenceSO fullSequence;
+    public ExperienceSequenceSO FullSequence => fullSequence;
+
     [Header("Identification")]
     [SerializeField] private string experienceId;
 

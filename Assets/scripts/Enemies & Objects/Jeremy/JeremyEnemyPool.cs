@@ -20,6 +20,12 @@ public sealed class JeremyEnemyPool :
 
     private void Awake()
     {
+        EnsureInitialized();
+    }
+
+    private void EnsureInitialized()
+    {
+        if (_pool != null) return;
         _pool = new ObjectPool<JeremyEnemy>(
             CreateEnemy,
             OnGetEnemy,
@@ -34,6 +40,7 @@ public sealed class JeremyEnemyPool :
 
     public IEnumerator Preload()
     {
+        EnsureInitialized();
         if (_isPrewarmed)
         {
             yield break;

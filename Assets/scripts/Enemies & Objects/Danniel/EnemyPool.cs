@@ -64,6 +64,12 @@ public class EnemyPool :
 
     private void Awake()
     {
+        EnsureInitialized();
+    }
+
+    private void EnsureInitialized()
+    {
+        if (pool != null) return;
 
         TryResolvePlayerTarget();
 
@@ -157,6 +163,7 @@ public class EnemyPool :
 
     public IEnumerator EnsurePrewarmed(int minimumCount)
     {
+        EnsureInitialized();
         if (pool == null)
         {
             Debug.LogError(
@@ -253,7 +260,7 @@ public class EnemyPool :
 
             GameObject enemy =
                 Instantiate(
-                    enemyPrefab
+                    enemyPrefab, transform
                 );
 
 

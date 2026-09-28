@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.Pool;
 
 [DisallowMultipleComponent]
-public sealed class BulletPool : MonoBehaviour
+public sealed class BulletPool : MonoBehaviour, IExperiencePreloadable
 {
     [Header("Bullet Prefab")]
     [SerializeField]
@@ -26,9 +26,22 @@ public sealed class BulletPool : MonoBehaviour
     private int maxSize = 64;
 
     private ObjectPool<PooledBullet> pool;
+    private readonly HashSet<PooledBullet> leased = new();
 
     private void Awake()
     {
+        EnsureInitialized();
+    }
+
+    public System.Collections.IEnumerator Preload()
+    {
+        EnsureInitialized();
+        yield break;
+    }
+
+    private void EnsureInitialized()
+    {
+        if (pool != null) return;
         if (bulletPrefab == null)
         {
             Debug.LogError(
@@ -78,6 +91,7 @@ public sealed class BulletPool : MonoBehaviour
         }
 
         PooledBullet bullet = pool.Get();
+        leased.Add(bullet);
 
         bullet.Launch(
             this,
@@ -100,7 +114,7 @@ public sealed class BulletPool : MonoBehaviour
             return;
         }
 
-        pool.Release(bullet);
+        if (leased.Remove(bullet)) pool.Release(bullet);
     }
 
     private PooledBullet CreateBullet()
@@ -159,5 +173,13 @@ public sealed class BulletPool : MonoBehaviour
         {
             pool.Release(bullet);
         }
+    }
+
+    private void OnDisable()
+    {
+        // Launched bullets leave the hierarchy; return them before the scene is deactivated.
+        foreach (PooledBullet bullet in new List<PooledBullet>(leased))
+            if (bullet != null) bullet.Despawn();
+        leased.Clear();
     }
 }

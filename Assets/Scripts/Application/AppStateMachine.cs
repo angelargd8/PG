@@ -113,6 +113,11 @@ public sealed class AppStateMachine : MonoBehaviour
         ExperienceRequest request
     )
     {
+        if (!_sceneFlowManager.ValidateRequest(request, out string error))
+        {
+            Debug.LogError(error, this);
+            return;
+        }
         Debug.Log(
             $"AppStateMachine recibi� experiencia: " +
             $"{request.Experience.DisplayName}, " +
@@ -177,6 +182,12 @@ public sealed class AppStateMachine : MonoBehaviour
 
         yield return null;
 
+
+        if (!_sceneFlowManager.TransitionSucceeded)
+        {
+            yield return ReturnToMainMenuRoutine();
+            yield break;
+        }
 
         CurrentState =
             AppState.Experience;
