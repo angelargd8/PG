@@ -283,7 +283,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2190828208922718286, guid: f6336ac4ac8b4d34bc5072418cdc62a0, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7054646180837666701, guid: f6336ac4ac8b4d34bc5072418cdc62a0, type: 3}
       propertyPath: m_Enabled
@@ -1520,13 +1520,6 @@ MonoBehaviour:
   experienceReady: {fileID: 11400000, guid: f4b8f7b73053533419eb97071978892d, type: 2}
   _mainMenuEntered: {fileID: 11400000, guid: 73e469e2fa118f34fba2072a9fe03733, type: 2}
   _mainMenuRequested: {fileID: 11400000, guid: 79709713fbe723e48b79c6b3004f8758, type: 2}
---- !u!1660057539 &9223372036854775807
-SceneRoots:
-  m_ObjectHideFlags: 0
-  m_Roots:
-  - {fileID: 1050064292}
-  - {fileID: 1411405105}
-  - {fileID: 1309528984}
 --- !u!114 &9000000101
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1555,3 +1548,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 93516b0e25584e0b80041f42fcacb719, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1660057539 &9223372036854775807
+SceneRoots:
+  m_ObjectHideFlags: 0
+  m_Roots:
+  - {fileID: 1050064292}
+  - {fileID: 1411405105}
+  - {fileID: 1309528984}
