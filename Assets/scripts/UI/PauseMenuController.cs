@@ -17,6 +17,9 @@ public sealed class PauseMenuController : MonoBehaviour
 
     private bool _isPaused;
 
+    public bool IsPaused => _isPaused && isActiveAndEnabled &&
+        _pausePanel != null && _pausePanel.activeInHierarchy;
+
 
     private void Awake()
     {
