@@ -2,7 +2,7 @@
 
 En `Assets/ScriptableObjects/Experiences/EXP_Punko.asset`, **Full Sequence** selecciona la secuencia. El modo individual sigue usando la lista **Scenes** y `ExperienceReady`.
 
-`SEQ_Punko_Test` usa Alex 0–31, Joaquin 31–125, Danniel 125–156 y Jeremy 156–187 segundos. `SEQ_Punko_Final` reserva también los intervalos de Shipi y JuanAndres; asignarla cuando sus escenas estén preparadas.
+`EXP_Punko` usa `SEQ_Punko_Final`: Alex 0–31.16, Joaquin 31.16–62.33, Shipi 62.33–93.50, JuanAndres 93.50–124.66, Danniel 124.66–155.83 y Jeremy 155.83–187 segundos. `SEQ_Punko_Test` conserva la secuencia anterior de cuatro escenas para pruebas.
 
 Cada segmento define **Scene**, **Start Time**, **End Time**, **Transition** y **Preload Before Playback**. Los intervalos deben empezar en cero y ser consecutivos. La transición corresponde a la entrada al segmento. `CameraFade` configura el color y la duración del fade de cámara.
 
@@ -15,3 +15,5 @@ Los pools de balas implementan `IExperienceRuntime`: `EndExperience` cancela sus
 La configuración **Release Unused Assets** libera recursos después de descargar escenas. Medir el rendimiento y la memoria en Quest: la precarga reduce el trabajo cercano al cambio, pero la activación de renderers, animadores y shaders también puede tener coste.
 
 Pruebas de regresión: `Assets/Scripts/Tests~/FullExperience`. Se ejecutan en un proyecto temporal separado; `FullExperienceProbeSetup.Start` construye escenas mínimas y un Timeline de audio real, luego prueba precarga inactiva, límites temporales, pausas, cancelación, modo individual y limpieza de balas.
+
+Shipi y JuanAndres usan sus objetos ExperienceContent existentes como Gameplay Root, guardados inactivos. Sus bootstraps están conectados a ExperienceSceneActivation y ExperienceReady, para admitir Full Experience y el modo individual. Ambas escenas están habilitadas en Build Settings.

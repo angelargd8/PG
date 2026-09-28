@@ -289,9 +289,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ExperienceSceneBootstrap
   preloaders: []
   runtimeSystems: []
-  gameplayRoot: {fileID: 0}
-  sceneActivation: {fileID: 0}
-  experienceReady: {fileID: 0}
+  gameplayRoot: {fileID: 2043384389}
+  sceneActivation: {fileID: 11400000, guid: 8f976cf0f1d94405a66e9b963c299e56, type: 2}
+  experienceReady: {fileID: 11400000, guid: f4b8f7b73053533419eb97071978892d, type: 2}
 --- !u!4 &950347284
 Transform:
   m_ObjectHideFlags: 0
@@ -452,7 +452,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &2043384390
 Transform:
   m_ObjectHideFlags: 0
