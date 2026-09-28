@@ -424,8 +424,15 @@ public sealed class JoaquinInteractionController :
 
     public void SetHitsPerFailure(int hitsPerFailure)
     {
-        _hitsPerFailure =
+        int newValue =
             Mathf.Max(1, hitsPerFailure);
+
+        if (_hitsPerFailure == newValue)
+        {
+            return;
+        }
+
+        _hitsPerFailure = newValue;
 
         _enemyAttackProgress.Clear();
     }

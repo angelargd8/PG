@@ -254,6 +254,47 @@ public sealed class EnemyWaveSpawner : MonoBehaviour, IExperienceRuntime
         }
     }
 
+
+    public void SetDifficulty(
+        int normalEnemiesPerSpawn,
+        int strongEnemiesPerSpawn,
+        int introductionMaxActiveEnemies,
+        int maxActiveEnemies)
+    {
+        normalEnemiesPerSpawn =
+            Mathf.Max(1, normalEnemiesPerSpawn);
+
+        strongEnemiesPerSpawn =
+            Mathf.Max(
+                normalEnemiesPerSpawn,
+                strongEnemiesPerSpawn
+            );
+
+        introductionMaxActiveEnemies =
+            Mathf.Max(
+                1,
+                introductionMaxActiveEnemies
+            );
+
+        maxActiveEnemies =
+            Mathf.Max(
+                introductionMaxActiveEnemies,
+                maxActiveEnemies
+            );
+
+        this.normalEnemiesPerSpawn =
+            normalEnemiesPerSpawn;
+
+        this.strongEnemiesPerSpawn =
+            strongEnemiesPerSpawn;
+
+        this.introductionMaxActiveEnemies =
+            introductionMaxActiveEnemies;
+
+        this.maxActiveEnemies =
+            maxActiveEnemies;
+    }
+
     private Transform GetNextSpawnPoint()
     {
         if (spawnPoints == null || spawnPoints.Length == 0)

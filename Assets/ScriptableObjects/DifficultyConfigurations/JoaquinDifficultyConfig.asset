@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 36664abf6272ca841b3a64382467a1c6, type: 3}
+  m_Name: JoaquinDifficultyConfig
+  m_EditorClassIdentifier: Assembly-CSharp::JoaquinDifficultyConfigSO
+  _easy:
+    _normalEnemiesPerSpawn: 1
+    _strongEnemiesPerSpawn: 1
+    _introductionMaxActiveEnemies: 2
+    _maxActiveEnemies: 3
+    _hitsPerFailure: 4
+  _normal:
+    _normalEnemiesPerSpawn: 1
+    _strongEnemiesPerSpawn: 2
+    _introductionMaxActiveEnemies: 3
+    _maxActiveEnemies: 4
+    _hitsPerFailure: 3
+  _hard:
+    _normalEnemiesPerSpawn: 2
+    _strongEnemiesPerSpawn: 3
+    _introductionMaxActiveEnemies: 4
+    _maxActiveEnemies: 6
+    _hitsPerFailure: 2
