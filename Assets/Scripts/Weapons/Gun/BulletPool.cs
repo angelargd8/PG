@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.Pool;
 
 [DisallowMultipleComponent]
-public sealed class BulletPool : MonoBehaviour, IExperiencePreloadable
+public sealed class BulletPool : MonoBehaviour, IExperiencePreloadable, IExperienceRuntime
 {
     [Header("Bullet Prefab")]
     [SerializeField]
@@ -27,6 +27,11 @@ public sealed class BulletPool : MonoBehaviour, IExperiencePreloadable
 
     private ObjectPool<PooledBullet> pool;
     private readonly HashSet<PooledBullet> leased = new();
+    private readonly List<PooledBullet> returnBuffer = new();
+    private bool isDisabling;
+
+    public void BeginExperience() => EnsureInitialized();
+    public void EndExperience() => ReturnAllToPool();
 
     private void Awake()
     {
@@ -81,6 +86,7 @@ public sealed class BulletPool : MonoBehaviour, IExperiencePreloadable
         float speed,
         float lifetime)
     {
+        if (!isActiveAndEnabled || isDisabling) return null;
         if (pool == null)
         {
             Debug.LogWarning(
@@ -141,7 +147,9 @@ public sealed class BulletPool : MonoBehaviour, IExperiencePreloadable
     {
         bullet.PrepareForPool();
 
-        bullet.transform.SetParent(poolRoot, false);
+        // OnDisable can run during a parent's SetActive(false). Unity forbids reparenting then.
+        if (!isDisabling && bullet.transform.parent != poolRoot)
+            bullet.transform.SetParent(poolRoot, false);
         bullet.gameObject.SetActive(false);
     }
 
@@ -175,11 +183,25 @@ public sealed class BulletPool : MonoBehaviour, IExperiencePreloadable
         }
     }
 
+    private void ReturnAllToPool()
+    {
+        returnBuffer.Clear();
+        returnBuffer.AddRange(leased);
+        // Cancellation is not a missed shot: do not publish Despawned during scene teardown.
+        foreach (PooledBullet bullet in returnBuffer)
+            if (bullet != null) Release(bullet);
+        leased.Clear();
+        returnBuffer.Clear();
+    }
+
     private void OnDisable()
     {
-        // Launched bullets leave the hierarchy; return them before the scene is deactivated.
-        foreach (PooledBullet bullet in new List<PooledBullet>(leased))
-            if (bullet != null) bullet.Despawn();
-        leased.Clear();
+        // Normal transitions already called EndExperience while the hierarchy was active.
+        // Also handle direct deactivation safely, without attaching to a parent being disabled.
+        isDisabling = true;
+        try { ReturnAllToPool(); }
+        finally { isDisabling = false; }
     }
+
+    private void OnDestroy() => pool?.Clear();
 }
