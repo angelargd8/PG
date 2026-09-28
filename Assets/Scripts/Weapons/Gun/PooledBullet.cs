@@ -13,6 +13,7 @@ public sealed class PooledBullet : MonoBehaviour
     private BulletPool ownerPool;
     private float remainingLifetime;
     private bool isInUse;
+    private Transform shooterRoot;
 
 
     public event Action<PooledBullet, Collider> TriggerEntered;
@@ -40,10 +41,12 @@ public sealed class PooledBullet : MonoBehaviour
         Vector3 position,
         Quaternion rotation,
         float speed,
-        float lifetime)
+        float lifetime,
+        Transform sourceRoot = null)
     {
         if (bulletRigidbody == null) bulletRigidbody = GetComponent<Rigidbody>();
         ownerPool = pool;
+        shooterRoot = sourceRoot;
         remainingLifetime = Mathf.Max(0.01f, lifetime);
         isInUse = true;
 
@@ -79,14 +82,19 @@ public sealed class PooledBullet : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
+        if (!isInUse || IsShooterCollider(collision.collider)) return;
         ReturnToPool();
     }
 
     private void OnTriggerEnter(Collider other)
     {
+        if (!isInUse || IsShooterCollider(other)) return;
         TriggerEntered?.Invoke(this, other);
         ReturnToPool();
     }
+
+    private bool IsShooterCollider(Collider other) =>
+        shooterRoot != null && other != null && other.transform.IsChildOf(shooterRoot);
 
     /// <summary>
     /// Limpia el estado f�sico antes de devolver la bala al pool.
@@ -97,6 +105,7 @@ public sealed class PooledBullet : MonoBehaviour
         isInUse = false;
         remainingLifetime = 0f;
         ownerPool = null;
+        shooterRoot = null;
 
         bulletRigidbody.linearVelocity = Vector3.zero;
         bulletRigidbody.angularVelocity = Vector3.zero;

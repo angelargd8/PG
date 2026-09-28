@@ -89,12 +89,15 @@ public sealed class EnemyShooter : MonoBehaviour
 
     private DannielRhythmDirector rhythmDirector;
     private bool isRhythmControlled;
+    private bool hasPendingRhythmShot;
 
-    public bool CanShootOnBeat =>
+    private bool HasValidShotReferences =>
         isRhythmControlled && isActiveAndEnabled &&
-        target != null && bulletPoint != null && bulletPool != null &&
-        (target.position - bulletPoint.position).sqrMagnitude <= shootingRangeSquared &&
+        target != null && bulletPoint != null && bulletPool != null && bulletPool.isActiveAndEnabled &&
         (target.position - bulletPoint.position).sqrMagnitude > Mathf.Epsilon;
+
+    public bool CanShootOnBeat => HasValidShotReferences &&
+        (target.position - bulletPoint.position).sqrMagnitude <= shootingRangeSquared;
 
 
     // =========================
@@ -113,6 +116,17 @@ public sealed class EnemyShooter : MonoBehaviour
     private float nextFireTime;
 
     private float shootingRangeSquared;
+
+    [ContextMenu("Log Shooting State")]
+    public void LogShootingState()
+    {
+        string distance = target != null && bulletPoint != null
+            ? Vector3.Distance(target.position, bulletPoint.position).ToString("F2") : "missing target/muzzle";
+        Debug.Log($"[EnemyShooter] {name} ({GetInstanceID()}): active={isActiveAndEnabled}, " +
+            $"eligible={CanShootOnBeat}, pending={hasPendingRhythmShot}, distance={distance}, range={shootingRange:F2}, " +
+            $"poolActive={bulletPool != null && bulletPool.isActiveAndEnabled}, " +
+            $"rhythmRunning={rhythmDirector != null && rhythmDirector.IsRunning}.", this);
+    }
 
 
     // =========================
@@ -253,6 +267,8 @@ public sealed class EnemyShooter : MonoBehaviour
 
     public void ShowRhythmCue()
     {
+        hasPendingRhythmShot = CanShootOnBeat;
+        if (!hasPendingRhythmShot) return;
         if (rhythmCueVfx != null)
         {
             rhythmCueVfx.Play(true);
@@ -262,6 +278,7 @@ public sealed class EnemyShooter : MonoBehaviour
 
     public void ClearRhythmCue()
     {
+        hasPendingRhythmShot = false;
         if (rhythmCueVfx != null)
         {
             rhythmCueVfx.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
@@ -271,14 +288,17 @@ public sealed class EnemyShooter : MonoBehaviour
 
     public bool TryShootOnBeat()
     {
-        if (!CanShootOnBeat || rhythmDirector == null || !rhythmDirector.IsRunning)
+        if (!hasPendingRhythmShot || !HasValidShotReferences ||
+            rhythmDirector == null || !rhythmDirector.IsRunning)
         {
             return false;
         }
 
+        // Range is checked when reserving the cue. Moving segments must not silently
+        // cancel an announced shot by crossing the range boundary before the next beat.
+        hasPendingRhythmShot = false;
         RotateTowardsTarget();
-        Shoot(target.position - bulletPoint.position);
-        return true;
+        return Shoot(target.position - bulletPoint.position);
     }
 
 
@@ -345,7 +365,7 @@ public sealed class EnemyShooter : MonoBehaviour
     // SHOOTING
     // =========================
 
-    private void Shoot(
+    private bool Shoot(
         Vector3 toTarget
     )
     {
@@ -354,19 +374,7 @@ public sealed class EnemyShooter : MonoBehaviour
             Mathf.Epsilon
         )
         {
-            return;
-        }
-
-
-        // =========================
-        // ANIMATION
-        // =========================
-
-        if (animator != null)
-        {
-            animator.SetTrigger(
-                ShootHash
-            );
+            return false;
         }
 
 
@@ -381,12 +389,16 @@ public sealed class EnemyShooter : MonoBehaviour
             );
 
 
-        bulletPool.Spawn(
+        PooledBullet bullet = bulletPool.Spawn(
             bulletPoint.position,
             shotRotation,
             muzzleSpeed,
-            bulletLifetime
+            bulletLifetime,
+            transform
         );
+        if (bullet == null) return false;
+        if (animator != null) animator.SetTrigger(ShootHash);
+        return true;
     }
 
 

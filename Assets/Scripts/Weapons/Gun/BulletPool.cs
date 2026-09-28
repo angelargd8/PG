@@ -30,6 +30,14 @@ public sealed class BulletPool : MonoBehaviour, IExperiencePreloadable, IExperie
     private readonly List<PooledBullet> returnBuffer = new();
     private bool isDisabling;
 
+    public int ActiveBulletCount => leased.Count;
+    public int InactiveBulletCount => pool?.CountInactive ?? 0;
+
+    [ContextMenu("Log Bullet Pool State")]
+    private void LogPoolState() => Debug.Log(
+        $"[BulletPool] {name}: enabled={isActiveAndEnabled}, active={ActiveBulletCount}, " +
+        $"available={InactiveBulletCount}, retainedLimit={maxSize} (not an ammunition limit).", this);
+
     public void BeginExperience() => EnsureInitialized();
     public void EndExperience() => ReturnAllToPool();
 
@@ -84,7 +92,8 @@ public sealed class BulletPool : MonoBehaviour, IExperiencePreloadable, IExperie
         Vector3 position,
         Quaternion rotation,
         float speed,
-        float lifetime)
+        float lifetime,
+        Transform shooterRoot = null)
     {
         if (!isActiveAndEnabled || isDisabling) return null;
         if (pool == null)
@@ -104,7 +113,8 @@ public sealed class BulletPool : MonoBehaviour, IExperiencePreloadable, IExperie
             position,
             rotation,
             speed,
-            lifetime
+            lifetime,
+            shooterRoot
         );
         
         return bullet;

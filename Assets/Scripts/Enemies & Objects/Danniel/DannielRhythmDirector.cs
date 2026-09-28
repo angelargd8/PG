@@ -38,6 +38,16 @@ public sealed class DannielRhythmDirector : MonoBehaviour, IExperienceRuntime
 
     public bool IsRunning { get; private set; }
 
+    [ContextMenu("Log Runtime Shooting State")]
+    private void LogShootingState()
+    {
+        Debug.Log($"[DannielRhythmDirector] running={IsRunning}, registered={_shooters.Count}, " +
+            $"pending={_pendingAttackers.Count}, attackersPerBeat={_maxAttackersPerBeat}, " +
+            $"songTime={(_musicClock != null ? _musicClock.SongTime : 0):F2}.", this);
+        foreach (EnemyShooter shooter in _shooters)
+            if (shooter != null) shooter.LogShootingState();
+    }
+
 
     public void BeginExperience()
     {
@@ -247,6 +257,10 @@ public sealed class DannielRhythmDirector : MonoBehaviour, IExperienceRuntime
             if (shooter != null && shooter.TryShootOnBeat())
             {
                 shots++;
+            }
+            else if (_logBeats && shooter != null)
+            {
+                shooter.LogShootingState();
             }
         }
 
