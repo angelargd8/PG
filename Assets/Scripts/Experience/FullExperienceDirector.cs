@@ -54,9 +54,12 @@ public sealed class FullExperienceDirector : MonoBehaviour
         { Fail("Full Experience necesita sus Event Channels."); yield break; }
         clock = FindFirstObjectByType<ExperienceMusicClock>();
         if (clock == null) { Fail("Falta ExperienceMusicClock en ExperienceCore."); yield break; }
-        yield return LoadSegment(0);
-        if (Error != null) yield break;
-        if (sequence.Count > 1) yield return LoadSegment(1);
+        for (int i = 0; i < sequence.Count; i++)
+        {
+            if (i >= 2 && !sequence.GetSegment(i).PreloadBeforePlayback) continue;
+            yield return LoadSegment(i);
+            if (Error != null) yield break;
+        }
         IsPrepared = Error == null;
     }
 
@@ -124,7 +127,7 @@ public sealed class FullExperienceDirector : MonoBehaviour
         string current = sequence.GetSegment(desired)?.Scene.SceneName;
         var next = desired >= 0 ? sequence.GetSegment(desired + 1) : null;
         foreach (string name in loaded.Keys)
-            if (name != current && name != next?.Scene.SceneName) return true;
+            if (name != current && name != next?.Scene.SceneName && !sequence.RetainStartupPreload(name, songTime)) return true;
         return current != null && !loaded.ContainsKey(current) ||
             next != null && songTime >= next.StartTime - sequence.PreloadLeadSeconds && !loaded.ContainsKey(next.Scene.SceneName);
     }
@@ -136,10 +139,11 @@ public sealed class FullExperienceDirector : MonoBehaviour
             string current = sequence.GetSegment(desired)?.Scene.SceneName;
             var nextSegment = sequence.GetSegment(desired + 1);
             string next = desired >= 0 ? nextSegment?.Scene.SceneName : null;
-            // Remove old/obsolete preloads first; never keep three gameplay scenes resident.
+            // Keep explicitly requested startup preloads until their segment has ended.
+            // Other scenes still use the current + next rolling window.
             var obsolete = new List<string>();
             foreach (string name in loaded.Keys)
-                if (name != current && name != next) obsolete.Add(name);
+                if (name != current && name != next && !sequence.RetainStartupPreload(name, songTime)) obsolete.Add(name);
             foreach (string name in obsolete)
             {
                 yield return SceneFlowManager.UnloadIfLoaded(name);

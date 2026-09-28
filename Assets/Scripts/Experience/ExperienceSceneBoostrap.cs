@@ -103,7 +103,7 @@ public sealed class ExperienceSceneBootstrap : MonoBehaviour
         if (!IsRunning) return;
         IsRunning = false;
         for (int i = preparedRuntimes.Count - 1; i >= 0; i--)
-            if (preparedRuntimes[i] is IExperienceRuntime runtime) runtime.EndExperience();
+            if (preparedRuntimes[i] != null && preparedRuntimes[i] is IExperienceRuntime runtime) runtime.EndExperience();
         if (gameplayRoot != null) gameplayRoot.SetActive(false);
         Debug.Log($"[ExperienceSceneBootstrap] Desactivada: {gameObject.scene.name}", this);
     }

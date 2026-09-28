@@ -108,6 +108,8 @@ public class SceneFlowManager : MonoBehaviour
         yield return LoadAdditive(loadingScene);
         SetActiveScene(loadingScene);
         if (fullExperienceDirector != null) yield return fullExperienceDirector.Shutdown();
+        if (!string.IsNullOrEmpty(currentExperienceScene))
+            FindExperienceBootstrap(SceneManager.GetSceneByName(currentExperienceScene))?.EndExperience();
         yield return UnloadIfLoaded(currentExperienceScene);
         yield return UnloadIfLoaded(experienceCoreScene);
         yield return LoadAdditive(mainMenuScene);

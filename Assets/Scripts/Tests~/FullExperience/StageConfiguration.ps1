@@ -34,6 +34,7 @@ function Sequence-Fields($entries) {
     foreach($e in $entries) {
         $guid=$sceneGuids[$e[0]]
         $result+="  - Scene: {fileID: 11400000, guid: $guid, type: 2}`n    StartTime: $($e[1])`n    EndTime: $($e[2])`n    Transition: {fileID: 11400000, guid: $fade, type: 2}`n"
+        if($e[0] -eq 'Danniel') { $result+="    PreloadBeforePlayback: 1`n" }
     }
     return $result+"  preloadLeadSeconds: 10`n  holdLastSceneUntilSongEnds: 1`n"
 }

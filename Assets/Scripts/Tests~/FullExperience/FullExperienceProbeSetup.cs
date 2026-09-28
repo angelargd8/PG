@@ -17,8 +17,11 @@ public static class FullExperienceProbeSetup
     static FullExperienceProbeSetup() { EditorApplication.update += Tick; }
     private static void Tick()
     {
+        // Editor search-index startup errors must not leave batch-mode tests paused.
+        if (EditorApplication.isPlaying && EditorApplication.isPaused) EditorApplication.isPaused = false;
         if (!EditorApplication.isPlaying || EditorApplication.isCompiling || !SessionState.GetBool(Pending, false)) return;
         SessionState.SetBool(Pending, false);
+        Debug.Log("FULLPROBE: starting runtime checks");
         new GameObject("Probe Runner").AddComponent<FullExperienceProbeRunner>();
     }
 
@@ -57,6 +60,7 @@ public static class FullExperienceProbeSetup
                 Set(definitions[i], "sceneName", names[i]);
                 EditorUtility.SetDirty(definitions[i]);
                 segments[i] = new ExperienceSequenceSO.Segment { Scene = definitions[i], StartTime = times[i], EndTime = times[i + 1], Transition = fade };
+                segments[i].PreloadBeforePlayback = names[i] == "Danniel";
                 Scene scene = EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single);
                 var content = new GameObject("Experience Content");
                 content.SetActive(false);
@@ -84,7 +88,7 @@ public static class FullExperienceProbeSetup
                 EditorSceneManager.SaveScene(empty, $"Assets/{name}.unity");
             }
 
-            // A real audio Timeline, not a fake clock. Manual time is selected only by the test runner.
+            // A real audio Timeline; tests seek between boundaries while playback keeps advancing.
             using (var writer = new BinaryWriter(File.Create("Assets/Song.wav")))
             {
                 int bytes = 8000 * 187 * 2;

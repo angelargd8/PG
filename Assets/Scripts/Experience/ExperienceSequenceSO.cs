@@ -12,6 +12,8 @@ public sealed class ExperienceSequenceSO : ScriptableObject
         [Min(0)] public double EndTime;
         [Tooltip("Transicion de entrada a este segmento. Vacio = corte directo.")]
         public ExperienceTransitionSO Transition;
+        [Tooltip("Carga y prepara esta escena en Loading, antes de iniciar la cancion. Permanece inactiva hasta su segmento.")]
+        public bool PreloadBeforePlayback;
     }
 
     [SerializeField] private Segment[] segments = Array.Empty<Segment>();
@@ -25,6 +27,17 @@ public sealed class ExperienceSequenceSO : ScriptableObject
     public float PreloadLeadSeconds => preloadLeadSeconds;
     public bool ReleaseUnusedAssets => releaseUnusedAssets;
     public Segment GetSegment(int index) => index >= 0 && index < Count ? segments[index] : null;
+
+    public bool RetainStartupPreload(string sceneName, double songTime)
+    {
+        for (int i = 0; i < Count; i++)
+        {
+            Segment segment = segments[i];
+            if (segment.PreloadBeforePlayback && segment.Scene.SceneName == sceneName && songTime < segment.EndTime)
+                return true;
+        }
+        return false;
+    }
 
     // Half-open intervals: the incoming segment owns the exact boundary.
     public int FindSegment(double songTime)
