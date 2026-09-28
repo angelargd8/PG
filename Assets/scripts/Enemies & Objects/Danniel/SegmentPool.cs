@@ -45,9 +45,20 @@ public class SegmentPool :  MonoBehaviour, IExperiencePreloadable, IExperienceRu
     [SerializeField]
     private int maxActiveSegments = 3;
 
+    [Header("Android Optimization")]
+    [Tooltip("Usar el presupuesto reducido solo en el APK de Android. Editor y Quest Link conservan Max Active Segments.")]
+    [SerializeField] private bool useAndroidSegmentSettings;
+
+    [Min(2)]
+    [SerializeField] private int androidMaxActiveSegments = 3;
+
+    [Tooltip("Adelantar el reciclaje del segmento trasero esta cantidad de longitudes de segmento.")]
+    [Min(0)]
+    [SerializeField] private int androidRecycleAdvanceSegments = 1;
+
 
     [Tooltip(
-        "Posici�n inicial del primer segmento."
+        "Posicion inicial del primer segmento."
     )]
     [SerializeField]
     private float firstSpawnZ = 0f;
@@ -115,6 +126,16 @@ public class SegmentPool :  MonoBehaviour, IExperiencePreloadable, IExperienceRu
 
 
     private int activeSegmentCount;
+    private int segmentLimit;
+    private bool useAndroidBudget;
+
+    public int ActiveSegmentCount => activeSegmentCount;
+    public int SegmentLimit => segmentLimit;
+
+    internal int ResolveSegmentLimit(RuntimePlatform platform) =>
+        useAndroidSegmentSettings && platform == RuntimePlatform.Android
+            ? Mathf.Max(2, androidMaxActiveSegments)
+            : Mathf.Max(1, maxActiveSegments);
 
     private int oldestIndex;
 
@@ -165,7 +186,9 @@ public class SegmentPool :  MonoBehaviour, IExperiencePreloadable, IExperienceRu
     }
 
 
-    public IEnumerator Preload()
+    public IEnumerator Preload() => PreloadForPlatform(Application.platform);
+
+    internal IEnumerator PreloadForPlatform(RuntimePlatform platform)
     {
         if (isInitialized)
         {
@@ -183,10 +206,11 @@ public class SegmentPool :  MonoBehaviour, IExperiencePreloadable, IExperienceRu
 
 
 
-        maxActiveSegments = Mathf.Max(1, maxActiveSegments);
+        useAndroidBudget = useAndroidSegmentSettings && platform == RuntimePlatform.Android;
+        segmentLimit = ResolveSegmentLimit(platform);
         segments =
             new SegmentData[
-                maxActiveSegments
+                segmentLimit
             ];
 
 
@@ -250,7 +274,7 @@ public class SegmentPool :  MonoBehaviour, IExperiencePreloadable, IExperienceRu
         // Para cantidades impares hace falta una reserva de ambos tipos:
         // al reciclar se alterna cual de ellos ocupa mas segmentos activos.
         yield return null;
-        int instancesPerType = (maxActiveSegments + 1) / 2;
+        int instancesPerType = (segmentLimit + 1) / 2;
         for (int i = 1; i < instancesPerType; i++)
         {
             SegmentData segment = CreateSegment(false);
@@ -277,7 +301,7 @@ public class SegmentPool :  MonoBehaviour, IExperiencePreloadable, IExperienceRu
 
         if (enemySpawnDirector != null)
         {
-            yield return enemySpawnDirector.PreloadForSegments(maxActiveSegments);
+            yield return enemySpawnDirector.PreloadForSegments(segmentLimit);
         }
 
         isInitialized = true;
@@ -310,7 +334,7 @@ public class SegmentPool :  MonoBehaviour, IExperiencePreloadable, IExperienceRu
 
         if (
             activeSegmentCount <
-            maxActiveSegments
+            segmentLimit
         )
         {
             AddInitialSegment();
@@ -322,7 +346,7 @@ public class SegmentPool :  MonoBehaviour, IExperiencePreloadable, IExperienceRu
 
         while (
             activeSegmentCount <
-            maxActiveSegments
+            segmentLimit
         )
         {
             AddInitialSegment();
@@ -354,7 +378,7 @@ public class SegmentPool :  MonoBehaviour, IExperiencePreloadable, IExperienceRu
         if (
             activeSegmentCount <= 0 ||
             activeSegmentCount >=
-            maxActiveSegments
+            segmentLimit
         )
         {
             return;
@@ -465,13 +489,26 @@ public class SegmentPool :  MonoBehaviour, IExperiencePreloadable, IExperienceRu
             segments[oldestIndex]
                 .Transform
                 .position
-                .z < recycleZ
+                .z < GetRecycleZ(segments[oldestIndex])
         )
         {
             RecycleOldestSegment();
         }
     }
 
+
+    private float GetRecycleZ(SegmentData segment)
+    {
+        if (!useAndroidBudget || androidRecycleAdvanceSegments <= 0 ||
+            segment.Anchors == null || segment.Anchors.StartPoint == null ||
+            segment.Anchors.EndPoint == null) return recycleZ;
+
+        float length = Mathf.Abs(segment.Anchors.EndPoint.position.z - segment.Anchors.StartPoint.position.z);
+        float endOffset = segment.Anchors.EndPoint.position.z - segment.Transform.position.z;
+        // Never recycle a segment until its end is behind the initial play area.
+        return Mathf.Min(recycleZ + length * androidRecycleAdvanceSegments,
+            firstSpawnZ - endOffset - 1f);
+    }
 
     private void ResetSpeedProgression()
     {

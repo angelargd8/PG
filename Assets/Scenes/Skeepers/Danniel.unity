@@ -428,6 +428,9 @@ MonoBehaviour:
   speed: 1.3
   speedMultiplier: 4
   maxActiveSegments: 4
+  useAndroidSegmentSettings: 1
+  androidMaxActiveSegments: 3
+  androidRecycleAdvanceSegments: 1
   firstSpawnZ: 0
   secondSegmentDelay: 1
   recycleZ: -80
@@ -862,7 +865,7 @@ MonoBehaviour:
   enemyPool: {fileID: 613208085}
   usePlatformEnemyCount: 1
   desktopEnemiesPerSegment: 6
-  androidEnemiesPerSegment: 3
+  androidEnemiesPerSegment: 4
   enemiesPerSegment: 3
 --- !u!1 &1463065915
 GameObject:
