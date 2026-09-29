@@ -6,8 +6,8 @@ public sealed class JuanAndresSpawnPoint : MonoBehaviour
     private JuanAndresTarget _occupant;
 
 
-    public bool IsAvailable =>
-        _occupant == null;
+    public bool IsAvailable => _occupant == null;
+    public JuanAndresTarget Occupant => _occupant;
 
 
     public bool TryReserve(JuanAndresTarget target)

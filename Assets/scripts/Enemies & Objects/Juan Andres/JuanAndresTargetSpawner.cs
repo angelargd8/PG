@@ -12,6 +12,12 @@ public sealed class JuanAndresTargetSpawner : MonoBehaviour
     [SerializeField] private JuanAndresSpawnPoint[] _spawnPoints;
 
 
+    public int SpawnPointCount =>
+        _spawnPoints != null
+            ? _spawnPoints.Length
+            : 0;
+
+
     public JuanAndresTarget ReserveTarget(
         JuanAndresSpawnPoint spawnPoint,
         JuanAndresActionDirection direction,
@@ -153,6 +159,31 @@ public sealed class JuanAndresTargetSpawner : MonoBehaviour
                     this
                 );
             }
+        }
+    }
+
+    public void ReleaseAllTargets()
+    {
+        if (_spawnPoints == null ||
+            _targetPool == null)
+        {
+            return;
+        }
+
+        for (int i = 0; i < _spawnPoints.Length; i++)
+        {
+            JuanAndresSpawnPoint spawnPoint =
+                _spawnPoints[i];
+
+            if (spawnPoint == null ||
+                spawnPoint.Occupant == null)
+            {
+                continue;
+            }
+
+            _targetPool.ReleaseTarget(
+                spawnPoint.Occupant
+            );
         }
     }
 }
