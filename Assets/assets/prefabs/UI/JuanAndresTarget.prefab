@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8919341453523837696}
   - component: {fileID: 2978676219897979142}
+  - component: {fileID: 9216315224668392250}
   m_Layer: 0
   m_Name: JuanAndresTarget
   m_TagString: Untagged
@@ -50,6 +51,27 @@ MonoBehaviour:
   _toolIcon: {fileID: 8211225578579947897}
   _soapSprite: {fileID: 21300000, guid: 236a6f5612c7be64fb49f4609ba172b2, type: 3}
   _brushSprite: {fileID: 21300000, guid: e2d9586396c4dbc4bb28304672797c66, type: 3}
+--- !u!65 &9216315224668392250
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3444691188994299499}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.27, y: 0.27, z: 0.27}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &3609465225210924756
 GameObject:
   m_ObjectHideFlags: 0

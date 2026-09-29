@@ -11,6 +11,8 @@ GameObject:
   - component: {fileID: 5447756826543492684}
   - component: {fileID: 7551819571281607896}
   - component: {fileID: 4567517114230956471}
+  - component: {fileID: 5518494896375804836}
+  - component: {fileID: 6804744217275858502}
   m_Layer: 0
   m_Name: JAGroomingTool
   m_TagString: Untagged
@@ -65,6 +67,53 @@ MonoBehaviour:
   _gameplayPauseChanged: {fileID: 11400000, guid: 1415d9d465e8b3d43b5df09e48696b07, type: 2}
   _mainMenuRequested: {fileID: 11400000, guid: 79709713fbe723e48b79c6b3004f8758, type: 2}
   weaponFollower: {fileID: 7551819571281607896}
+--- !u!114 &5518494896375804836
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4670656490605237494}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 36e6f7faeffb31d44abc36a278f43844, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::JuanAndresTool
+  _toolType: 1
+  _hand: 0
+  _interactionPoint: {fileID: 3985294077733816456}
+  _minimumGestureAngle: 75
+  _minimumRadius: 0.04
+  _minimumStepAngle: 0.5
+  _maximumStepAngle: 35
+  _logDetectedGestures: 1
+--- !u!54 &6804744217275858502
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4670656490605237494}
+  serializedVersion: 5
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 3
 --- !u!1 &6766776281136845531
 GameObject:
   m_ObjectHideFlags: 0

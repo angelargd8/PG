@@ -11,6 +11,8 @@ GameObject:
   - component: {fileID: 8232662968855227710}
   - component: {fileID: 8817841471329231030}
   - component: {fileID: 1775522706606500681}
+  - component: {fileID: 2225730510904686102}
+  - component: {fileID: 3982563285372221519}
   m_Layer: 0
   m_Name: JASoap
   m_TagString: Untagged
@@ -65,6 +67,53 @@ MonoBehaviour:
   _gameplayPauseChanged: {fileID: 11400000, guid: 1415d9d465e8b3d43b5df09e48696b07, type: 2}
   _mainMenuRequested: {fileID: 11400000, guid: 79709713fbe723e48b79c6b3004f8758, type: 2}
   weaponFollower: {fileID: 8817841471329231030}
+--- !u!114 &2225730510904686102
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6311059069897434971}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 36e6f7faeffb31d44abc36a278f43844, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::JuanAndresTool
+  _toolType: 0
+  _hand: 1
+  _interactionPoint: {fileID: 8220091658595217917}
+  _minimumGestureAngle: 75
+  _minimumRadius: 0.04
+  _minimumStepAngle: 0.5
+  _maximumStepAngle: 35
+  _logDetectedGestures: 1
+--- !u!54 &3982563285372221519
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6311059069897434971}
+  serializedVersion: 5
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 3
 --- !u!1001 &8473831329828787734
 PrefabInstance:
   m_ObjectHideFlags: 0
