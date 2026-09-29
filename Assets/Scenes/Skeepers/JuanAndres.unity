@@ -725,6 +725,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 6349384442204505658, guid: cc6b3e636f70b5044994ea3e192717ac, type: 3}
   m_PrefabInstance: {fileID: 561355795}
   m_PrefabAsset: {fileID: 0}
+--- !u!95 &561355797 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 4291414336234631490, guid: cc6b3e636f70b5044994ea3e192717ac, type: 3}
+  m_PrefabInstance: {fileID: 561355795}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &754869695
 GameObject:
   m_ObjectHideFlags: 0
@@ -793,6 +798,7 @@ Transform:
   - {fileID: 116001850}
   - {fileID: 960706195}
   - {fileID: 150597917}
+  - {fileID: 1304591116}
   m_Father: {fileID: 2043384390}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &932208956
@@ -992,6 +998,60 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d293b8e321b58334ca24e7d974984c81, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::JuanAndresSpawnPoint
+--- !u!1 &1304591115
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1304591116}
+  - component: {fileID: 1304591117}
+  m_Layer: 0
+  m_Name: DogFeedbackController
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1304591116
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1304591115}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 887524687}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1304591117
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1304591115}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 802557cc6397dd341897ae55f79c4117, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::JuanAndresDogFeedbackController
+  _animator: {fileID: 561355797}
+  _scoreProfile: {fileID: 11400000, guid: f55e00ea4882be74eb7caa7899450c1e, type: 2}
+  _interactionRegistered: {fileID: 11400000, guid: 188abd6f30130bb42b4877604a6ce24f, type: 2}
+  _animationIdParameter: AnimationID
+  _idleStateName: Base Layer.Breathing
+  _perfectAnimationId: 1
+  _perfectStateName: Base Layer.WigglingTail
+  _useLowTimingReaction: 1
+  _lowTimingAnimationId: 6
+  _lowTimingStateName: Base Layer.AngryCycle
 --- !u!1 &1483033379
 GameObject:
   m_ObjectHideFlags: 0
