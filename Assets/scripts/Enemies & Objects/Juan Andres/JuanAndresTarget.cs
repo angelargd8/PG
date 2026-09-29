@@ -22,6 +22,7 @@ public sealed class JuanAndresTarget : MonoBehaviour
     private Vector3 _directionBaseScale;
     private Vector3 _lifetimeBaseScale;
     private bool _isResolved;
+    private bool _visualStateInitialized;
 
 
     public JuanAndresActionDirection ExpectedDirection { get; private set; }
@@ -33,24 +34,6 @@ public sealed class JuanAndresTarget : MonoBehaviour
     public int PairId { get; private set; }
     public bool IsPaired => PairId >= 0;
     public bool IsResolved => _isResolved;
-
-
-    private void Awake()
-    {
-        if (_directionRing != null)
-        {
-            _directionBaseScale =
-                _directionRing.localScale;
-        }
-
-        if (_lifetimeFill != null)
-        {
-            _lifetimeBaseScale =
-                _lifetimeFill.localScale;
-        }
-
-        ResolveRuntimeReferences();
-    }
 
 
     private void Update()
@@ -82,6 +65,8 @@ public sealed class JuanAndresTarget : MonoBehaviour
         double expireTime,
         int pairId)
     {
+        EnsureVisualStateInitialized();
+
         _pool = pool;
         _spawnPoint = spawnPoint;
 
@@ -115,6 +100,29 @@ public sealed class JuanAndresTarget : MonoBehaviour
     }
 
 
+    private void EnsureVisualStateInitialized()
+    {
+        if (_visualStateInitialized)
+        {
+            return;
+        }
+
+        if (_directionRing != null)
+        {
+            _directionBaseScale =
+                _directionRing.localScale;
+        }
+
+        if (_lifetimeFill != null)
+        {
+            _lifetimeBaseScale =
+                _lifetimeFill.localScale;
+        }
+
+        _visualStateInitialized = true;
+    }
+
+
     public bool TryResolve()
     {
         if (_isResolved)
@@ -132,6 +140,8 @@ public sealed class JuanAndresTarget : MonoBehaviour
 
     public void ResetTarget()
     {
+        EnsureVisualStateInitialized();
+
         if (_spawnPoint != null)
         {
             _spawnPoint.Release(this);
@@ -144,7 +154,7 @@ public sealed class JuanAndresTarget : MonoBehaviour
 
         PairId = -1;
 
-        ResetLifetimeVisual();
+        ResetVisuals();
     }
 
 
@@ -249,6 +259,22 @@ public sealed class JuanAndresTarget : MonoBehaviour
 
     private void ResetLifetimeVisual()
     {
+        if (_lifetimeFill != null)
+        {
+            _lifetimeFill.localScale =
+                _lifetimeBaseScale;
+        }
+    }
+
+
+    private void ResetVisuals()
+    {
+        if (_directionRing != null)
+        {
+            _directionRing.localScale =
+                _directionBaseScale;
+        }
+
         if (_lifetimeFill != null)
         {
             _lifetimeFill.localScale =

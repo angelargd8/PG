@@ -37,6 +37,8 @@ public sealed class JuanAndresSpawnDirector :
     [Header("Difficulty")]
     [SerializeField] private JuanAndresDifficultyConfigSO _difficultyConfig;
     [SerializeField] private DifficultyLevelEventChannelSO _difficultyChanged;
+    [SerializeField] private DifficultyLevel _manualDifficulty = DifficultyLevel.Normal;
+    [SerializeField] private bool _useDynamicDifficulty;
 
 
     private readonly List<ScheduledSpawn> _scheduledSpawns =
@@ -81,7 +83,8 @@ public sealed class JuanAndresSpawnDirector :
             return;
         }
 
-        if (_difficultyChanged != null)
+        if (_useDynamicDifficulty &&
+            _difficultyChanged != null)
         {
             _difficultyChanged.Raised += SetDifficulty;
 
@@ -91,7 +94,7 @@ public sealed class JuanAndresSpawnDirector :
         else
         {
             _currentDifficulty =
-                DifficultyLevel.Normal;
+                _manualDifficulty;
         }
 
         _currentProfile =
@@ -120,7 +123,7 @@ public sealed class JuanAndresSpawnDirector :
 
     public void EndExperience()
     {
-        if (_difficultyChanged != null)
+        if (_useDynamicDifficulty && _difficultyChanged != null)
         {
             _difficultyChanged.Raised -= SetDifficulty;
         }
@@ -514,7 +517,8 @@ public sealed class JuanAndresSpawnDirector :
 
     private void SetDifficulty(DifficultyLevel difficulty)
     {
-        if (_currentDifficulty == difficulty)
+        if (!_useDynamicDifficulty ||
+            _currentDifficulty == difficulty)
         {
             return;
         }

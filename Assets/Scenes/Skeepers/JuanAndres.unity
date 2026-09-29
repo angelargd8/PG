@@ -169,6 +169,8 @@ MonoBehaviour:
   _lookAheadSpawns: 6
   _difficultyConfig: {fileID: 11400000, guid: 7d25a57a4dea6004c802ebb756d8d79f, type: 2}
   _difficultyChanged: {fileID: 11400000, guid: 998849c379bbe114dbafefdb36ea08e9, type: 2}
+  _manualDifficulty: 0
+  _useDynamicDifficulty: 0
 --- !u!1 &247526433
 GameObject:
   m_ObjectHideFlags: 0
@@ -481,8 +483,8 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0.781, y: 1.4051001, z: 0.85200006}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 0.8, y: 0.8, z: 0.8}
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 561355796}
   - {fileID: 1926717903}
@@ -594,8 +596,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eaa6b2cacddd6674481841d251c26da6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ExperienceSceneBootstrap
-  preloaders: []
-  runtimeSystems: []
+  preloaders:
+  - {fileID: 1801902748}
+  runtimeSystems:
+  - {fileID: 116001851}
   gameplayRoot: {fileID: 2043384389}
   sceneActivation: {fileID: 11400000, guid: 8f976cf0f1d94405a66e9b963c299e56, type: 2}
   experienceReady: {fileID: 11400000, guid: f4b8f7b73053533419eb97071978892d, type: 2}
