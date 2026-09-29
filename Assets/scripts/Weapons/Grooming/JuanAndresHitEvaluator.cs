@@ -12,6 +12,12 @@ public sealed class JuanAndresHitEvaluator :
         public double SongTime;
     }
 
+    private sealed class PairSuccessData
+    {
+        public double ActualTime;
+        public Vector3 FeedbackPosition;
+    }
+
     [Header("References")]
     [SerializeField] private JuanAndresTargetSpawner _targetSpawner;
     [SerializeField] private JuanAndresTool[] _tools;
@@ -22,6 +28,11 @@ public sealed class JuanAndresHitEvaluator :
     [Header("Score")]
     [SerializeField] private ScoreProfileSO _scoreProfile;
     [SerializeField] private ScoreProfileEventChannelSO _scoreProfileChanged;
+    [SerializeField] private ScoreBonusEventChannelSO _scoreBonusAwarded;
+
+    [Header("Pair Bonus")]
+    [Min(0f)]
+    [SerializeField] private float _dualSuccessWindow = 0.2f;
 
     [Header("Haptic Feedback")]
     [Range(0f, 1f)]
@@ -41,6 +52,8 @@ public sealed class JuanAndresHitEvaluator :
     private bool _isRunning;
     private readonly Dictionary<JuanAndresTool, GestureStartData> _gestureStarts =
         new Dictionary<JuanAndresTool, GestureStartData>();
+    private readonly Dictionary<int, PairSuccessData> _pairSuccesses =
+        new Dictionary<int, PairSuccessData>();
 
 
     public void BeginExperience()
@@ -68,21 +81,20 @@ public sealed class JuanAndresHitEvaluator :
             return;
         }
 
-        _targetSpawner.TargetActivated +=
-            HandleTargetActivated;
+        _targetSpawner.TargetActivated += HandleTargetActivated;
 
         for (int i = 0; i < _tools.Length; i++)
         {
-            _tools[i].GestureStarted +=
-                HandleGestureStarted;
+            _tools[i].GestureStarted += HandleGestureStarted;
 
-            _tools[i].GestureDetected +=
-                HandleGestureDetected;
+            _tools[i].GestureDetected += HandleGestureDetected;
         }
 
         _scoreProfileChanged.RaiseEvent(
             _scoreProfile
         );
+
+        _pairSuccesses.Clear();
 
         _isRunning = true;
     }
@@ -95,20 +107,20 @@ public sealed class JuanAndresHitEvaluator :
             return;
         }
 
-        _targetSpawner.TargetActivated -=
-            HandleTargetActivated;
+        _targetSpawner.TargetActivated -= HandleTargetActivated;
 
         for (int i = 0; i < _tools.Length; i++)
         {
             if (_tools[i] != null)
             {
-                _tools[i].GestureStarted -=
-                    HandleGestureStarted;
+                _tools[i].GestureStarted -= HandleGestureStarted;
 
-                _tools[i].GestureDetected -=
-                    HandleGestureDetected;
+                _tools[i].GestureDetected -= HandleGestureDetected;
             }
         }
+
+        _pairSuccesses.Clear();
+        _gestureStarts.Clear();
 
         _isRunning = false;
     }
@@ -121,8 +133,7 @@ public sealed class JuanAndresHitEvaluator :
             return;
         }
 
-        target.Expired +=
-            HandleTargetExpired;
+        target.Expired += HandleTargetExpired;
     }
 
 
@@ -185,6 +196,8 @@ public sealed class JuanAndresHitEvaluator :
 
         DifficultyLevel difficulty = target.Difficulty;
 
+        int pairId = target.PairId;
+
         double actualTime = _musicClock.SongTime;
 
         if (_gestureStarts.TryGetValue(
@@ -231,6 +244,13 @@ public sealed class JuanAndresHitEvaluator :
         _interactionRegistered.RaiseEvent(
             result
         );
+
+        HandlePairResult(
+            pairId,
+            outcome,
+            actualTime,
+            feedbackPosition
+        );
     }
 
 
@@ -241,6 +261,8 @@ public sealed class JuanAndresHitEvaluator :
         {
             return;
         }
+
+        int pairId = target.PairId;
 
         InteractionResult result =
             new InteractionResult(
@@ -253,6 +275,70 @@ public sealed class JuanAndresHitEvaluator :
 
         _interactionRegistered.RaiseEvent(
             result
+        );
+
+        if (pairId >= 0)
+        {
+            _pairSuccesses.Remove(
+                pairId
+            );
+        }
+    }
+
+
+    private void HandlePairResult(
+        int pairId,
+        InteractionOutcome outcome,
+        double actualTime,
+        Vector3 feedbackPosition)
+    {
+        if (pairId < 0)
+        {
+            return;
+        }
+
+        if (outcome != InteractionOutcome.Success)
+        {
+            _pairSuccesses.Remove(
+                pairId
+            );
+
+            return;
+        }
+
+        if (!_pairSuccesses.TryGetValue(
+            pairId,
+            out PairSuccessData firstSuccess))
+        {
+            _pairSuccesses[pairId] =
+                new PairSuccessData
+                {
+                    ActualTime = actualTime,
+                    FeedbackPosition = feedbackPosition
+                };
+
+            return;
+        }
+
+        _pairSuccesses.Remove(
+            pairId
+        );
+
+        double timeDifference =
+            System.Math.Abs(
+                actualTime -
+                firstSuccess.ActualTime
+            );
+
+        if (timeDifference >
+            _dualSuccessWindow)
+        {
+            return;
+        }
+
+        AwardPairBonus(
+            firstSuccess.FeedbackPosition,
+            feedbackPosition
         );
     }
 
@@ -308,6 +394,34 @@ public sealed class JuanAndresHitEvaluator :
     }
 
 
+    private void AwardPairBonus(Vector3 firstPosition, Vector3 secondPosition)
+    {
+        if (_scoreBonusAwarded == null ||
+            _scoreProfile == null ||
+            _scoreProfile.BonusPoints <= 0)
+        {
+            return;
+        }
+
+        Vector3 bonusPosition =
+            Vector3.Lerp(
+                firstPosition,
+                secondPosition,
+                0.5f
+            );
+
+        ScoreBonus bonus =
+            new ScoreBonus(
+                _scoreProfile.BonusPoints,
+                bonusPosition
+            );
+
+        _scoreBonusAwarded.RaiseEvent(
+            bonus
+        );
+    }
+
+
     private bool ValidateReferences()
     {
         if (_targetSpawner == null)
@@ -359,6 +473,16 @@ public sealed class JuanAndresHitEvaluator :
         {
             Debug.LogError(
                 "[JuanAndresHitEvaluator] Configuración de Score incompleta.",
+                this
+            );
+
+            return false;
+        }
+
+        if (_scoreBonusAwarded == null)
+        {
+            Debug.LogError(
+                "[JuanAndresHitEvaluator] ScoreBonusAwarded no está asignado.",
                 this
             );
 
