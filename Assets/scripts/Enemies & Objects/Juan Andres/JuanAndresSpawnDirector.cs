@@ -43,17 +43,14 @@ public sealed class JuanAndresSpawnDirector :
 
     private readonly List<ScheduledSpawn> _scheduledSpawns =
         new List<ScheduledSpawn>();
-
     private readonly List<JuanAndresSpawnPoint> _availableSpawnPoints =
         new List<JuanAndresSpawnPoint>();
-
-
+    private readonly HashSet<JuanAndresSpawnPoint> _lastSpawnPoints =
+        new HashSet<JuanAndresSpawnPoint>();
     private ExperienceMusicClock _musicClock;
-
     private bool _isRunning;
     private int _nextBeatIndex;
     private int _nextPairId;
-
     private DifficultyLevel _currentDifficulty;
     private JuanAndresDifficultyProfile _currentProfile;
 
@@ -103,6 +100,7 @@ public sealed class JuanAndresSpawnDirector :
             );
 
         _scheduledSpawns.Clear();
+        _lastSpawnPoints.Clear();
 
         _nextBeatIndex = 0;
         _nextPairId = 0;
@@ -131,6 +129,7 @@ public sealed class JuanAndresSpawnDirector :
         _isRunning = false;
 
         _scheduledSpawns.Clear();
+        _lastSpawnPoints.Clear();
 
         if (_targetSpawner != null)
         {
@@ -276,9 +275,17 @@ public sealed class JuanAndresSpawnDirector :
             return;
         }
 
+        int eligibleCount =
+            GetEligibleSpawnPoints();
+
+        if (eligibleCount == 0)
+        {
+            return;
+        }
+
         bool canSpawnPair =
             scheduledSpawn.WantsPair &&
-            availableCount >= 2 &&
+            eligibleCount >= 2 &&
             remainingSlots >= 2;
 
         if (canSpawnPair)
@@ -298,19 +305,12 @@ public sealed class JuanAndresSpawnDirector :
 
     private void SpawnSingle(ScheduledSpawn scheduledSpawn)
     {
-        if (
-            _targetSpawner.GetAvailableSpawnPoints(
-                _availableSpawnPoints
-            ) == 0)
+        if (GetEligibleSpawnPoints() == 0)
         {
             return;
         }
 
-        int randomIndex =
-            Random.Range(
-                0,
-                _availableSpawnPoints.Count
-            );
+        int randomIndex = Random.Range(0, _availableSpawnPoints.Count);
 
         JuanAndresSpawnPoint spawnPoint =
             _availableSpawnPoints[randomIndex];
@@ -342,44 +342,32 @@ public sealed class JuanAndresSpawnDirector :
             return;
         }
 
-        _targetSpawner.ActivateTarget(
-            target
-        );
+        if (_targetSpawner.ActivateTarget(target))
+        {
+            RememberLastSpawnPoint(spawnPoint);
+        }
     }
 
 
     private void SpawnPair(ScheduledSpawn scheduledSpawn)
     {
-        if (
-            _targetSpawner.GetAvailableSpawnPoints(
-                _availableSpawnPoints
-            ) < 2)
-        {
-            SpawnSingle(
-                scheduledSpawn
-            );
+        int eligibleCount =
+            GetEligibleSpawnPoints();
 
+        if (eligibleCount < 2)
+        {
+            SpawnSingle(scheduledSpawn);
             return;
         }
 
-        int firstIndex =
-            Random.Range(
-                0,
-                _availableSpawnPoints.Count
-            );
+        int firstIndex = Random.Range(0, _availableSpawnPoints.Count);
 
         JuanAndresSpawnPoint firstPoint =
             _availableSpawnPoints[firstIndex];
 
-        _availableSpawnPoints.RemoveAt(
-            firstIndex
-        );
+        _availableSpawnPoints.RemoveAt(firstIndex);
 
-        int secondIndex =
-            Random.Range(
-                0,
-                _availableSpawnPoints.Count
-            );
+        int secondIndex = Random.Range(0, _availableSpawnPoints.Count);
 
         JuanAndresSpawnPoint secondPoint =
             _availableSpawnPoints[secondIndex];
@@ -390,8 +378,7 @@ public sealed class JuanAndresSpawnDirector :
                 : JuanAndresToolType.Brush;
 
         JuanAndresToolType secondTool =
-            firstTool ==
-            JuanAndresToolType.Soap
+            firstTool == JuanAndresToolType.Soap
                 ? JuanAndresToolType.Brush
                 : JuanAndresToolType.Soap;
 
@@ -426,38 +413,34 @@ public sealed class JuanAndresSpawnDirector :
                 pairId
             );
 
-        if (
-            firstTarget == null ||
+        if (firstTarget == null ||
             secondTarget == null)
         {
             if (firstTarget != null)
             {
-                _targetSpawner.CancelReservedTarget(
-                    firstTarget
-                );
+                _targetSpawner.CancelReservedTarget(firstTarget);
             }
 
             if (secondTarget != null)
             {
-                _targetSpawner.CancelReservedTarget(
-                    secondTarget
-                );
+                _targetSpawner.CancelReservedTarget(secondTarget);
             }
 
-            SpawnSingle(
-                scheduledSpawn
-            );
-
+            SpawnSingle(scheduledSpawn);
             return;
         }
 
-        _targetSpawner.ActivateTarget(
-            firstTarget
-        );
+        bool firstActivated =
+            _targetSpawner.ActivateTarget(firstTarget);
 
-        _targetSpawner.ActivateTarget(
-            secondTarget
-        );
+        bool secondActivated =
+            _targetSpawner.ActivateTarget(secondTarget);
+
+        if (firstActivated &&
+            secondActivated)
+        {
+            RememberLastSpawnPoints(firstPoint, secondPoint);
+        }
     }
 
 
@@ -474,6 +457,63 @@ public sealed class JuanAndresSpawnDirector :
         return Random.value < 0.5f
             ? JuanAndresToolType.Soap
             : JuanAndresToolType.Brush;
+    }
+
+
+    private int GetEligibleSpawnPoints()
+    {
+        _targetSpawner.GetAvailableSpawnPoints(
+            _availableSpawnPoints
+        );
+
+        for (
+            int i = _availableSpawnPoints.Count - 1;
+            i >= 0;
+            i--)
+        {
+            if (_lastSpawnPoints.Contains(
+                _availableSpawnPoints[i]))
+            {
+                _availableSpawnPoints.RemoveAt(
+                    i
+                );
+            }
+        }
+
+        return _availableSpawnPoints.Count;
+    }
+
+
+    private void RememberLastSpawnPoint(JuanAndresSpawnPoint spawnPoint)
+    {
+        _lastSpawnPoints.Clear();
+
+        if (spawnPoint != null)
+        {
+            _lastSpawnPoints.Add(
+                spawnPoint
+            );
+        }
+    }
+
+
+    private void RememberLastSpawnPoints(JuanAndresSpawnPoint firstPoint, JuanAndresSpawnPoint secondPoint)
+    {
+        _lastSpawnPoints.Clear();
+
+        if (firstPoint != null)
+        {
+            _lastSpawnPoints.Add(
+                firstPoint
+            );
+        }
+
+        if (secondPoint != null)
+        {
+            _lastSpawnPoints.Add(
+                secondPoint
+            );
+        }
     }
 
 
