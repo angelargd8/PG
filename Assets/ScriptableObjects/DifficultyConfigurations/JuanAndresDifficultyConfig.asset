@@ -14,16 +14,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::JuanAndresDifficultyConfigSO
   _easy:
     _spawnEveryNBeats: 4
-    _responseWindow: 5
+    _responseWindow: 6
     _maxActiveTargets: 2
     _dualTargetProbability: 0
   _normal:
     _spawnEveryNBeats: 4
-    _responseWindow: 4
-    _maxActiveTargets: 4
+    _responseWindow: 5
+    _maxActiveTargets: 3
     _dualTargetProbability: 0.2
   _hard:
     _spawnEveryNBeats: 3
-    _responseWindow: 3
-    _maxActiveTargets: 6
+    _responseWindow: 4
+    _maxActiveTargets: 4
     _dualTargetProbability: 0.4

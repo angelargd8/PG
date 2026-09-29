@@ -282,8 +282,8 @@ MonoBehaviour:
   _lookAheadSpawns: 6
   _difficultyConfig: {fileID: 11400000, guid: 7d25a57a4dea6004c802ebb756d8d79f, type: 2}
   _difficultyChanged: {fileID: 11400000, guid: 998849c379bbe114dbafefdb36ea08e9, type: 2}
-  _manualDifficulty: 0
-  _useDynamicDifficulty: 0
+  _manualDifficulty: 1
+  _useDynamicDifficulty: 1
 --- !u!1 &247526433
 GameObject:
   m_ObjectHideFlags: 0
