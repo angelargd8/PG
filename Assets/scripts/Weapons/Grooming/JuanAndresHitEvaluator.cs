@@ -1,10 +1,17 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 [DisallowMultipleComponent]
 public sealed class JuanAndresHitEvaluator :
     MonoBehaviour,
     IExperienceRuntime
 {
+    private sealed class GestureStartData
+    {
+        public JuanAndresTarget Target;
+        public double SongTime;
+    }
+
     [Header("References")]
     [SerializeField] private JuanAndresTargetSpawner _targetSpawner;
     [SerializeField] private JuanAndresTool[] _tools;
@@ -32,6 +39,8 @@ public sealed class JuanAndresHitEvaluator :
 
     private ExperienceMusicClock _musicClock;
     private bool _isRunning;
+    private readonly Dictionary<JuanAndresTool, GestureStartData> _gestureStarts =
+        new Dictionary<JuanAndresTool, GestureStartData>();
 
 
     public void BeginExperience()
@@ -64,6 +73,9 @@ public sealed class JuanAndresHitEvaluator :
 
         for (int i = 0; i < _tools.Length; i++)
         {
+            _tools[i].GestureStarted +=
+                HandleGestureStarted;
+
             _tools[i].GestureDetected +=
                 HandleGestureDetected;
         }
@@ -90,6 +102,9 @@ public sealed class JuanAndresHitEvaluator :
         {
             if (_tools[i] != null)
             {
+                _tools[i].GestureStarted -=
+                    HandleGestureStarted;
+
                 _tools[i].GestureDetected -=
                     HandleGestureDetected;
             }
@@ -108,6 +123,25 @@ public sealed class JuanAndresHitEvaluator :
 
         target.Expired +=
             HandleTargetExpired;
+    }
+
+
+    private void HandleGestureStarted(JuanAndresTarget target, JuanAndresTool tool)
+    {
+        if (!_isRunning ||
+            target == null ||
+            tool == null ||
+            target.IsResolved)
+        {
+            return;
+        }
+
+        _gestureStarts[tool] =
+            new GestureStartData
+            {
+                Target = target,
+                SongTime = _musicClock.SongTime
+            };
     }
 
 
@@ -147,14 +181,21 @@ public sealed class JuanAndresHitEvaluator :
             correctHand &&
             correctTool;
 
-        double expectedTime =
-            target.ExpectedTime;
+        double expectedTime = target.ExpectedTime;
 
-        DifficultyLevel difficulty =
-            target.Difficulty;
+        DifficultyLevel difficulty = target.Difficulty;
 
-        double actualTime =
-            _musicClock.SongTime;
+        double actualTime = _musicClock.SongTime;
+
+        if (_gestureStarts.TryGetValue(
+                tool,
+                out GestureStartData gestureStart) &&
+            gestureStart.Target == target)
+        {
+            actualTime = gestureStart.SongTime;
+        }
+
+        _gestureStarts.Remove(tool);
 
         if (!target.TryResolve())
         {

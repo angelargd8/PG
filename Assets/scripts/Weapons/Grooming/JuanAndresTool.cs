@@ -27,29 +27,26 @@ public sealed class JuanAndresTool : MonoBehaviour
 
 
     private JuanAndresTarget _activeTarget;
-
     private Vector3 _gesturePlaneNormal;
     private Vector3 _previousRadial;
-
     private float _accumulatedAngle;
-
     private bool _hasPreviousRadial;
     private bool _gestureSubmitted;
+    private bool _gestureStarted;
 
 
     public JuanAndresToolType ToolType => _toolType;
     public SceneWeaponEquipController.Hand Hand => _hand;
-
     public Vector3 InteractionPosition =>
         _interactionPoint != null
             ? _interactionPoint.position
             : transform.position;
-
     public event Action<
         JuanAndresTarget,
         JuanAndresTool,
         JuanAndresActionDirection,
         Vector3> GestureDetected;
+    public event Action<JuanAndresTarget, JuanAndresTool> GestureStarted;
 
 
     private void Update()
@@ -133,6 +130,7 @@ public sealed class JuanAndresTool : MonoBehaviour
 
         _hasPreviousRadial = false;
         _gestureSubmitted = false;
+        _gestureStarted = false;
 
         TrySetInitialRadial();
     }
@@ -171,8 +169,17 @@ public sealed class JuanAndresTool : MonoBehaviour
             return;
         }
 
-        _accumulatedAngle +=
-            angleDelta;
+        if (!_gestureStarted)
+        {
+            _gestureStarted = true;
+
+            GestureStarted?.Invoke(
+                _activeTarget,
+                this
+            );
+        }
+
+        _accumulatedAngle += angleDelta;
 
         if (Mathf.Abs(_accumulatedAngle) <
             _minimumGestureAngle)
@@ -262,5 +269,6 @@ public sealed class JuanAndresTool : MonoBehaviour
 
         _hasPreviousRadial = false;
         _gestureSubmitted = false;
+        _gestureStarted = false;
     }
 }
