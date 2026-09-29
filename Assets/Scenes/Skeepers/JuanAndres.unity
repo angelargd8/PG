@@ -169,7 +169,7 @@ MonoBehaviour:
   _lookAheadSpawns: 6
   _difficultyConfig: {fileID: 11400000, guid: 7d25a57a4dea6004c802ebb756d8d79f, type: 2}
   _difficultyChanged: {fileID: 11400000, guid: 998849c379bbe114dbafefdb36ea08e9, type: 2}
-  _manualDifficulty: 0
+  _manualDifficulty: 1
   _useDynamicDifficulty: 0
 --- !u!1 &247526433
 GameObject:
@@ -365,7 +365,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6349384442204505658, guid: cc6b3e636f70b5044994ea3e192717ac, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: -0.304
       objectReference: {fileID: 0}
     - target: {fileID: 6349384442204505658, guid: cc6b3e636f70b5044994ea3e192717ac, type: 3}
       propertyPath: m_LocalPosition.z
@@ -1273,6 +1273,10 @@ PrefabInstance:
     - target: {fileID: 6676650526912003304, guid: bfb5a87a6b8431b4ea3141ca12732ddf, type: 3}
       propertyPath: m_LocalPosition.z
       value: -1.93
+      objectReference: {fileID: 0}
+    - target: {fileID: 7847022902105664394, guid: bfb5a87a6b8431b4ea3141ca12732ddf, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.58431304
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
