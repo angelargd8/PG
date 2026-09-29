@@ -30,9 +30,10 @@ public sealed class JuanAndresSpawnDirector :
     [Header("Timing")]
     [Min(0.05f)]
     [SerializeField] private float _reactionLeadTime = 0.5f;
-
     [Min(1)]
     [SerializeField] private int _lookAheadSpawns = 4;
+    [Min(0)]
+    [SerializeField] private int _ignoredFinalBeats = 4;
 
     [Header("Difficulty")]
     [SerializeField] private JuanAndresDifficultyConfigSO _difficultyConfig;
@@ -53,6 +54,12 @@ public sealed class JuanAndresSpawnDirector :
     private int _nextPairId;
     private DifficultyLevel _currentDifficulty;
     private JuanAndresDifficultyProfile _currentProfile;
+    private int SchedulableBeatCount =>
+        Mathf.Max(
+            0,
+            _beatMap.Beats.Count -
+            _ignoredFinalBeats
+        );
 
 
     public void BeginExperience()
@@ -158,10 +165,9 @@ public sealed class JuanAndresSpawnDirector :
     {
         while (
             _scheduledSpawns.Count < _lookAheadSpawns &&
-            _nextBeatIndex < _beatMap.Beats.Count)
+            _nextBeatIndex < SchedulableBeatCount)
         {
-            int beatCount =
-                _currentProfile.SpawnEveryNBeats;
+            int beatCount = _currentProfile.SpawnEveryNBeats;
 
             int beatIndex =
                 GetMostIntenseBeatIndex(
@@ -169,8 +175,7 @@ public sealed class JuanAndresSpawnDirector :
                     beatCount
                 );
 
-            _nextBeatIndex +=
-                beatCount;
+            _nextBeatIndex += beatCount;
 
             ScheduleBeat(
                 beatIndex
@@ -522,33 +527,26 @@ public sealed class JuanAndresSpawnDirector :
         int endIndex =
             Mathf.Min(
                 startIndex + beatCount,
-                _beatMap.Beats.Count
+                SchedulableBeatCount
             );
 
-        int selectedIndex =
-            startIndex;
-
-        float highestIntensity =
-            _beatMap.Beats[startIndex].Intensity;
+        int selectedIndex = startIndex;
+        float highestIntensity = _beatMap.Beats[startIndex].Intensity;
 
         for (
             int i = startIndex + 1;
             i < endIndex;
             i++)
         {
-            float intensity =
-                _beatMap.Beats[i].Intensity;
+            float intensity = _beatMap.Beats[i].Intensity;
 
             if (intensity <= highestIntensity)
             {
                 continue;
             }
 
-            highestIntensity =
-                intensity;
-
-            selectedIndex =
-                i;
+            highestIntensity = intensity;
+            selectedIndex = i;
         }
 
         return selectedIndex;

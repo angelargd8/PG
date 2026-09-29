@@ -280,10 +280,57 @@ MonoBehaviour:
   _beatMap: {fileID: 11400000, guid: 5399c0f14c7917840b01cac5d893b357, type: 2}
   _reactionLeadTime: 0.5
   _lookAheadSpawns: 6
+  _ignoredFinalBeats: 4
   _difficultyConfig: {fileID: 11400000, guid: 7d25a57a4dea6004c802ebb756d8d79f, type: 2}
   _difficultyChanged: {fileID: 11400000, guid: 998849c379bbe114dbafefdb36ea08e9, type: 2}
   _manualDifficulty: 1
   _useDynamicDifficulty: 1
+--- !u!1 &150597916
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 150597917}
+  - component: {fileID: 150597918}
+  m_Layer: 0
+  m_Name: DogVisibilityController
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &150597917
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 150597916}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 887524687}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &150597918
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 150597916}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 916b6e0ed4d156e48a4c38ff43523fa5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::JuanAndresDogVisibilityController
+  _dogRoot: {fileID: 754869695}
+  _gameplayPauseChanged: {fileID: 11400000, guid: 1415d9d465e8b3d43b5df09e48696b07, type: 2}
 --- !u!1 &247526433
 GameObject:
   m_ObjectHideFlags: 0
@@ -791,6 +838,7 @@ Transform:
   - {fileID: 270077648}
   - {fileID: 116001850}
   - {fileID: 960706195}
+  - {fileID: 150597917}
   m_Father: {fileID: 2043384390}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &932208956
