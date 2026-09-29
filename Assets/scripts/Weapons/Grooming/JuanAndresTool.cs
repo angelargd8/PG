@@ -25,6 +25,9 @@ public sealed class JuanAndresTool : MonoBehaviour
     [Header("Debug")]
     [SerializeField] private bool _logDetectedGestures = true;
 
+    [Header("Particles")]
+    [SerializeField] private JuanAndresToolBubbleController _bubbleController;
+
 
     private JuanAndresTarget _activeTarget;
     private Vector3 _gesturePlaneNormal;
@@ -123,14 +126,18 @@ public sealed class JuanAndresTool : MonoBehaviour
     {
         _activeTarget = target;
 
-        _gesturePlaneNormal =
-            target.transform.forward.normalized;
+        _gesturePlaneNormal = target.transform.forward.normalized;
 
         _accumulatedAngle = 0f;
 
         _hasPreviousRadial = false;
         _gestureSubmitted = false;
         _gestureStarted = false;
+
+        if (_bubbleController != null)
+        {
+            _bubbleController.BeginContact();
+        }
 
         TrySetInitialRadial();
     }
@@ -263,6 +270,12 @@ public sealed class JuanAndresTool : MonoBehaviour
 
     private void ResetTracking()
     {
+        if (_activeTarget != null &&
+            _bubbleController != null)
+        {
+            _bubbleController.EndContact();
+        }
+
         _activeTarget = null;
 
         _accumulatedAngle = 0f;
