@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using System;
 
 [DisallowMultipleComponent]
 public sealed class JuanAndresTarget : MonoBehaviour
@@ -34,6 +35,7 @@ public sealed class JuanAndresTarget : MonoBehaviour
     public int PairId { get; private set; }
     public bool IsPaired => PairId >= 0;
     public bool IsResolved => _isResolved;
+    public event Action<JuanAndresTarget> Expired;
 
 
     private void Update()
@@ -154,6 +156,8 @@ public sealed class JuanAndresTarget : MonoBehaviour
 
         PairId = -1;
 
+        Expired = null;
+
         ResetVisuals();
     }
 
@@ -201,6 +205,8 @@ public sealed class JuanAndresTarget : MonoBehaviour
         }
 
         _isResolved = true;
+
+        Expired?.Invoke(this);
 
         ReleaseTarget();
     }

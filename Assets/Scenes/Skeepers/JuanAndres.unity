@@ -364,6 +364,17 @@ BoxCollider:
   m_CorrespondingSourceObject: {fileID: 6357302143583366856, guid: 6bbd5771dd85c724e9b98150301d4fc5, type: 3}
   m_PrefabInstance: {fileID: 450646246}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &450646249 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5518494896375804836, guid: 6bbd5771dd85c724e9b98150301d4fc5, type: 3}
+  m_PrefabInstance: {fileID: 450646246}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 36e6f7faeffb31d44abc36a278f43844, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::JuanAndresTool
 --- !u!1001 &561355795
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -550,6 +561,7 @@ Transform:
   m_Children:
   - {fileID: 270077648}
   - {fileID: 116001850}
+  - {fileID: 960706195}
   m_Father: {fileID: 2043384390}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &932208956
@@ -628,6 +640,7 @@ MonoBehaviour:
   preloaders:
   - {fileID: 1801902748}
   runtimeSystems:
+  - {fileID: 960706196}
   - {fileID: 116001851}
   gameplayRoot: {fileID: 2043384389}
   sceneActivation: {fileID: 11400000, guid: 8f976cf0f1d94405a66e9b963c299e56, type: 2}
@@ -647,6 +660,61 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &960706194
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 960706195}
+  - component: {fileID: 960706196}
+  m_Layer: 0
+  m_Name: HitEvaluator
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &960706195
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 960706194}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 887524687}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &960706196
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 960706194}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c5307cfb1ab0cce42b6f23727f2102de, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::JuanAndresHitEvaluator
+  _targetSpawner: {fileID: 270077649}
+  _tools:
+  - {fileID: 450646249}
+  - {fileID: 1820247590}
+  _interactionRegistered: {fileID: 11400000, guid: 188abd6f30130bb42b4877604a6ce24f, type: 2}
+  _scoreProfile: {fileID: 11400000, guid: f55e00ea4882be74eb7caa7899450c1e, type: 2}
+  _scoreProfileChanged: {fileID: 11400000, guid: c8e1d8ffc14710a459ba601e5db3f7d7, type: 2}
+  _successHapticAmplitude: 0.4
+  _successHapticDuration: 0.06
+  _failureHapticAmplitude: 0.6
+  _failureHapticDuration: 0.1
 --- !u!1 &1152699376
 GameObject:
   m_ObjectHideFlags: 0
@@ -1128,6 +1196,17 @@ BoxCollider:
   m_CorrespondingSourceObject: {fileID: 4930853518495951324, guid: febc7ead9a208c84a913d2ca39e5f2df, type: 3}
   m_PrefabInstance: {fileID: 1820247587}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1820247590 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2225730510904686102, guid: febc7ead9a208c84a913d2ca39e5f2df, type: 3}
+  m_PrefabInstance: {fileID: 1820247587}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 36e6f7faeffb31d44abc36a278f43844, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::JuanAndresTool
 --- !u!1 &1830858898
 GameObject:
   m_ObjectHideFlags: 0

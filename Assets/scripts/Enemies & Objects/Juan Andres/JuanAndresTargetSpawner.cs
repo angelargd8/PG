@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 [DisallowMultipleComponent]
 public sealed class JuanAndresTargetSpawner : MonoBehaviour
@@ -12,6 +13,7 @@ public sealed class JuanAndresTargetSpawner : MonoBehaviour
     [SerializeField] private JuanAndresSpawnPoint[] _spawnPoints;
 
 
+    public event Action<JuanAndresTarget> TargetActivated;
     public int SpawnPointCount =>
         _spawnPoints != null
             ? _spawnPoints.Length
@@ -91,6 +93,8 @@ public sealed class JuanAndresTargetSpawner : MonoBehaviour
         }
 
         target.gameObject.SetActive(true);
+
+        TargetActivated?.Invoke(target);
 
         return true;
     }
