@@ -128,6 +128,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 247526434}
+  - component: {fileID: 247526435}
   m_Layer: 0
   m_Name: Spawnpoint (4)
   m_TagString: Untagged
@@ -150,6 +151,72 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1926717903}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &247526435
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 247526433}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d293b8e321b58334ca24e7d974984c81, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::JuanAndresSpawnPoint
+--- !u!1 &270077647
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 270077648}
+  - component: {fileID: 270077649}
+  m_Layer: 0
+  m_Name: TargetSpawner
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &270077648
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 270077647}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 887524687}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &270077649
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 270077647}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 73c8ca10c25c0f04daec9ca19552188f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::JuanAndresTargetSpawner
+  _targetPool: {fileID: 1801902748}
+  _spawnPoints:
+  - {fileID: 1152699378}
+  - {fileID: 1889127776}
+  - {fileID: 1560752207}
+  - {fileID: 247526435}
+  - {fileID: 932208958}
+  - {fileID: 1855485304}
+  - {fileID: 677341559}
+  - {fileID: 1467863703}
 --- !u!1001 &450646246
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -303,6 +370,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 677341558}
+  - component: {fileID: 677341559}
   m_Layer: 0
   m_Name: Spawnpoint (7)
   m_TagString: Untagged
@@ -325,6 +393,18 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1926717903}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &677341559
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 677341557}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d293b8e321b58334ca24e7d974984c81, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::JuanAndresSpawnPoint
 --- !u!1 &754869695
 GameObject:
   m_ObjectHideFlags: 0
@@ -358,6 +438,38 @@ Transform:
   - {fileID: 1926717903}
   m_Father: {fileID: 2043384390}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &887524686
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 887524687}
+  m_Layer: 0
+  m_Name: JuanAndresSystems
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &887524687
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 887524686}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 270077648}
+  m_Father: {fileID: 2043384390}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &932208956
 GameObject:
   m_ObjectHideFlags: 0
@@ -367,6 +479,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 932208957}
+  - component: {fileID: 932208958}
   m_Layer: 0
   m_Name: Spawnpoint (5)
   m_TagString: Untagged
@@ -389,6 +502,18 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1926717903}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &932208958
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 932208956}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d293b8e321b58334ca24e7d974984c81, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::JuanAndresSpawnPoint
 --- !u!1 &950347282
 GameObject:
   m_ObjectHideFlags: 0
@@ -447,6 +572,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1152699377}
+  - component: {fileID: 1152699378}
   m_Layer: 0
   m_Name: Spawnpoint (1)
   m_TagString: Untagged
@@ -469,6 +595,18 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1926717903}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1152699378
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1152699376}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d293b8e321b58334ca24e7d974984c81, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::JuanAndresSpawnPoint
 --- !u!1 &1467863701
 GameObject:
   m_ObjectHideFlags: 0
@@ -478,6 +616,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1467863702}
+  - component: {fileID: 1467863703}
   m_Layer: 0
   m_Name: Spawnpoint (8)
   m_TagString: Untagged
@@ -500,6 +639,18 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1926717903}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1467863703
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1467863701}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d293b8e321b58334ca24e7d974984c81, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::JuanAndresSpawnPoint
 --- !u!1 &1483033379
 GameObject:
   m_ObjectHideFlags: 0
@@ -606,6 +757,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1560752206}
+  - component: {fileID: 1560752207}
   m_Layer: 0
   m_Name: Spawnpoint (3)
   m_TagString: Untagged
@@ -628,6 +780,18 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1926717903}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1560752207
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1560752205}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d293b8e321b58334ca24e7d974984c81, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::JuanAndresSpawnPoint
 --- !u!1 &1774537031
 GameObject:
   m_ObjectHideFlags: 0
@@ -661,6 +825,54 @@ Transform:
   - {fileID: 1820247588}
   m_Father: {fileID: 2043384390}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1801902746
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1801902747}
+  - component: {fileID: 1801902748}
+  m_Layer: 0
+  m_Name: targetPool
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1801902747
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1801902746}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 1.36602, y: 2.03231, z: -0.24006999}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2043384390}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1801902748
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1801902746}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9e5ffd90b1e2d904dadec04af6933a6b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::JuanAndresTargetPool
+  _targetPrefab: {fileID: 2978676219897979142, guid: ed47bcabda4dcce40910aad92c74cbe7, type: 3}
+  _defaultCapacity: 8
+  _maxSize: 16
+  _prewarmCount: 8
 --- !u!1001 &1820247587
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -781,6 +993,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1855485303}
+  - component: {fileID: 1855485304}
   m_Layer: 0
   m_Name: Spawnpoint (6)
   m_TagString: Untagged
@@ -803,6 +1016,18 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1926717903}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1855485304
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1855485302}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d293b8e321b58334ca24e7d974984c81, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::JuanAndresSpawnPoint
 --- !u!1 &1889127774
 GameObject:
   m_ObjectHideFlags: 0
@@ -812,6 +1037,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1889127775}
+  - component: {fileID: 1889127776}
   m_Layer: 0
   m_Name: Spawnpoint (2)
   m_TagString: Untagged
@@ -834,6 +1060,18 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1926717903}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1889127776
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1889127774}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d293b8e321b58334ca24e7d974984c81, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::JuanAndresSpawnPoint
 --- !u!1 &1926717902
 GameObject:
   m_ObjectHideFlags: 0
@@ -905,6 +1143,8 @@ Transform:
   - {fileID: 1830858899}
   - {fileID: 1774537032}
   - {fileID: 754869696}
+  - {fileID: 1801902747}
+  - {fileID: 887524687}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &5775563548758070831
