@@ -22,3 +22,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 5f404783ddaa915438a34c9912bf5064, type: 2}
   - {fileID: 11400000, guid: 3b988eed9380762408821fddd601db22, type: 2}
   fullSequence: {fileID: 11400000, guid: ff94d256832249d1bb340d3f0c211fc9, type: 2}
+  creditsScene: {fileID: 11400000, guid: 40c306d6701832a4d9525faddb816a73, type: 2}
+  creditsTransition: {fileID: 11400000, guid: 01a98b27a1e64d09afbd7b686d842243, type: 2}
+  creditsVisibleSeconds: 5

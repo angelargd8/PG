@@ -77,7 +77,7 @@ public sealed class PauseMenuController : MonoBehaviour
 
     public void Pause()
     {
-        if (_isPaused)
+        if (_isPaused || Time.timeScale <= 0f)
         {
             return;
         }

@@ -10,6 +10,14 @@ public sealed class ExperienceDefinitionSO : ScriptableObject
     [SerializeField] private ExperienceSequenceSO fullSequence;
     public ExperienceSequenceSO FullSequence => fullSequence;
 
+    [Header("End Credits (Full and Individual)")]
+    [SerializeField] private ExperienceSceneDefinitionSO creditsScene;
+    [SerializeField] private ExperienceTransitionSO creditsTransition;
+    [Min(0)] [SerializeField] private float creditsVisibleSeconds = 5f;
+    public ExperienceSceneDefinitionSO CreditsScene => creditsScene;
+    public ExperienceTransitionSO CreditsTransition => creditsTransition;
+    public float CreditsVisibleSeconds => Mathf.Max(0, creditsVisibleSeconds);
+
     [Header("Identification")]
     [SerializeField] private string experienceId;
 

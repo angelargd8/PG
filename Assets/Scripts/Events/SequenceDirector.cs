@@ -9,12 +9,14 @@ public class SequenceDirector : MonoBehaviour
     [Header("Timeline")]
     [SerializeField] private PlayableDirector playableDirector;
 
-    [Tooltip("Opcional si solo hay una pista de audio. Con varias pistas, asigna ExperienceMusicSource.")]
+    [Tooltip("si solo hay una pista de audio. Con varias pistas, asigna ExperienceMusicSource.")]
     [SerializeField] private AudioSource musicSource;
 
     [Header("Event Channel")]
     [SerializeField] private VoidEventChannelSO experienceReady;
     [SerializeField] private VoidEventChannelSO experienceCompleted;
+    [Tooltip("Cuando esta asignado, SceneFlowManager muestra los creditos antes de publicar ExperienceCompleted.")]
+    [SerializeField] private VoidEventChannelSO songFinished;
 
 
     private bool sequenceStarted;
@@ -93,7 +95,7 @@ public class SequenceDirector : MonoBehaviour
 
         // Hold conserva el tiempo final;
         // None lo reinicia y Loop nunca se detiene
-        // La experiencia reproduce la cancion una sola vez, y luego vuelve al menu
+        // La experiencia reproduce la cancion una sola vez y luego inicia su cierre.
         playableDirector.extrapolationMode = DirectorWrapMode.Hold;
         playableDirector.time = 0;
         playableDirector.Evaluate();
@@ -119,17 +121,15 @@ public class SequenceDirector : MonoBehaviour
             return;
         }
 
-        // Reintentar en el siguiente frame si otra transicion aun esta terminando.
+        // Publicar una sola vez aunque Hold conserve el ultimo frame
         menuReturnRequested = true;
         playableDirector.Pause();
 
-        if (experienceCompleted != null)
-        {
-            experienceCompleted.RaiseEvent();
-        }
+        if (songFinished != null) songFinished.RaiseEvent();
+        else experienceCompleted?.RaiseEvent();
 
         Debug.Log(
-            "[SequenceDirector] Cancion terminada. ExperienceCompleted publicado.",
+            "[SequenceDirector] Cancion terminada. Iniciando cierre de la experiencia.",
             this
         );
     }

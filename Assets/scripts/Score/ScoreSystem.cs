@@ -10,12 +10,14 @@ public sealed class ScoreSystem : MonoBehaviour
     [SerializeField] private VoidEventChannelSO _experienceReady;
     [SerializeField] private VoidEventChannelSO _mainMenuRequested;
     [SerializeField] private VoidEventChannelSO _experienceCompleted;
+    [SerializeField] private VoidEventChannelSO _songFinished;
     [SerializeField] private FinalScoreEventChannelSO _finalScoreSubmitted;
     [SerializeField] private ScoreBonusEventChannelSO _scoreBonusAwarded;
 
 
     private ScoreProfileSO _currentProfile;
     private bool _isExperienceActive;
+    private bool _songHasFinished;
 
 
     public int CurrentScore { get; private set; }
@@ -23,6 +25,7 @@ public sealed class ScoreSystem : MonoBehaviour
 
     private void OnEnable()
     {
+        if (_songFinished != null) _songFinished.Raised += HandleSongFinished;
         if (_interactionRegistered != null)
         {
             _interactionRegistered.Raised += HandleInteraction;
@@ -57,6 +60,7 @@ public sealed class ScoreSystem : MonoBehaviour
 
     private void OnDisable()
     {
+        if (_songFinished != null) _songFinished.Raised -= HandleSongFinished;
         if (_interactionRegistered != null)
         {
             _interactionRegistered.Raised -= HandleInteraction;
@@ -91,7 +95,7 @@ public sealed class ScoreSystem : MonoBehaviour
 
     private void HandleInteraction(InteractionResult result)
     {
-        if (!_isExperienceActive)
+        if (!_isExperienceActive || _songHasFinished)
         {
             return;
         }
@@ -135,7 +139,7 @@ public sealed class ScoreSystem : MonoBehaviour
 
     private void HandleScoreBonus(ScoreBonus bonus)
     {
-        if (!_isExperienceActive)
+        if (!_isExperienceActive || _songHasFinished)
         {
             return;
         }
@@ -172,6 +176,7 @@ public sealed class ScoreSystem : MonoBehaviour
 
     private void HandleExperienceReady()
     {
+        _songHasFinished = false;
         _isExperienceActive = true;
         ResetScore();
     }
@@ -221,4 +226,6 @@ public sealed class ScoreSystem : MonoBehaviour
             _finalScoreSubmitted.RaiseEvent(CurrentScore);
         }
     }
+
+    private void HandleSongFinished() => _songHasFinished = true;
 }

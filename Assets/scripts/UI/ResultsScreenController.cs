@@ -19,6 +19,7 @@ public sealed class ResultsScreenController : MonoBehaviour
     [SerializeField] private RunResultEventChannelSO _runResultReady;
     [SerializeField] private BoolEventChannelSO _gameplayPauseChanged;
     [SerializeField] private VoidEventChannelSO _mainMenuRequested;
+    [SerializeField] private VoidEventChannelSO _songFinished;
 
 
     private bool _isShowing;
@@ -35,6 +36,7 @@ public sealed class ResultsScreenController : MonoBehaviour
 
     private void OnEnable()
     {
+        if (_songFinished != null) _songFinished.Raised += HandleSongFinished;
         if (_runResultReady != null)
         {
             _runResultReady.Raised += HandleRunResultReady;
@@ -44,6 +46,7 @@ public sealed class ResultsScreenController : MonoBehaviour
 
     private void OnDisable()
     {
+        if (_songFinished != null) _songFinished.Raised -= HandleSongFinished;
         if (_runResultReady != null)
         {
             _runResultReady.Raised -= HandleRunResultReady;
@@ -52,6 +55,11 @@ public sealed class ResultsScreenController : MonoBehaviour
         RestoreGameplay();
     }
 
+
+    private void HandleSongFinished()
+    {
+        if (_scoreHud != null) _scoreHud.SetActive(false);
+    }
 
     private void HandleRunResultReady(RunResult result)
     {

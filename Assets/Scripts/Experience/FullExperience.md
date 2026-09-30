@@ -17,3 +17,13 @@ La configuración **Release Unused Assets** libera recursos después de descarga
 Pruebas de regresión: `Assets/Scripts/Tests~/FullExperience`. Se ejecutan en un proyecto temporal separado; `FullExperienceProbeSetup.Start` construye escenas mínimas y un Timeline de audio real, luego prueba precarga inactiva, límites temporales, pausas, cancelación, modo individual y limpieza de balas.
 
 Shipi y JuanAndres usan sus objetos ExperienceContent existentes como Gameplay Root, guardados inactivos. Sus bootstraps están conectados a ExperienceSceneActivation y ExperienceReady, para admitir Full Experience y el modo individual. Ambas escenas están habilitadas en Build Settings.
+
+## Créditos al finalizar
+
+`EXP_Punko` configura **Credits Scene = SCN_Credits**, **Credits Transition = CameraFade** y **Credits Visible Seconds = 5**. Aplica tanto a Full Experience como a cualquier escena individual de esa experiencia. `SCN_Credits.SceneName` es `CreditScene`, incluida en Build Settings. No se añade como segmento musical ni como opción de juego individual.
+
+Al alcanzar el final real del audio, `SequenceDirector` pausa el Timeline y publica `SongFinished` una sola vez. `ScoreSystem` deja de aceptar interacciones/bonos y la UI oculta el HUD. `SceneFlowManager` congela el gameplay, ejecuta el fade, termina y descarga las escenas de juego y carga los créditos de forma aditiva. Después del fade de entrada cuenta cinco segundos completos con tiempo real, hace fade de salida y descarga los créditos. Conserva `ExperienceCore` y publica el `ExperienceCompleted` existente para guardar el puntaje y mostrar resultados; finalmente revela esos resultados.
+
+Los fades usan el SO configurado y los créditos usan tiempo real porque la canción ya terminó y el gameplay está pausado. La salida al menú cancela el cierre, espera las operaciones de carga en curso y descarga los créditos antes de restaurar el menú. Una definición sin Credits Scene conserva el cierre directo a resultados. El Canvas de créditos conserva su pertenencia a CreditScene y `VRLoadingCanvasBinder` lo coloca frente a la cámara XR sin trasladarlo a la jerarquía persistente.
+
+Regresión del cierre: `Assets/Scripts/Tests~/Credits`, con pruebas en Unity aislado de Full, individual, duración visible, puntaje congelado, eventos duplicados, cancelación y configuración sin créditos.

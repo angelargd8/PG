@@ -755,6 +755,9 @@ MonoBehaviour:
   loadingScene: LoadingScene
   experienceCoreScene: ExperienceCore
   fullExperienceDirector: {fileID: 9000000101}
+  songFinished: {fileID: 11400000, guid: 106b3861a04b42a0b7c97f2b2e7dcb07, type: 2}
+  experienceCompleted: {fileID: 11400000, guid: d0711fd40f6603a4f8f8bf3ae2315306, type: 2}
+  gameplayPauseChanged: {fileID: 11400000, guid: 1415d9d465e8b3d43b5df09e48696b07, type: 2}
 --- !u!1 &1125499964
 GameObject:
   m_ObjectHideFlags: 0

@@ -1314,6 +1314,7 @@ MonoBehaviour:
   musicSource: {fileID: 0}
   experienceReady: {fileID: 11400000, guid: f4b8f7b73053533419eb97071978892d, type: 2}
   experienceCompleted: {fileID: 11400000, guid: d0711fd40f6603a4f8f8bf3ae2315306, type: 2}
+  songFinished: {fileID: 11400000, guid: 106b3861a04b42a0b7c97f2b2e7dcb07, type: 2}
 --- !u!1 &807246433
 GameObject:
   m_ObjectHideFlags: 0
@@ -1351,6 +1352,7 @@ MonoBehaviour:
   _experienceCompleted: {fileID: 11400000, guid: d0711fd40f6603a4f8f8bf3ae2315306, type: 2}
   _finalScoreSubmitted: {fileID: 11400000, guid: d8cca13adfba7c7409a08d53f25e5bcd, type: 2}
   _scoreBonusAwarded: {fileID: 11400000, guid: d6eb6c7f73648e145bc4bfbe0e1e7e03, type: 2}
+  _songFinished: {fileID: 11400000, guid: 106b3861a04b42a0b7c97f2b2e7dcb07, type: 2}
 --- !u!4 &807246435
 Transform:
   m_ObjectHideFlags: 0
@@ -2401,6 +2403,7 @@ MonoBehaviour:
   _runResultReady: {fileID: 11400000, guid: ba6bafbdfb92fe245a344373a1a49418, type: 2}
   _gameplayPauseChanged: {fileID: 11400000, guid: 1415d9d465e8b3d43b5df09e48696b07, type: 2}
   _mainMenuRequested: {fileID: 11400000, guid: 79709713fbe723e48b79c6b3004f8758, type: 2}
+  _songFinished: {fileID: 11400000, guid: 106b3861a04b42a0b7c97f2b2e7dcb07, type: 2}
 --- !u!4 &1801040148
 Transform:
   m_ObjectHideFlags: 0
