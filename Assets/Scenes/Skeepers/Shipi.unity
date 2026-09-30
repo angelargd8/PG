@@ -494,6 +494,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 331863409}
+  - component: {fileID: 331863410}
   m_Layer: 0
   m_Name: midPoint2
   m_TagString: Untagged
@@ -516,6 +517,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 2145766467}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &331863410
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 331863408}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 08962b5d428461f4da927f840c9c8db9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ShipiMovePoint
+  _type: 1
 --- !u!1001 &411932552
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -951,6 +965,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 619568917}
+  - component: {fileID: 619568918}
   m_Layer: 0
   m_Name: eatingPoint
   m_TagString: Untagged
@@ -973,6 +988,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 2145766467}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &619568918
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 619568916}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 08962b5d428461f4da927f840c9c8db9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ShipiMovePoint
+  _type: 4
 --- !u!1001 &623588543
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1124,6 +1152,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 696452787}
+  - component: {fileID: 696452788}
   m_Layer: 0
   m_Name: midPoint1
   m_TagString: Untagged
@@ -1146,6 +1175,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 2145766467}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &696452788
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 696452786}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 08962b5d428461f4da927f840c9c8db9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ShipiMovePoint
+  _type: 1
 --- !u!1001 &766149609
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1599,6 +1641,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 983050370}
+  - component: {fileID: 983050371}
   m_Layer: 0
   m_Name: exit
   m_TagString: Untagged
@@ -1621,6 +1664,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 2145766467}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &983050371
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 983050369}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 08962b5d428461f4da927f840c9c8db9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ShipiMovePoint
+  _type: 3
 --- !u!1 &991163964
 GameObject:
   m_ObjectHideFlags: 0
@@ -1630,6 +1686,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 991163965}
+  - component: {fileID: 991163966}
   m_Layer: 0
   m_Name: FoodSpawner
   m_TagString: Untagged
@@ -1652,6 +1709,21 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1916163823}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &991163966
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 991163964}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a65624742b9bc0a4fb5566134d563e56, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ShipiFoodSpawner
+  _foodDefinitions: []
+  _noCutProbability: 0.2
+  _foodRoot: {fileID: 0}
 --- !u!1001 &1001820556
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2118,6 +2190,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1378156324}
+  - component: {fileID: 1378156325}
   m_Layer: 0
   m_Name: Entrance
   m_TagString: Untagged
@@ -2140,6 +2213,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 2145766467}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1378156325
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1378156323}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 08962b5d428461f4da927f840c9c8db9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ShipiMovePoint
+  _type: 0
 --- !u!1001 &1430541714
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2636,6 +2722,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1667002547}
+  - component: {fileID: 1667002548}
   m_Layer: 0
   m_Name: cuttingPoint
   m_TagString: Untagged
@@ -2658,6 +2745,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 2145766467}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1667002548
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1667002546}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 08962b5d428461f4da927f840c9c8db9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ShipiMovePoint
+  _type: 2
 --- !u!1001 &1715578053
 PrefabInstance:
   m_ObjectHideFlags: 0
