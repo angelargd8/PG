@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 25d03fad76fb8114bb3e1cbbf5802c37, type: 3}
+  m_Name: AppleFoodDefinition
+  m_EditorClassIdentifier: Assembly-CSharp::ShipiFoodDefinitionSO
+  _foodId: apple
+  _wholePrefab: {fileID: 6151764057914302201, guid: 5f517a570192a5748aca960fd8824439, type: 3}
+  _verticalCutPrefab: {fileID: 7334378355397118729, guid: bbc4d45c7014f5e46845f80e7fcd4e93, type: 3}
+  _horizontalCutPrefab: {fileID: 6797983267397444946, guid: 221f50c006e44ef43a4541b3787d394c, type: 3}
