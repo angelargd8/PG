@@ -222,17 +222,14 @@ public sealed class ShipiConveyDirector :
             if (nextIndex >=
                 _movePoints.Length)
             {
-                Destroy(
-                    food
-                );
+                _foodSpawner.Release(food);
 
                 _activeFoods.RemoveAt(i);
 
                 continue;
             }
 
-            ShipiMovePoint nextPoint =
-                _movePoints[nextIndex];
+            ShipiMovePoint nextPoint = _movePoints[nextIndex];
 
             food.MoveToPoint(
                 nextPoint,
@@ -248,12 +245,9 @@ public sealed class ShipiConveyDirector :
                 );
             }
 
-            if (nextPoint.Type ==
-                ShipiMovePointType.End)
+            if (nextPoint.Type == ShipiMovePointType.End)
             {
-                Destroy(
-                    food
-                );
+                _foodSpawner.Release(food);
 
                 _activeFoods.RemoveAt(i);
             }

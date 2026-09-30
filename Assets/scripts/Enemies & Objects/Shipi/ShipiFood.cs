@@ -46,8 +46,13 @@ public sealed class ShipiFood : MonoBehaviour
         CurrentPoint = point;
         CurrentPointIndex = pointIndex;
 
-        transform.position =
-            point.Position;
+        transform.SetParent(
+            point.transform,
+            false
+        );
+
+        transform.localPosition = Vector3.zero;
+        transform.localRotation = Quaternion.identity;
 
         if (point.Type ==
             ShipiMovePointType.Cutting)

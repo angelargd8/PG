@@ -26,9 +26,6 @@ public sealed class ShipiFoodDefinitionSO : ScriptableObject
             ShipiCutDirection.TopToBottom =>
                 _verticalCutPrefab,
 
-            ShipiCutDirection.BottomToTop =>
-                _verticalCutPrefab,
-
             ShipiCutDirection.LeftToRight =>
                 _horizontalCutPrefab,
 

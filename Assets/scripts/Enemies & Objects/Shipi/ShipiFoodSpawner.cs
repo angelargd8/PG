@@ -45,9 +45,6 @@ public sealed class ShipiFoodSpawner :
             return null;
         }
 
-        food.transform.position =
-            spawnPoint.Position;
-
         return food;
     }
 
@@ -103,21 +100,15 @@ public sealed class ShipiFoodSpawner :
         if (Random.value <
             _noCutProbability)
         {
-            return
-                ShipiCutDirection.None;
+            return ShipiCutDirection.None;
         }
 
         int direction =
             Random.Range(
-                (int)
-                    ShipiCutDirection.LeftToRight,
-                (int)
-                    ShipiCutDirection.BottomToTop
-                    + 1
+                (int) ShipiCutDirection.LeftToRight,
+                (int) ShipiCutDirection.TopToBottom
             );
 
-        return
-            (ShipiCutDirection)
-            direction;
+        return (ShipiCutDirection) direction;
     }
 }
