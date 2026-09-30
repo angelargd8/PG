@@ -267,7 +267,8 @@ public sealed class PlayerStateSystem : MonoBehaviour
 
     private bool IsPlayerAction(InteractionResult result)
     {
-        if (result.InteractionType == InteractionType.PlayerHit)
+        if (result.InteractionType == InteractionType.PlayerHit ||
+            result.InteractionType == InteractionType.FoodClear)
         {
             return false;
         }
