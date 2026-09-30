@@ -2282,7 +2282,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1163053590
 Transform:
   m_ObjectHideFlags: 0
@@ -3151,6 +3151,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1782954689}
   - component: {fileID: 1782954690}
+  - component: {fileID: 1782954691}
   m_Layer: 0
   m_Name: ConveyorDirector
   m_TagString: Untagged
@@ -3196,6 +3197,25 @@ MonoBehaviour:
   _beatMap: {fileID: 11400000, guid: 5399c0f14c7917840b01cac5d893b357, type: 2}
   _difficultyConfig: {fileID: 11400000, guid: e440d0e54568d0f45801ac4a6ce0ecc1, type: 2}
   _difficultyChanged: {fileID: 11400000, guid: 998849c379bbe114dbafefdb36ea08e9, type: 2}
+  _manualDifficulty: 0
+  _useDynamicDifficulty: 0
+--- !u!114 &1782954691
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1782954688}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e0424cf3f4458884c8270b33b6c82019, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ShipiCutDirectionDisplay
+  _conveyDirector: {fileID: 1782954690}
+  _displayRoot: {fileID: 1163053589}
+  _directionImage: {fileID: 2103746424}
+  _arrowSprite: {fileID: 21300000, guid: 31d43c8e4712d0e419ee836b83b51edf, type: 3}
+  _noCutSprite: {fileID: 21300000, guid: 2d67be7188cf1834db783ed8e20dc722, type: 3}
 --- !u!1001 &1842167851
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3513,6 +3533,7 @@ MonoBehaviour:
   preloaders:
   - {fileID: 894835162}
   runtimeSystems:
+  - {fileID: 1782954690}
   - {fileID: 1782954690}
   gameplayRoot: {fileID: 2035041693}
   sceneActivation: {fileID: 11400000, guid: 8f976cf0f1d94405a66e9b963c299e56, type: 2}

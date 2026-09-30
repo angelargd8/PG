@@ -19,6 +19,8 @@ public sealed class ShipiConveyDirector :
     [Header("Difficulty")]
     [SerializeField] private ShipiDifficultyConfigSO _difficultyConfig;
     [SerializeField] private DifficultyLevelEventChannelSO _difficultyChanged;
+    [SerializeField] private DifficultyLevel _manualDifficulty = DifficultyLevel.Normal;
+    [SerializeField] private bool _useDynamicDifficulty;
 
 
     public event Action<ShipiFood> FoodEnteredCuttingPoint;
@@ -64,7 +66,8 @@ public sealed class ShipiConveyDirector :
             return;
         }
 
-        if (_difficultyChanged != null)
+        if (_useDynamicDifficulty &&
+            _difficultyChanged != null)
         {
             _difficultyChanged.Raised +=
                 SetDifficulty;
@@ -75,7 +78,7 @@ public sealed class ShipiConveyDirector :
         else
         {
             _currentDifficulty =
-                DifficultyLevel.Normal;
+                _manualDifficulty;
         }
 
         _currentProfile =
@@ -106,7 +109,8 @@ public sealed class ShipiConveyDirector :
 
     public void EndExperience()
     {
-        if (_difficultyChanged != null)
+        if (_useDynamicDifficulty &&
+            _difficultyChanged != null)
         {
             _difficultyChanged.Raised -= SetDifficulty;
         }
@@ -283,10 +287,10 @@ public sealed class ShipiConveyDirector :
     }
 
 
-    private void SetDifficulty(
-        DifficultyLevel difficulty)
+    private void SetDifficulty(DifficultyLevel difficulty)
     {
-        if (_currentDifficulty ==
+        if (!_useDynamicDifficulty ||
+            _currentDifficulty ==
             difficulty)
         {
             return;
@@ -301,7 +305,7 @@ public sealed class ShipiConveyDirector :
             );
 
         Debug.Log(
-            $"[ShipiFoodDirector] Difficulty changed to {difficulty}. " +
+            $"[ShipiConveyDirector] Difficulty changed to {difficulty}. " +
             $"Move every {_currentProfile.MoveEveryNBeats} beats.",
             this
         );
