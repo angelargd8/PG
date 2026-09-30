@@ -1,24 +1,23 @@
 using UnityEngine;
 
 [DisallowMultipleComponent]
-public sealed class ShipiFoodSpawner : MonoBehaviour
+public sealed class ShipiFoodSpawner :
+    MonoBehaviour
 {
-    [Header("Food")]
-    [SerializeField] private ShipiFoodDefinitionSO[] _foodDefinitions;
+    [Header("Pool")]
+    [SerializeField] private ShipiFoodPool _foodPool;
 
     [Header("Directions")]
     [Range(0f, 1f)]
     [SerializeField] private float _noCutProbability = 0.2f;
 
-    [Header("Hierarchy")]
-    [SerializeField] private Transform _foodRoot;
 
-
-    public ShipiFood Spawn(ShipiMovePoint spawnPoint, DifficultyLevel difficulty)
+    public ShipiFood Spawn(
+        ShipiMovePoint spawnPoint,
+        DifficultyLevel difficulty)
     {
         if (spawnPoint == null ||
-            _foodDefinitions == null ||
-            _foodDefinitions.Length == 0)
+            _foodPool == null)
         {
             return null;
         }
@@ -26,26 +25,25 @@ public sealed class ShipiFoodSpawner : MonoBehaviour
         ShipiFoodDefinitionSO definition =
             GetRandomDefinition();
 
-        if (definition == null ||
-            definition.WholePrefab == null)
+        if (definition == null)
         {
             return null;
         }
 
-        ShipiFood food =
-            Instantiate(
-                definition.WholePrefab,
-                _foodRoot
-            );
-
         ShipiCutDirection direction =
             GetRandomDirection();
 
-        food.Initialize(
-            definition,
-            direction,
-            difficulty
-        );
+        ShipiFood food =
+            _foodPool.GetFood(
+                definition,
+                direction,
+                difficulty
+            );
+
+        if (food == null)
+        {
+            return null;
+        }
 
         food.transform.position =
             spawnPoint.Position;
@@ -54,33 +52,72 @@ public sealed class ShipiFoodSpawner : MonoBehaviour
     }
 
 
-    private ShipiFoodDefinitionSO GetRandomDefinition()
+    public void Release(
+        ShipiFood food)
     {
-        int index =
-            Random.Range(
-                0,
-                _foodDefinitions.Length
-            );
+        if (_foodPool == null)
+        {
+            return;
+        }
 
-        return _foodDefinitions[index];
+        _foodPool.ReleaseFood(
+            food
+        );
     }
 
 
-    private ShipiCutDirection GetRandomDirection()
+    public void ReleaseAll()
+    {
+        if (_foodPool != null)
+        {
+            _foodPool.ReleaseAllFoods();
+        }
+    }
+
+
+    private ShipiFoodDefinitionSO
+        GetRandomDefinition()
+    {
+        ShipiFoodDefinitionSO[] definitions =
+            _foodPool.FoodDefinitions;
+
+        if (definitions == null ||
+            definitions.Length == 0)
+        {
+            return null;
+        }
+
+        int index =
+            Random.Range(
+                0,
+                definitions.Length
+            );
+
+        return definitions[index];
+    }
+
+
+    private ShipiCutDirection
+        GetRandomDirection()
     {
         if (Random.value <
             _noCutProbability)
         {
-            return ShipiCutDirection.None;
+            return
+                ShipiCutDirection.None;
         }
 
         int direction =
             Random.Range(
-                (int)ShipiCutDirection.LeftToRight,
-                (int)ShipiCutDirection.BottomToTop + 1
+                (int)
+                    ShipiCutDirection.LeftToRight,
+                (int)
+                    ShipiCutDirection.BottomToTop
+                    + 1
             );
 
         return
-            (ShipiCutDirection)direction;
+            (ShipiCutDirection)
+            direction;
     }
 }

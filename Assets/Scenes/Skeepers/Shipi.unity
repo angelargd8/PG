@@ -1266,6 +1266,54 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 9597122838879955, guid: 537fca49233300e4c9196e5a7fab121b, type: 3}
   m_PrefabInstance: {fileID: 766149609}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &894835160
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 894835161}
+  - component: {fileID: 894835162}
+  m_Layer: 0
+  m_Name: FoodPool
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &894835161
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 894835160}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1916163823}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &894835162
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 894835160}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b7f336c8a3447a34a9ef09aaace2337e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ShipiFoodPool
+  _foodDefinitions:
+  - {fileID: 11400000, guid: da08786119d72fa4aa93550102887fa6, type: 2}
+  _maxActiveFoods: 6
+  _prewarmPerFood: 1
 --- !u!1 &916587192
 GameObject:
   m_ObjectHideFlags: 0
@@ -1721,9 +1769,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a65624742b9bc0a4fb5566134d563e56, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ShipiFoodSpawner
-  _foodDefinitions: []
+  _foodPool: {fileID: 894835162}
   _noCutProbability: 0.2
-  _foodRoot: {fileID: 0}
 --- !u!1001 &1001820556
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3188,6 +3235,7 @@ Transform:
   - {fileID: 991163965}
   - {fileID: 1320932656}
   - {fileID: 916587193}
+  - {fileID: 894835161}
   m_Father: {fileID: 2035041694}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1971680384
@@ -3328,7 +3376,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eaa6b2cacddd6674481841d251c26da6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ExperienceSceneBootstrap
-  preloaders: []
+  preloaders:
+  - {fileID: 894835162}
   runtimeSystems:
   - {fileID: 1782954690}
   gameplayRoot: {fileID: 2035041693}

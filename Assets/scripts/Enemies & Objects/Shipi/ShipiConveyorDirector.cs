@@ -108,26 +108,17 @@ public sealed class ShipiConveyDirector :
     {
         if (_difficultyChanged != null)
         {
-            _difficultyChanged.Raised -=
-                SetDifficulty;
+            _difficultyChanged.Raised -= SetDifficulty;
         }
 
         _isRunning = false;
 
-        for (int i = 0; i < _activeFoods.Count; i++)
-        {
-            ShipiFood food =
-                _activeFoods[i];
-
-            if (food != null)
-            {
-                Destroy(
-                    food.gameObject
-                );
-            }
-        }
-
         _activeFoods.Clear();
+
+        if(_foodSpawner != null)
+        {
+            _foodSpawner.ReleaseAll();
+        }
     }
 
 
@@ -232,7 +223,7 @@ public sealed class ShipiConveyDirector :
                 _movePoints.Length)
             {
                 Destroy(
-                    food.gameObject
+                    food
                 );
 
                 _activeFoods.RemoveAt(i);
@@ -261,7 +252,7 @@ public sealed class ShipiConveyDirector :
                 ShipiMovePointType.End)
             {
                 Destroy(
-                    food.gameObject
+                    food
                 );
 
                 _activeFoods.RemoveAt(i);

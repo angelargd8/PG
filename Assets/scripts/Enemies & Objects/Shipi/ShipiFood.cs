@@ -61,4 +61,26 @@ public sealed class ShipiFood : MonoBehaviour
     {
         IsResolved = true;
     }
+
+    public void ResetFood()
+    {
+        Definition = null;
+
+        ExpectedDirection = ShipiCutDirection.None;
+
+        Difficulty = DifficultyLevel.Normal;
+
+        CurrentPoint = null;
+        CurrentPointIndex = -1;
+
+        ExpectedCutTime = 0d;
+
+        IsResolved = false;
+
+        transform.localPosition =
+            Vector3.zero;
+
+        transform.localRotation =
+            Quaternion.identity;
+    }
 }
