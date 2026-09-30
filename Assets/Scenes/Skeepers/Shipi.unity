@@ -2969,6 +2969,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1782954689}
+  - component: {fileID: 1782954690}
   m_Layer: 0
   m_Name: ConveyorDirector
   m_TagString: Untagged
@@ -2991,6 +2992,29 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1916163823}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1782954690
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1782954688}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a3c5763a8a5336b4999c7bc119fe741f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ShipiConveyorDirector
+  _foodSpawner: {fileID: 991163966}
+  _movePoints:
+  - {fileID: 1378156325}
+  - {fileID: 696452788}
+  - {fileID: 1667002548}
+  - {fileID: 331863410}
+  - {fileID: 983050371}
+  - {fileID: 619568918}
+  _beatMap: {fileID: 11400000, guid: 5399c0f14c7917840b01cac5d893b357, type: 2}
+  _difficultyConfig: {fileID: 11400000, guid: e440d0e54568d0f45801ac4a6ce0ecc1, type: 2}
+  _difficultyChanged: {fileID: 11400000, guid: 998849c379bbe114dbafefdb36ea08e9, type: 2}
 --- !u!1001 &1842167851
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3305,7 +3329,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ExperienceSceneBootstrap
   preloaders: []
-  runtimeSystems: []
+  runtimeSystems:
+  - {fileID: 1782954690}
   gameplayRoot: {fileID: 2035041693}
   sceneActivation: {fileID: 11400000, guid: 8f976cf0f1d94405a66e9b963c299e56, type: 2}
   experienceReady: {fileID: 11400000, guid: f4b8f7b73053533419eb97071978892d, type: 2}
