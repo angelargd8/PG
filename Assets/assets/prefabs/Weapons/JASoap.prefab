@@ -67,7 +67,7 @@ Transform:
   m_Children:
   - {fileID: 2808579949130258240}
   - {fileID: 8220091658595217917}
-  - {fileID: 5514618151476375983}
+  - {fileID: 5339127291238378572}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &8817841471329231030
@@ -134,7 +134,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 56c9d5fc5903d97428e50ea0e2975f38, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::JuanAndresToolBubbleController
-  _bubbleParticles: {fileID: 5514618151490532591}
+  _bubbleParticles: {fileID: 0}
   _movementPoint: {fileID: 2808579949130258240}
   _requireContact: 1
   _minimumSpeed: 0.05
@@ -167,7 +167,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 3
---- !u!1001 &5514618151476505389
+--- !u!1001 &5339127291238512334
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -180,36 +180,24 @@ PrefabInstance:
       value: Bubble Particles
       objectReference: {fileID: 0}
     - target: {fileID: 400002, guid: b9037713bd8bb8347ae0a9ee0be244ed, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 400002, guid: b9037713bd8bb8347ae0a9ee0be244ed, type: 3}
-      propertyPath: m_LocalScale.y
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 400002, guid: b9037713bd8bb8347ae0a9ee0be244ed, type: 3}
-      propertyPath: m_LocalScale.z
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 400002, guid: b9037713bd8bb8347ae0a9ee0be244ed, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.19711
+      value: 0.01784
       objectReference: {fileID: 0}
     - target: {fileID: 400002, guid: b9037713bd8bb8347ae0a9ee0be244ed, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.5755999
+      value: 0.011
       objectReference: {fileID: 0}
     - target: {fileID: 400002, guid: b9037713bd8bb8347ae0a9ee0be244ed, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 2.0609097
+      value: 0.079
       objectReference: {fileID: 0}
     - target: {fileID: 400002, guid: b9037713bd8bb8347ae0a9ee0be244ed, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.7071068
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 400002, guid: b9037713bd8bb8347ae0a9ee0be244ed, type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0.7071068
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 400002, guid: b9037713bd8bb8347ae0a9ee0be244ed, type: 3}
       propertyPath: m_LocalRotation.y
@@ -221,7 +209,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 400002, guid: b9037713bd8bb8347ae0a9ee0be244ed, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
-      value: -90
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 400002, guid: b9037713bd8bb8347ae0a9ee0be244ed, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
@@ -231,44 +219,15 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 400002, guid: b9037713bd8bb8347ae0a9ee0be244ed, type: 3}
-      propertyPath: m_ConstrainProportionsScale
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 19800000, guid: b9037713bd8bb8347ae0a9ee0be244ed, type: 3}
-      propertyPath: InitialModule.startSizeY.minMaxState
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 19800000, guid: b9037713bd8bb8347ae0a9ee0be244ed, type: 3}
-      propertyPath: InitialModule.startSizeZ.minMaxState
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 19800002, guid: b9037713bd8bb8347ae0a9ee0be244ed, type: 3}
-      propertyPath: ShapeModule.m_Scale.x
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 19800002, guid: b9037713bd8bb8347ae0a9ee0be244ed, type: 3}
-      propertyPath: ShapeModule.m_Scale.y
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 19800002, guid: b9037713bd8bb8347ae0a9ee0be244ed, type: 3}
-      propertyPath: ShapeModule.m_Scale.z
-      value: 1
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b9037713bd8bb8347ae0a9ee0be244ed, type: 3}
---- !u!4 &5514618151476375983 stripped
+--- !u!4 &5339127291238378572 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 400002, guid: b9037713bd8bb8347ae0a9ee0be244ed, type: 3}
-  m_PrefabInstance: {fileID: 5514618151476505389}
-  m_PrefabAsset: {fileID: 0}
---- !u!198 &5514618151490532591 stripped
-ParticleSystem:
-  m_CorrespondingSourceObject: {fileID: 19800002, guid: b9037713bd8bb8347ae0a9ee0be244ed, type: 3}
-  m_PrefabInstance: {fileID: 5514618151476505389}
+  m_PrefabInstance: {fileID: 5339127291238512334}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &8473831329828787734
 PrefabInstance:

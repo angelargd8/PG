@@ -232,56 +232,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 59970884}
   m_Mesh: {fileID: 4300000, guid: f82b9f16845dc9b419151a2519c758f8, type: 3}
---- !u!1 &66696252
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 66696253}
-  - component: {fileID: 66696254}
-  m_Layer: 0
-  m_Name: BubbleController
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &66696253
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 66696252}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 887524687}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &66696254
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 66696252}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 56c9d5fc5903d97428e50ea0e2975f38, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::JuanAndresToolBubbleController
-  _bubbleParticles: {fileID: 19800002, guid: b9037713bd8bb8347ae0a9ee0be244ed, type: 3}
-  _movementPoint: {fileID: 0}
-  _requireContact: 1
-  _minimumSpeed: 0.05
-  _maximumSpeed: 1.2
-  _maximumRateOverTime: 35
 --- !u!1 &116001849
 GameObject:
   m_ObjectHideFlags: 0
@@ -670,7 +620,7 @@ PrefabInstance:
     - target: {fileID: 5518494896375804836, guid: 6bbd5771dd85c724e9b98150301d4fc5, type: 3}
       propertyPath: _bubbleController
       value: 
-      objectReference: {fileID: 66696254}
+      objectReference: {fileID: 450646250}
     - target: {fileID: 7551819571281607896, guid: 6bbd5771dd85c724e9b98150301d4fc5, type: 3}
       propertyPath: positionOffset.y
       value: 0
@@ -701,6 +651,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 36e6f7faeffb31d44abc36a278f43844, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::JuanAndresTool
+--- !u!114 &450646250 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3039531363791962756, guid: 6bbd5771dd85c724e9b98150301d4fc5, type: 3}
+  m_PrefabInstance: {fileID: 450646246}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 56c9d5fc5903d97428e50ea0e2975f38, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::JuanAndresToolBubbleController
 --- !u!1001 &561355795
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -853,7 +814,6 @@ Transform:
   - {fileID: 960706195}
   - {fileID: 150597917}
   - {fileID: 1304591116}
-  - {fileID: 66696253}
   m_Father: {fileID: 2043384390}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &932208956
@@ -1392,7 +1352,7 @@ PrefabInstance:
     - target: {fileID: 2225730510904686102, guid: febc7ead9a208c84a913d2ca39e5f2df, type: 3}
       propertyPath: _bubbleController
       value: 
-      objectReference: {fileID: 66696254}
+      objectReference: {fileID: 1820247591}
     - target: {fileID: 6311059069897434971, guid: febc7ead9a208c84a913d2ca39e5f2df, type: 3}
       propertyPath: m_Name
       value: JASoap
@@ -1515,6 +1475,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 36e6f7faeffb31d44abc36a278f43844, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::JuanAndresTool
+--- !u!114 &1820247591 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2863310076407420213, guid: febc7ead9a208c84a913d2ca39e5f2df, type: 3}
+  m_PrefabInstance: {fileID: 1820247587}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 56c9d5fc5903d97428e50ea0e2975f38, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::JuanAndresToolBubbleController
 --- !u!1 &1830858898
 GameObject:
   m_ObjectHideFlags: 0
