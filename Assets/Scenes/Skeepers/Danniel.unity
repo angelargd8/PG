@@ -431,11 +431,19 @@ MonoBehaviour:
   useAndroidSegmentSettings: 1
   androidMaxActiveSegments: 3
   androidRecycleAdvanceSegments: 1
+  reduceEnemiesOnQuest2: 1
+  quest2EnemiesPerSegment: 3
+  quest3EnemiesPerSegment: 4
+  pcEnemiesPerSegment: 6
+  runtimeEnemiesPerSegment: 4
   firstSpawnZ: 0
   secondSegmentDelay: 1
   recycleZ: -80
   useProgressiveSpeed: 1
   startSpeedMultiplier: 1.5
+  introDuration: 5
+  normalSpeedMultiplier: 2.21
+  normalTransitionDuration: 2
   accelerationDuration: 120
   musicClock: {fileID: 0}
   currentSpeedMultiplier: 0
@@ -867,6 +875,7 @@ MonoBehaviour:
   desktopEnemiesPerSegment: 6
   androidEnemiesPerSegment: 4
   enemiesPerSegment: 3
+  runtimeMaxEnemiesPerSegment: -1
 --- !u!1 &1463065915
 GameObject:
   m_ObjectHideFlags: 0
@@ -906,9 +915,9 @@ MonoBehaviour:
   - {fileID: 998151777}
   - {fileID: 419797356}
   - {fileID: 689917742}
-  experienceReady: {fileID: 11400000, guid: f4b8f7b73053533419eb97071978892d, type: 2}
   gameplayRoot: {fileID: 9000000001}
   sceneActivation: {fileID: 11400000, guid: 8f976cf0f1d94405a66e9b963c299e56, type: 2}
+  experienceReady: {fileID: 11400000, guid: f4b8f7b73053533419eb97071978892d, type: 2}
 --- !u!4 &1463065917
 Transform:
   m_ObjectHideFlags: 0

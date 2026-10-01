@@ -28,30 +28,28 @@ public class SegmentPool : MonoBehaviour, IExperiencePreloadable, IExperienceRun
     private GameObject rotatedSegmentPrefab;
 
     [SerializeField]
-    private float speed = 1f;
+    private float speed = 1.3f;
 
     private float _difficultySpeedScale = 1f;
 
-    [Tooltip("Multiplicador fijo, o final cuando Use Progressive Speed esta activado.")]
+    [Tooltip("Multiplicador final de velocidad.")]
     [Min(0f)]
     [SerializeField]
-    private float speedMultiplier = 2f;
+    private float speedMultiplier = 4f;
 
     [SerializeField]
-    private int maxActiveSegments = 3;
+    private int maxActiveSegments = 4;
 
 
     [Header("Android Optimization")]
 
-    [Tooltip("Usar el presupuesto reducido solo en el APK de Android. Editor y Quest Link conservan Max Active Segments.")]
     [SerializeField]
-    private bool useAndroidSegmentSettings;
+    private bool useAndroidSegmentSettings = true;
 
     [Min(2)]
     [SerializeField]
     private int androidMaxActiveSegments = 3;
 
-    [Tooltip("Adelantar el reciclaje del segmento trasero esta cantidad de longitudes de segmento.")]
     [Min(0)]
     [SerializeField]
     private int androidRecycleAdvanceSegments = 1;
@@ -82,7 +80,7 @@ public class SegmentPool : MonoBehaviour, IExperiencePreloadable, IExperienceRun
     private float firstSpawnZ = 0f;
 
     [SerializeField]
-    private float secondSegmentDelay = 5f;
+    private float secondSegmentDelay = 1f;//1
 
     [SerializeField]
     private float recycleZ = -80f;
@@ -91,15 +89,32 @@ public class SegmentPool : MonoBehaviour, IExperiencePreloadable, IExperienceRun
     [Header("Progressive Speed")]
 
     [SerializeField]
-    private bool useProgressiveSpeed;
+    private bool useProgressiveSpeed = true;
 
+    [Tooltip("Velocidad lenta durante los primeros segundos.")]
     [Min(0f)]
     [SerializeField]
     private float startSpeedMultiplier = 1.5f;
 
+    [Tooltip("Tiempo inicial lento para que el jugador observe el entorno.")]
+    [Min(0f)]
+    [SerializeField]
+    private float introDuration = 5f;
+
+    [Tooltip("Velocidad normal alcanzada despues de la introduccion.")]
+    [Min(0f)]
+    [SerializeField]
+    private float normalSpeedMultiplier = 2.21f;
+
+    [Tooltip("Tiempo para pasar suavemente de la velocidad inicial a la normal.")]
     [Min(0.01f)]
     [SerializeField]
-    private float accelerationDuration = 120f;
+    private float normalTransitionDuration = 2f;
+
+    [Tooltip("Tiempo para pasar desde la velocidad normal hasta Speed Multiplier.")]
+    [Min(0.01f)]
+    [SerializeField]
+    private float accelerationDuration = 60f;
 
     [SerializeField]
     private ExperienceMusicClock musicClock;
@@ -591,20 +606,30 @@ public class SegmentPool : MonoBehaviour, IExperiencePreloadable, IExperienceRun
     {
         hasSpeedStartSongTime = false;
 
+        float finalMultiplier =
+            Mathf.Max(
+                0f,
+                speedMultiplier
+            );
+
+        float normalMultiplier =
+            Mathf.Clamp(
+                normalSpeedMultiplier,
+                0f,
+                finalMultiplier
+            );
+
+        float initialMultiplier =
+            Mathf.Clamp(
+                startSpeedMultiplier,
+                0f,
+                normalMultiplier
+            );
+
         currentSpeedMultiplier =
             useProgressiveSpeed
-                ? Mathf.Clamp(
-                    startSpeedMultiplier,
-                    0f,
-                    Mathf.Max(
-                        0f,
-                        speedMultiplier
-                    )
-                )
-                : Mathf.Max(
-                    0f,
-                    speedMultiplier
-                );
+                ? initialMultiplier
+                : finalMultiplier;
 
         if (!useProgressiveSpeed)
         {
@@ -678,11 +703,18 @@ public class SegmentPool : MonoBehaviour, IExperiencePreloadable, IExperienceRun
             return true;
         }
 
+        float normalMultiplier =
+            Mathf.Clamp(
+                normalSpeedMultiplier,
+                0f,
+                finalMultiplier
+            );
+
         float initialMultiplier =
             Mathf.Clamp(
                 startSpeedMultiplier,
                 0f,
-                finalMultiplier
+                normalMultiplier
             );
 
         if (musicClock == null)
@@ -713,23 +745,74 @@ public class SegmentPool : MonoBehaviour, IExperiencePreloadable, IExperienceRun
                 true;
         }
 
-        float progress =
+        float elapsed =
             (float)(
-                (
-                    songTime -
-                    speedStartSongTime
-                ) /
-                Mathf.Max(
-                    0.01f,
-                    accelerationDuration
-                )
+                songTime -
+                speedStartSongTime
             );
+
+        float introTime =
+            Mathf.Max(
+                0f,
+                introDuration
+            );
+
+        float transitionTime =
+            Mathf.Max(
+                0.01f,
+                normalTransitionDuration
+            );
+
+        float accelerationTime =
+            Mathf.Max(
+                0.01f,
+                accelerationDuration
+            );
+
+
+        if (elapsed < introTime)
+        {
+            currentSpeedMultiplier =
+                initialMultiplier;
+
+            return true;
+        }
+
+
+        float transitionElapsed =
+            elapsed -
+            introTime;
+
+        if (transitionElapsed < transitionTime)
+        {
+            float transitionProgress =
+                transitionElapsed /
+                transitionTime;
+
+            currentSpeedMultiplier =
+                Mathf.Lerp(
+                    initialMultiplier,
+                    normalMultiplier,
+                    transitionProgress
+                );
+
+            return true;
+        }
+
+
+        float accelerationElapsed =
+            transitionElapsed -
+            transitionTime;
+
+        float accelerationProgress =
+            accelerationElapsed /
+            accelerationTime;
 
         currentSpeedMultiplier =
             Mathf.Lerp(
-                initialMultiplier,
+                normalMultiplier,
                 finalMultiplier,
-                progress
+                accelerationProgress
             );
 
         return true;
