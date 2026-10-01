@@ -114,7 +114,7 @@ public class EnemySpawnDirector : MonoBehaviour
 
 
 
-    /// SegmentPool llama este metodo durante Preload.
+    /// SegmentPool
     /// Quest 2      -> 3
     /// Quest 3/3S   -> 4
     /// Editor/Link  -> 6
@@ -172,10 +172,6 @@ public class EnemySpawnDirector : MonoBehaviour
             );
     }
 
-
-    // =========================================================
-    // SPAWN
-    // =========================================================
 
     public void SpawnEnemiesOnSegment(
         SegmentEnemySpawns segmentSpawns
