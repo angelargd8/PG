@@ -27,7 +27,7 @@ MonoBehaviour:
     StartTime: 62.33
     EndTime: 93.5
     Transition: {fileID: 11400000, guid: 01a98b27a1e64d09afbd7b686d842243, type: 2}
-    PreloadBeforePlayback: 1
+    PreloadBeforePlayback: 0
   - Scene: {fileID: 11400000, guid: a75851789c6ce2f49b917156020afd6b, type: 2}
     StartTime: 93.5
     EndTime: 124.66
