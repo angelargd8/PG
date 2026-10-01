@@ -3232,7 +3232,7 @@ MonoBehaviour:
   _difficultyConfig: {fileID: 11400000, guid: e440d0e54568d0f45801ac4a6ce0ecc1, type: 2}
   _difficultyChanged: {fileID: 11400000, guid: 998849c379bbe114dbafefdb36ea08e9, type: 2}
   _manualDifficulty: 0
-  _useDynamicDifficulty: 0
+  _useDynamicDifficulty: 1
 --- !u!114 &1782954691
 MonoBehaviour:
   m_ObjectHideFlags: 0

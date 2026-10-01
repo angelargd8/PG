@@ -66,19 +66,27 @@ public sealed class ShipiConveyDirector :
             return;
         }
 
-        if (_useDynamicDifficulty &&
-            _difficultyChanged != null)
+        if (_useDynamicDifficulty)
         {
-            _difficultyChanged.Raised +=
-                SetDifficulty;
+            if (_difficultyChanged == null)
+            {
+                Debug.LogError(
+                    "[ShipiConveyDirector] " +
+                    "Use Dynamic Difficulty está activo, " +
+                    "pero DifficultyChanged no está asignado.",
+                    this
+                );
 
-            _currentDifficulty =
-                _difficultyChanged.CurrentDifficulty;
+                return;
+            }
+
+            _difficultyChanged.Raised += SetDifficulty;
+
+            _currentDifficulty = _difficultyChanged.CurrentDifficulty;
         }
         else
         {
-            _currentDifficulty =
-                _manualDifficulty;
+            _currentDifficulty = _manualDifficulty;
         }
 
         _currentProfile =
@@ -98,10 +106,7 @@ public sealed class ShipiConveyDirector :
             _nextBeatIndex++;
         }
 
-        // Hace que el primer beat disponible
-        // produzca un movimiento/spawn.
-        _beatsSinceLastMove =
-            _currentProfile.MoveEveryNBeats - 1;
+        _beatsSinceLastMove = _currentProfile.MoveEveryNBeats - 1;
 
         _isRunning = true;
     }
@@ -290,11 +295,18 @@ public sealed class ShipiConveyDirector :
     private void SetDifficulty(DifficultyLevel difficulty)
     {
         if (!_useDynamicDifficulty ||
-            _currentDifficulty ==
-            difficulty)
+            _currentDifficulty == difficulty)
         {
             return;
         }
+
+        DifficultyLevel previousDifficulty =
+            _currentDifficulty;
+
+        int previousMoveEveryNBeats =
+            _currentProfile != null
+                ? _currentProfile.MoveEveryNBeats
+                : 0;
 
         _currentDifficulty =
             difficulty;
@@ -304,11 +316,12 @@ public sealed class ShipiConveyDirector :
                 difficulty
             );
 
-        Debug.Log(
-            $"[ShipiConveyDirector] Difficulty changed to {difficulty}. " +
-            $"Move every {_currentProfile.MoveEveryNBeats} beats.",
-            this
-        );
+        _beatsSinceLastMove =
+            Mathf.Clamp(
+                _beatsSinceLastMove,
+                0,
+                _currentProfile.MoveEveryNBeats - 1
+            );
     }
 
 
@@ -385,6 +398,19 @@ public sealed class ShipiConveyDirector :
         {
             Debug.LogError(
                 "[ShipiFoodDirector] DifficultyConfig no está asignado.",
+                this
+            );
+
+            return false;
+        }
+
+        if (_useDynamicDifficulty &&
+            _difficultyChanged == null)
+        {
+            Debug.LogError(
+                "[ShipiConveyDirector] " +
+                "DifficultyChanged es obligatorio " +
+                "cuando Use Dynamic Difficulty está activo.",
                 this
             );
 
