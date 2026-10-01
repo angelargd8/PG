@@ -17,18 +17,22 @@ MonoBehaviour:
     StartTime: 0
     EndTime: 31.16
     Transition: {fileID: 11400000, guid: 01a98b27a1e64d09afbd7b686d842243, type: 2}
+    PreloadBeforePlayback: 0
   - Scene: {fileID: 11400000, guid: 302f0ff70018b014ca70342dc5193736, type: 2}
     StartTime: 31.16
     EndTime: 62.33
     Transition: {fileID: 11400000, guid: 01a98b27a1e64d09afbd7b686d842243, type: 2}
+    PreloadBeforePlayback: 0
   - Scene: {fileID: 11400000, guid: 3b988eed9380762408821fddd601db22, type: 2}
     StartTime: 62.33
-    EndTime: 93.50
+    EndTime: 93.5
     Transition: {fileID: 11400000, guid: 01a98b27a1e64d09afbd7b686d842243, type: 2}
+    PreloadBeforePlayback: 1
   - Scene: {fileID: 11400000, guid: a75851789c6ce2f49b917156020afd6b, type: 2}
-    StartTime: 93.50
+    StartTime: 93.5
     EndTime: 124.66
     Transition: {fileID: 11400000, guid: 01a98b27a1e64d09afbd7b686d842243, type: 2}
+    PreloadBeforePlayback: 0
   - Scene: {fileID: 11400000, guid: 07b22d0059d107b4393cc082b9d8157d, type: 2}
     StartTime: 124.66
     EndTime: 155.83
@@ -38,5 +42,7 @@ MonoBehaviour:
     StartTime: 155.83
     EndTime: 187
     Transition: {fileID: 11400000, guid: 01a98b27a1e64d09afbd7b686d842243, type: 2}
+    PreloadBeforePlayback: 0
   preloadLeadSeconds: 10
+  releaseUnusedAssets: 1
   holdLastSceneUntilSongEnds: 1
