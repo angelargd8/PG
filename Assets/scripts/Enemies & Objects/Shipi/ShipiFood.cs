@@ -15,6 +15,7 @@ public sealed class ShipiFood : MonoBehaviour
     public ShipiMovePoint CurrentPoint { get; private set; }
     public int CurrentPointIndex { get; private set; }
 
+    public double CueTime { get; private set; }
     public double ExpectedCutTime { get; private set; }
 
     public bool IsResolved { get; private set; }
@@ -58,6 +59,7 @@ public sealed class ShipiFood : MonoBehaviour
         CurrentPoint = null;
         CurrentPointIndex = -1;
 
+        CueTime = 0d;
         ExpectedCutTime = 0d;
 
         IsResolved = false;
@@ -106,6 +108,13 @@ public sealed class ShipiFood : MonoBehaviour
         }
     }
 
+    public void SetCutTiming(
+        double cueTime,
+        double expectedCutTime)
+    {
+        CueTime = cueTime;
+        ExpectedCutTime = expectedCutTime;
+    }
 
     public void ShowCutVisual(GameObject cutPrefab)
     {

@@ -16,6 +16,11 @@ public sealed class ShipiConveyDirector :
     [Header("Beat Map")]
     [SerializeField] private BeatMapSO _beatMap;
 
+    [Header("Cut Timing")]
+    [Range(0f, 1f)]
+    [SerializeField]
+    private float _cutTimingTargetRatio = 0.55f;
+
     [Header("Difficulty")]
     [SerializeField] private ShipiDifficultyConfigSO _difficultyConfig;
     [SerializeField] private DifficultyLevelEventChannelSO _difficultyChanged;
@@ -156,10 +161,14 @@ public sealed class ShipiConveyDirector :
             songTime >=
             _beatMap.Beats[_nextBeatIndex].Time)
         {
+            int beatIndex =
+                _nextBeatIndex;
+
             double beatTime =
-                _beatMap.Beats[_nextBeatIndex].Time;
+                _beatMap.Beats[beatIndex].Time;
 
             ProcessBeat(
+                beatIndex,
                 beatTime
             );
 
@@ -168,7 +177,7 @@ public sealed class ShipiConveyDirector :
     }
 
 
-    private void ProcessBeat(double beatTime)
+    private void ProcessBeat(int beatIndex, double beatTime)
     {
         _beatsSinceLastMove++;
 
@@ -181,6 +190,7 @@ public sealed class ShipiConveyDirector :
         _beatsSinceLastMove = 0;
 
         MoveFoods(
+            beatIndex,
             beatTime
         );
 
@@ -190,7 +200,7 @@ public sealed class ShipiConveyDirector :
     }
 
 
-    private void MoveFoods(double beatTime)
+    private void MoveFoods(int beatIndex, double beatTime)
     {
         for (
             int i = _activeFoods.Count - 1;
@@ -249,6 +259,12 @@ public sealed class ShipiConveyDirector :
             if (nextPoint.Type ==
                 ShipiMovePointType.Cutting)
             {
+                ConfigureCutTiming(
+                    food,
+                    beatIndex,
+                    beatTime
+                );
+
                 FoodEnteredCuttingPoint?.Invoke(
                     food
                 );
@@ -261,6 +277,119 @@ public sealed class ShipiConveyDirector :
                 _activeFoods.RemoveAt(i);
             }
         }
+    }
+
+
+    private void ConfigureCutTiming(
+        ShipiFood food,
+        int entryBeatIndex,
+        double cueTime)
+    {
+        if (food == null ||
+            _currentProfile == null)
+        {
+            return;
+        }
+
+        int exitBeatIndex =
+            entryBeatIndex +
+            _currentProfile.MoveEveryNBeats;
+
+        double cutWindowEndTime =
+            GetBeatTimeOrEstimate(
+                exitBeatIndex,
+                entryBeatIndex,
+                cueTime
+            );
+
+        double availableCutTime =
+            System.Math.Max(
+                0d,
+                cutWindowEndTime - cueTime
+            );
+
+        double expectedCutTime =
+            cueTime +
+            availableCutTime *
+            _cutTimingTargetRatio;
+
+        food.SetCutTiming(
+            cueTime,
+            expectedCutTime
+        );
+
+        Debug.Log(
+            $"[ShipiTiming] " +
+            $"Food: {food.Definition?.FoodId} | " +
+            $"Difficulty: {_currentDifficulty} | " +
+            $"Cue: {cueTime:F3} | " +
+            $"WindowEnd: {cutWindowEndTime:F3} | " +
+            $"Window: {availableCutTime:F3}s | " +
+            $"Target: {expectedCutTime:F3}",
+            this
+        );
+    }
+
+
+    private double GetBeatTimeOrEstimate(
+        int targetBeatIndex,
+        int currentBeatIndex,
+        double currentBeatTime)
+    {
+        if (targetBeatIndex >= 0 &&
+            targetBeatIndex <
+            _beatMap.Beats.Count)
+        {
+            return
+                _beatMap.Beats[
+                    targetBeatIndex
+                ].Time;
+        }
+
+        double beatInterval =
+            GetRecentBeatInterval(
+                currentBeatIndex
+            );
+
+        return
+            currentBeatTime +
+            beatInterval *
+            _currentProfile.MoveEveryNBeats;
+    }
+
+
+    private double GetRecentBeatInterval(
+        int currentBeatIndex)
+    {
+        if (currentBeatIndex > 0)
+        {
+            double currentTime =
+                _beatMap.Beats[
+                    currentBeatIndex
+                ].Time;
+
+            double previousTime =
+                _beatMap.Beats[
+                    currentBeatIndex - 1
+                ].Time;
+
+            double interval =
+                currentTime - previousTime;
+
+            if (interval > 0d)
+            {
+                return interval;
+            }
+        }
+
+        if (_beatMap.EstimatedBpm > 0f)
+        {
+            return
+                60d /
+                _beatMap.EstimatedBpm;
+        }
+
+        return 0.5d;
     }
 
 

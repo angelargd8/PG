@@ -181,7 +181,7 @@ public sealed class ShipiHitEvaluator :
         double reactionTime =
             System.Math.Max(
                 0d,
-                actualTime - expectedTime
+                actualTime - food.CueTime
             );
 
 
