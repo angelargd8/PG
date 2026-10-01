@@ -174,7 +174,7 @@ public sealed class FullExperienceDirector : MonoBehaviour
         { Fail($"{name} necesita bootstrap, Gameplay Root inactivo y Scene Activation."); yield break; }
         bootstrap.SetExternallyControlled(true);
         if (stopping) yield break;
-        yield return ExperiencePreloadOperation.Run(bootstrap.Prepare(), exception => Fail($"{name}: {exception.Message}"));
+        yield return ExperiencePreloadOperation.Run(bootstrap.Prepare(), exception => Fail($"{name}: {exception}"));
         if (!bootstrap.IsPrepared) Fail($"No se pudo preparar {name}.");
     }
 

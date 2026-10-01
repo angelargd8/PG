@@ -99,7 +99,7 @@ public class SceneFlowManager : MonoBehaviour
             yield return ExperiencePreloadOperation.Run(bootstrap.Prepare(), exception =>
             {
                 failed = true;
-                Debug.LogError($"{currentExperienceScene}: {exception.Message}", this);
+                Debug.LogError($"{currentExperienceScene}: {exception}", this);
             });
             if (failed) yield break;
             if (!bootstrap.IsPrepared) yield break;

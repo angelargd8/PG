@@ -22,6 +22,18 @@ public sealed class ShipiFood : MonoBehaviour
 
     private void Awake()
     {
+        EnsureVisualReferences();
+    }
+
+
+    private void EnsureVisualReferences()
+    {
+
+        if (_wholeRenderers != null && _wholeColliders != null)
+        {
+            return;
+        }
+
         _wholeRenderers =
             GetComponentsInChildren<Renderer>(
                 true
@@ -128,6 +140,8 @@ public sealed class ShipiFood : MonoBehaviour
 
     private void SetWholeVisualEnabled(bool enabled)
     {
+        EnsureVisualReferences();
+
         for (int i = 0;
             i < _wholeRenderers.Length;
             i++)
