@@ -8,11 +8,11 @@ public sealed class DannielDifficultyController :
     [Header("References")]
     [SerializeField] private EnemySpawnDirector _enemySpawnDirector;
     [SerializeField] private SegmentPool _segmentPool;
+    [SerializeField] private DannielRhythmDirector _rhythmDirector;
 
     [Header("Difficulty")]
     [SerializeField] private DannielDifficultyConfigSO _difficultyConfig;
     [SerializeField] private DifficultyLevelEventChannelSO _difficultyChanged;
-
 
     private bool _isRunning;
 
@@ -26,6 +26,7 @@ public sealed class DannielDifficultyController :
 
         if (_enemySpawnDirector == null ||
             _segmentPool == null ||
+            _rhythmDirector == null ||
             _difficultyConfig == null)
         {
             Debug.LogError(
@@ -72,7 +73,9 @@ public sealed class DannielDifficultyController :
     }
 
 
-    private void HandleDifficultyChanged(DifficultyLevel difficulty)
+    private void HandleDifficultyChanged(
+        DifficultyLevel difficulty
+    )
     {
         if (!_isRunning)
         {
@@ -83,10 +86,14 @@ public sealed class DannielDifficultyController :
     }
 
 
-    private void ApplyDifficulty(DifficultyLevel difficulty)
+    private void ApplyDifficulty(
+        DifficultyLevel difficulty
+    )
     {
         DannielDifficultyProfile profile =
-            _difficultyConfig.GetProfile(difficulty);
+            _difficultyConfig.GetProfile(
+                difficulty
+            );
 
         if (profile == null)
         {
@@ -100,6 +107,10 @@ public sealed class DannielDifficultyController :
 
         _segmentPool.SetDifficultySpeedScale(
             profile.SpeedScale
+        );
+
+        _rhythmDirector.SetDifficulty(
+            difficulty
         );
 
         Debug.Log(

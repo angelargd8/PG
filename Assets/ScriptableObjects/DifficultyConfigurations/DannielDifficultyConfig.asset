@@ -13,10 +13,10 @@ MonoBehaviour:
   m_Name: DannielDifficultyConfig
   m_EditorClassIdentifier: Assembly-CSharp::DannielDifficultyConfigSO
   _easy:
-    _enemyDensity: 0.4
+    _enemyDensity: 0.6
     _speedScale: 1
   _normal:
-    _enemyDensity: 0.67
+    _enemyDensity: 0.8
     _speedScale: 1
   _hard:
     _enemyDensity: 1

@@ -652,9 +652,15 @@ MonoBehaviour:
   _beatMap: {fileID: 11400000, guid: 5399c0f14c7917840b01cac5d893b357, type: 2}
   _musicClock: {fileID: 0}
   _firstAttackBeat: 2
+  _maxBeatLateness: 0.1
+  _easyAttackEveryNBeats: 6
+  _easyMaxAttackersPerBeat: 1
+  _normalAttackEveryNBeats: 3
+  _normalMaxAttackersPerBeat: 2
+  _hardAttackEveryNBeats: 2
+  _hardMaxAttackersPerBeat: 4
   _attackEveryNBeats: 2
   _maxAttackersPerBeat: 1
-  _maxBeatLateness: 0.1
   _logBeats: 0
 --- !u!1 &998151776
 GameObject:
@@ -687,6 +693,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DannielDifficultyController
   _enemySpawnDirector: {fileID: 1413581909}
   _segmentPool: {fileID: 419797356}
+  _rhythmDirector: {fileID: 689917742}
   _difficultyConfig: {fileID: 11400000, guid: 4c529a911d601e44b8f0266f23c5fe02, type: 2}
   _difficultyChanged: {fileID: 11400000, guid: 998849c379bbe114dbafefdb36ea08e9, type: 2}
 --- !u!4 &998151778
@@ -973,6 +980,7 @@ MonoBehaviour:
   _scoreProfile: {fileID: 11400000, guid: e472d08ea2a84cc4da4efb3b0cb5c5d1, type: 2}
   _scoreProfileChanged: {fileID: 11400000, guid: c8e1d8ffc14710a459ba601e5db3f7d7, type: 2}
   _scoreBonusAwarded: {fileID: 11400000, guid: d6eb6c7f73648e145bc4bfbe0e1e7e03, type: 2}
+  _rhythmDirector: {fileID: 0}
 --- !u!4 &1676405014
 Transform:
   m_ObjectHideFlags: 0

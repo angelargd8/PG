@@ -35,6 +35,9 @@ public sealed class DannielInteractionController :
     [SerializeField] private ScoreProfileEventChannelSO _scoreProfileChanged;
     [SerializeField] private ScoreBonusEventChannelSO _scoreBonusAwarded;
 
+    [SerializeField]
+    private DannielRhythmDirector _rhythmDirector;
+
 
     private readonly Dictionary<PooledBullet, PendingShot> _pendingShots = new Dictionary<PooledBullet, PendingShot>();
     private ExperienceMusicClock _musicClock;
