@@ -1647,6 +1647,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: ShipyCuchillo
       objectReference: {fileID: 0}
+    - target: {fileID: 1794783686098639133, guid: 0684fecbd850e2b43b013ebbd84d326c, type: 3}
+      propertyPath: _hitEvaluator
+      value: 
+      objectReference: {fileID: 1320932657}
     - target: {fileID: 6132807868284928708, guid: 0684fecbd850e2b43b013ebbd84d326c, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.99195
@@ -2345,6 +2349,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1320932656}
+  - component: {fileID: 1320932657}
   m_Layer: 0
   m_Name: HitEvaluator
   m_TagString: Untagged
@@ -2367,6 +2372,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1916163823}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1320932657
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1320932655}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 98ed9a1514ce7ef4a9d02bf2a464c27b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ShipiHitEvaluator
+  _directionReference: {fileID: 0}
 --- !u!1 &1378156323
 GameObject:
   m_ObjectHideFlags: 0

@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 6132807868284928708}
   - component: {fileID: 7621750435099492784}
   - component: {fileID: 8661577953778535271}
+  - component: {fileID: 1794783686098639133}
   m_Layer: 0
   m_Name: ShipyCuchillo
   m_TagString: Untagged
@@ -65,6 +66,20 @@ MonoBehaviour:
   _gameplayPauseChanged: {fileID: 11400000, guid: 1415d9d465e8b3d43b5df09e48696b07, type: 2}
   _mainMenuRequested: {fileID: 11400000, guid: 79709713fbe723e48b79c6b3004f8758, type: 2}
   weaponFollower: {fileID: 7621750435099492784}
+--- !u!114 &1794783686098639133
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 586125290433021969}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 85c4932abea9aa44e85edffd27f9f472, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ShipiKnife
+  _hitEvaluator: {fileID: 0}
+  _minimumCutSpeed: 0.5
 --- !u!1 &4717210331241395237
 GameObject:
   m_ObjectHideFlags: 0
@@ -76,6 +91,7 @@ GameObject:
   - component: {fileID: 5349490624032829087}
   - component: {fileID: 9048557334972686650}
   - component: {fileID: 6518425812803098096}
+  - component: {fileID: 3524759926655360691}
   - component: {fileID: 8315280738147793687}
   m_Layer: 0
   m_Name: cuchillo_render
@@ -156,6 +172,33 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!54 &3524759926655360691
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4717210331241395237}
+  serializedVersion: 5
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!65 &8315280738147793687
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -171,7 +214,7 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
