@@ -20,6 +20,8 @@ public sealed class JeremySwordAttachment : MonoBehaviour, IExperienceRuntime
     private Transform _anchor;
     private Renderer[] _renderers;
     private bool _isAttached;
+    private bool _attachmentRequested, _isPaused, _warnedMissingAnchor;
+    private float _nextAnchorAttempt;
 
 
     private void Awake()
@@ -58,6 +60,13 @@ public sealed class JeremySwordAttachment : MonoBehaviour, IExperienceRuntime
 
     private void LateUpdate()
     {
+        if (!_attachmentRequested) return;
+        if (_anchor == null || !_anchor.gameObject.activeInHierarchy)
+        {
+            _isAttached = false;
+            SetSwordVisible(false);
+            if (Time.unscaledTime >= _nextAnchorAttempt) BeginExperience();
+        }
         if (!_isAttached || _anchor == null)
         {
             return;
@@ -72,6 +81,8 @@ public sealed class JeremySwordAttachment : MonoBehaviour, IExperienceRuntime
 
     public void BeginExperience()
     {
+        _attachmentRequested = true;
+        _nextAnchorAttempt = Time.unscaledTime + 1f;
         string anchorName = _hand == Hand.Left
             ? "LeftWeaponAnchor"
             : "RightWeaponAnchor";
@@ -80,11 +91,15 @@ public sealed class JeremySwordAttachment : MonoBehaviour, IExperienceRuntime
 
         if (anchorObject == null)
         {
-            Debug.LogError($"[JeremySwordAttachment] No se encontró {anchorName}.", this);
+            if (!_warnedMissingAnchor)
+                Debug.LogWarning($"[JeremySwordAttachment] {anchorName} no esta disponible. Se reintentara cuando la mano vuelva a estar activa.", this);
+            _warnedMissingAnchor = true;
+            SetSwordVisible(false);
             return;
         }
 
         _anchor = anchorObject.transform;
+        _warnedMissingAnchor = false;
         _isAttached = true;
 
         transform.SetPositionAndRotation(
@@ -92,12 +107,14 @@ public sealed class JeremySwordAttachment : MonoBehaviour, IExperienceRuntime
             _anchor.rotation
         );
 
-        SetSwordVisible(true);
+        SetSwordVisible(!_isPaused);
     }
 
 
     public void EndExperience()
     {
+        _attachmentRequested = false;
+        _warnedMissingAnchor = false;
         _isAttached = false;
         _anchor = null;
 
@@ -107,7 +124,8 @@ public sealed class JeremySwordAttachment : MonoBehaviour, IExperienceRuntime
 
     private void HandlePauseChanged(bool isPaused)
     {
-        SetSwordVisible(!isPaused);
+        _isPaused = isPaused;
+        SetSwordVisible(_isAttached && !isPaused);
     }
 
 
@@ -119,9 +137,10 @@ public sealed class JeremySwordAttachment : MonoBehaviour, IExperienceRuntime
 
     private void SetSwordVisible(bool isVisible)
     {
+        if (_renderers == null) _renderers = GetComponentsInChildren<Renderer>(true);
         for (int i = 0; i < _renderers.Length; i++)
         {
-            _renderers[i].enabled = isVisible;
+            if (_renderers[i] != null) _renderers[i].enabled = isVisible;
         }
     }
 }

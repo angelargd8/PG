@@ -25,6 +25,21 @@ public sealed class SceneWeaponEquipController : MonoBehaviour, IExperienceRunti
 
     private Renderer[] _renderers;
     private bool _isEquipped;
+    private bool _equipPending, _isPaused, _warnedMissingAnchor;
+    private float _nextAnchorAttempt;
+    private Transform _boundAnchor;
+
+    private void Update()
+    {
+        if (!_equipPending) return;
+        if (_isEquipped && (_boundAnchor == null || !_boundAnchor.gameObject.activeInHierarchy))
+        {
+            _isEquipped = false;
+            if (weaponFollower != null) weaponFollower.Unbind();
+            SetWeaponVisible(false);
+        }
+        if (!_isEquipped && Time.unscaledTime >= _nextAnchorAttempt) HandleEquipRequested();
+    }
 
 
     private void Awake()
@@ -82,14 +97,13 @@ public sealed class SceneWeaponEquipController : MonoBehaviour, IExperienceRunti
 
     private void HandleEquipRequested()
     {
+        _equipPending = true;
+        _nextAnchorAttempt = Time.unscaledTime + 1f;
         if (_isEquipped) return;
-        Debug.Log(
-            $"[SceneWeaponEquipController] Evento recibido para equipar {name}.",
-            this
-        );
 
         if (weaponFollower == null)
         {
+            _equipPending = false;
             Debug.LogError(
                 "[SceneWeaponEquipController] No se asignó SceneWeaponFollower.",
                 this
@@ -121,18 +135,19 @@ public sealed class SceneWeaponEquipController : MonoBehaviour, IExperienceRunti
 
         if (anchor == null)
         {
-            Debug.LogError(
-                $"[SceneWeaponEquipController] No se encontró {anchorName} en Bootstrap. Comprueba que esté activo.",
-                this
-            );
+            if (!_warnedMissingAnchor)
+                Debug.LogWarning($"[SceneWeaponEquipController] {anchorName} no esta disponible. El arma esperara a que la mano vuelva a estar activa.", this);
+            _warnedMissingAnchor = true;
 
             return;
         }
 
         weaponFollower.Bind(anchor);
+        _boundAnchor = anchor;
+        _warnedMissingAnchor = false;
 
         _isEquipped = true;
-        SetWeaponVisible(true);
+        SetWeaponVisible(!_isPaused);
 
         Debug.Log(
             $"[SceneWeaponEquipController] {name} equipada correctamente.",
@@ -143,6 +158,7 @@ public sealed class SceneWeaponEquipController : MonoBehaviour, IExperienceRunti
 
     private void HandlePauseChanged(bool isPaused)
     {
+        _isPaused = isPaused;
         SetWeaponVisible(
             _isEquipped && !isPaused
         );
@@ -151,6 +167,9 @@ public sealed class SceneWeaponEquipController : MonoBehaviour, IExperienceRunti
 
     private void HandleMainMenuRequested()
     {
+        _equipPending = false;
+        _boundAnchor = null;
+        _warnedMissingAnchor = false;
         _isEquipped = false;
 
         SetWeaponVisible(false);

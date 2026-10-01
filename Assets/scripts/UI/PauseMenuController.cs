@@ -16,6 +16,7 @@ public sealed class PauseMenuController : MonoBehaviour
 
 
     private bool _isPaused;
+    private InputAction _subscribedAction;
 
     public bool IsPaused => _isPaused && isActiveAndEnabled &&
         _pausePanel != null && _pausePanel.activeInHierarchy;
@@ -32,24 +33,26 @@ public sealed class PauseMenuController : MonoBehaviour
 
     private void OnEnable()
     {
-        if (_pauseAction != null)
+        if (_pauseAction != null && _pauseAction.action != null)
         {
-            _pauseAction.action.performed += HandlePausePerformed;
-            _pauseAction.action.Enable();
+            _subscribedAction = _pauseAction.action;
+            _subscribedAction.performed += HandlePausePerformed;
+            _subscribedAction.Enable();
         }
         else
         {
-            Debug.LogError("Pause Action no está asignada.", this);
+            Debug.LogWarning("Pause Action no esta disponible. El boton de pausa quedara sin entrada.", this);
         }
     }
 
 
     private void OnDisable()
     {
-        if (_pauseAction != null)
+        if (_subscribedAction != null)
         {
-            _pauseAction.action.performed -= HandlePausePerformed;
-            _pauseAction.action.Disable();
+            _subscribedAction.performed -= HandlePausePerformed;
+            _subscribedAction.Disable();
+            _subscribedAction = null;
         }
 
         RestoreGameplay();

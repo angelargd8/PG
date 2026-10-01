@@ -4,9 +4,23 @@ using UnityEngine.XR;
 [DisallowMultipleComponent]
 public sealed class XRHapticFeedback : MonoBehaviour
 {
-    // =========================
-    // INSTANCE
-    // =========================
+    private float _nextConnectionCheck;
+    private int _missingHands = -1;
+
+    private void Update()
+    {
+        if (Instance != this || Time.unscaledTime < _nextConnectionCheck) return;
+        _nextConnectionCheck = Time.unscaledTime + 1f;
+        int missing = (InputDevices.GetDeviceAtXRNode(XRNode.LeftHand).isValid ? 0 : 1) |
+                      (InputDevices.GetDeviceAtXRNode(XRNode.RightHand).isValid ? 0 : 2);
+        if (missing == _missingHands) return;
+        _missingHands = missing;
+        if (missing != 0)
+        {
+            string hands = missing == 3 ? "izquierdo y derecho" : missing == 1 ? "izquierdo" : "derecho";
+            Debug.LogWarning($"[XR] Control {hands} no disponible. La app continuara; se omitira la vibracion de las manos desconectadas hasta que vuelvan a conectarse.", this);
+        }
+    }
 
     public static XRHapticFeedback Instance
     {
@@ -15,9 +29,6 @@ public sealed class XRHapticFeedback : MonoBehaviour
     }
 
 
-    // =========================
-    // DEFAULT CONFIGURATION
-    // =========================
 
     [Header("Default Haptics")]
 
@@ -29,10 +40,6 @@ public sealed class XRHapticFeedback : MonoBehaviour
     [SerializeField]
     private float defaultDuration = 0.08f;
 
-
-    // =========================
-    // UNITY
-    // =========================
 
     private void Awake()
     {
@@ -63,9 +70,6 @@ public sealed class XRHapticFeedback : MonoBehaviour
     }
 
 
-    // =========================
-    // PUBLIC
-    // =========================
 
     public void Pulse(
         XRNode hand
@@ -119,11 +123,6 @@ public sealed class XRHapticFeedback : MonoBehaviour
             Mathf.Max(0.01f, duration)
         );
     }
-
-
-    // =========================
-    // SHORTCUTS
-    // =========================
 
     public void PulseRight(
         float amplitude,

@@ -15,13 +15,14 @@ public sealed class WeaponInputController : MonoBehaviour
 
 
     private bool _isPaused;
+    private InputAction _subscribedAction;
 
 
     private void OnEnable()
     {
-        if (_fireAction == null)
+        if (_fireAction == null || _fireAction.action == null)
         {
-            Debug.LogError(
+            Debug.LogWarning(
                 "[WeaponInputController] No se asignó Fire Action",
                 this
             );
@@ -39,7 +40,8 @@ public sealed class WeaponInputController : MonoBehaviour
             return;
         }
 
-        _fireAction.action.performed += HandleFirePerformed;
+        _subscribedAction = _fireAction.action;
+        _subscribedAction.performed += HandleFirePerformed;
 
         if (_gameplayPauseChanged != null)
         {
@@ -55,9 +57,10 @@ public sealed class WeaponInputController : MonoBehaviour
 
     private void OnDisable()
     {
-        if (_fireAction != null)
+        if (_subscribedAction != null)
         {
-            _fireAction.action.performed -= HandleFirePerformed;
+            _subscribedAction.performed -= HandleFirePerformed;
+            _subscribedAction = null;
         }
 
         if (_gameplayPauseChanged != null)
@@ -69,7 +72,7 @@ public sealed class WeaponInputController : MonoBehaviour
 
     private void HandleFirePerformed(InputAction.CallbackContext context)
     {
-        if (_isPaused)
+        if (_isPaused || _gunShooter == null)
         {
             return;
         }
