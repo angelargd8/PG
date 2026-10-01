@@ -2384,7 +2384,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 98ed9a1514ce7ef4a9d02bf2a464c27b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ShipiHitEvaluator
+  _conveyDirector: {fileID: 1782954690}
   _directionReference: {fileID: 0}
+  _interactionRegistered: {fileID: 11400000, guid: 188abd6f30130bb42b4877604a6ce24f, type: 2}
 --- !u!1 &1378156323
 GameObject:
   m_ObjectHideFlags: 0
@@ -3558,6 +3560,7 @@ MonoBehaviour:
   runtimeSystems:
   - {fileID: 1782954690}
   - {fileID: 1782954690}
+  - {fileID: 1320932657}
   gameplayRoot: {fileID: 2035041693}
   sceneActivation: {fileID: 11400000, guid: 8f976cf0f1d94405a66e9b963c299e56, type: 2}
   experienceReady: {fileID: 11400000, guid: f4b8f7b73053533419eb97071978892d, type: 2}

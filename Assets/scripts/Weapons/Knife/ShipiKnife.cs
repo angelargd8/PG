@@ -69,9 +69,15 @@ public sealed class ShipiKnife :
             return;
         }
 
+        Vector3 feedbackPosition =
+            other.ClosestPoint(
+                transform.position
+            );
+
         _hitEvaluator.EvaluateCut(
             food,
-            _velocity
+            _velocity,
+            feedbackPosition
         );
-    }
+            }
 }
