@@ -12,45 +12,99 @@ public class EnemySpawnDirector : MonoBehaviour
     [SerializeField]
     private EnemyPool enemyPool;
 
+
+
     [Header("Enemies Per Platform")]
-    [Tooltip("Usar la cantidad de Android en Quest standalone y la de PC en el Editor o Quest Link.")]
-    [SerializeField] private bool usePlatformEnemyCount = true;
 
-    [Min(0)]
-    [SerializeField] private int desktopEnemiesPerSegment = 6;
+    [Tooltip(
+        "Usar la cantidad de Android en Quest standalone " +
+        "y la de PC en Editor o Quest Link. " +
+        "Estos valores funcionan como fallback si SegmentPool " +
+        "no establece un limite runtime."
+    )]
+    [SerializeField]
+    private bool usePlatformEnemyCount = true;
 
-    [Tooltip("Cantidad para el APK que se ejecuta directamente en Quest, incluso conectado por USB.")]
-    [Min(0)]
-    [SerializeField] private int androidEnemiesPerSegment = 3;
 
-    [Tooltip("Cantidad manual. Solo se usa si Use Platform Enemy Count esta desactivado.")]
+    [Tooltip(
+        "Cantidad por defecto para Editor, Windows y Quest Link."
+    )]
     [Min(0)]
     [SerializeField]
-    private int enemiesPerSegment = 3;
+    private int desktopEnemiesPerSegment = 6;
+
+
+    [Tooltip(
+        "Cantidad fallback para un APK Android. " +
+        "Normalmente SegmentPool reemplaza este valor " +
+        "segun el modelo de Quest."
+    )]
+    [Min(0)]
+    [SerializeField]
+    private int androidEnemiesPerSegment = 4;
+
+
+    [Tooltip(
+        "Cantidad manual. Solo se usa si Use Platform Enemy Count " +
+        "esta desactivado y SegmentPool no establece un limite."
+    )]
+    [Min(0)]
+    [SerializeField]
+    private int enemiesPerSegment = 4;
+
+
+    [Header("Runtime Enemy Limit")]
+
+    [Tooltip(
+        "Valor establecido automaticamente por SegmentPool. " +
+        "-1 significa que no hay override."
+    )]
+    [SerializeField]
+    private int runtimeMaxEnemiesPerSegment = -1;
+
+
+    public int RuntimeMaxEnemiesPerSegment =>
+        runtimeMaxEnemiesPerSegment;
+
+
 
     private DifficultyLevel _spawnDifficulty =
         DifficultyLevel.Normal;
 
+
     private float _difficultyEnemyDensity = 1f;
+
 
 
     private int EffectiveEnemiesPerSegment
     {
         get
         {
-            int baseAmount = BaseEnemiesPerSegment;
+            int baseAmount =
+                BaseEnemiesPerSegment;
 
-            if (baseAmount <= 0 ||
-                _difficultyEnemyDensity <= 0f)
+
+            if (
+                baseAmount <= 0 ||
+                _difficultyEnemyDensity <= 0f
+            )
             {
                 return 0;
             }
 
-            int amount = Mathf.RoundToInt(
-                baseAmount * _difficultyEnemyDensity
-            );
 
-            return Mathf.Clamp(amount, 1, baseAmount);
+            int amount =
+                Mathf.RoundToInt(
+                    baseAmount *
+                    _difficultyEnemyDensity
+                );
+
+
+            return Mathf.Clamp(
+                amount,
+                1,
+                baseAmount
+            );
         }
     }
 
@@ -59,15 +113,69 @@ public class EnemySpawnDirector : MonoBehaviour
         new List<Transform>(16);
 
 
-    public IEnumerator PreloadForSegments(int segmentCount)
+
+    /// SegmentPool llama este metodo durante Preload.
+    /// Quest 2      -> 3
+    /// Quest 3/3S   -> 4
+    /// Editor/Link  -> 6
+    public void SetMaxEnemiesPerSegment(
+        int amount
+    )
     {
-        if (enemyPool != null)
-        {
-            // Precalentar para el maximo simultaneo, no solo para el primer segmento.
-            int requiredCount = Mathf.Max(1, segmentCount) * EffectiveEnemiesPerSegment;
-            yield return enemyPool.EnsurePrewarmed(requiredCount);
-        }
+        runtimeMaxEnemiesPerSegment =
+            Mathf.Max(
+                0,
+                amount
+            );
+
+
+        Debug.Log(
+            "[EnemySpawnDirector] " +
+            "Limite runtime establecido: " +
+            $"{runtimeMaxEnemiesPerSegment} enemigos por segmento.",
+            this
+        );
     }
+
+
+    public IEnumerator PreloadForSegments(
+        int segmentCount
+    )
+    {
+        if (enemyPool == null)
+        {
+            yield break;
+        }
+
+
+        int requiredCount =
+            Mathf.Max(
+                1,
+                segmentCount
+            )
+            *
+            EffectiveEnemiesPerSegment;
+
+
+        Debug.Log(
+            "[EnemySpawnDirector] Prewarm | " +
+            $"Segmentos: {segmentCount} | " +
+            $"Enemigos/segmento: {EffectiveEnemiesPerSegment} | " +
+            $"Total pool requerido: {requiredCount}",
+            this
+        );
+
+
+        yield return
+            enemyPool.EnsurePrewarmed(
+                requiredCount
+            );
+    }
+
+
+    // =========================================================
+    // SPAWN
+    // =========================================================
 
     public void SpawnEnemiesOnSegment(
         SegmentEnemySpawns segmentSpawns
@@ -75,8 +183,10 @@ public class EnemySpawnDirector : MonoBehaviour
     {
         using (SpawnMarker.Auto())
         {
-            if (segmentSpawns == null ||
-                enemyPool == null)
+            if (
+                segmentSpawns == null ||
+                enemyPool == null
+            )
             {
                 return;
             }
@@ -86,15 +196,17 @@ public class EnemySpawnDirector : MonoBehaviour
                 segmentSpawns.SpawnPoints;
 
 
-            if (spawnPoints == null ||
-                spawnPoints.Length == 0)
+            if (
+                spawnPoints == null ||
+                spawnPoints.Length == 0
+            )
             {
                 return;
             }
 
 
-            // Ya no usamos GetComponent
-            SegmentContent segmentContent = segmentSpawns.Content;
+            SegmentContent segmentContent =
+                segmentSpawns.Content;
 
 
             if (segmentContent != null)
@@ -105,8 +217,8 @@ public class EnemySpawnDirector : MonoBehaviour
             }
 
 
-            // Reutilizamos la misma lista
             availablePoints.Clear();
+
 
             availablePoints.AddRange(
                 spawnPoints
@@ -120,7 +232,11 @@ public class EnemySpawnDirector : MonoBehaviour
                 );
 
 
-            for (int i = 0; i < amount; i++)
+            for (
+                int i = 0;
+                i < amount;
+                i++
+            )
             {
                 int randomIndex =
                     Random.Range(
@@ -130,19 +246,27 @@ public class EnemySpawnDirector : MonoBehaviour
 
 
                 Transform spawnPoint =
-                    availablePoints[randomIndex];
+                    availablePoints[
+                        randomIndex
+                    ];
 
 
-                // Remove r�pido
                 int lastIndex =
                     availablePoints.Count - 1;
 
-                availablePoints[randomIndex] =
-                    availablePoints[lastIndex];
+
+                availablePoints[
+                    randomIndex
+                ] =
+                    availablePoints[
+                        lastIndex
+                    ];
+
 
                 availablePoints.RemoveAt(
                     lastIndex
                 );
+
 
 
                 GameObject enemy =
@@ -163,27 +287,59 @@ public class EnemySpawnDirector : MonoBehaviour
         }
     }
 
+
+
     private int BaseEnemiesPerSegment
     {
         get
         {
-            int amount = enemiesPerSegment;
+
+
+            if (
+                runtimeMaxEnemiesPerSegment >= 0
+            )
+            {
+                return runtimeMaxEnemiesPerSegment;
+            }
+
+
+
+            int amount =
+                enemiesPerSegment;
+
 
             if (usePlatformEnemyCount)
             {
-                amount = Application.platform == RuntimePlatform.Android
-                    ? androidEnemiesPerSegment
-                    : desktopEnemiesPerSegment;
+                amount =
+                    Application.platform ==
+                    RuntimePlatform.Android
+
+                        ? androidEnemiesPerSegment
+                        : desktopEnemiesPerSegment;
             }
 
-            return Mathf.Max(0, amount);
+
+            return Mathf.Max(
+                0,
+                amount
+            );
         }
     }
 
 
-    public void SetDifficulty(DifficultyLevel difficulty, float enemyDensity)
+
+    public void SetDifficulty(
+        DifficultyLevel difficulty,
+        float enemyDensity
+    )
     {
-        _spawnDifficulty = difficulty;
-        _difficultyEnemyDensity = Mathf.Clamp01(enemyDensity);
+        _spawnDifficulty =
+            difficulty;
+
+
+        _difficultyEnemyDensity =
+            Mathf.Clamp01(
+                enemyDensity
+            );
     }
 }
