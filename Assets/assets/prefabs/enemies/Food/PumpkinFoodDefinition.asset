@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 25d03fad76fb8114bb3e1cbbf5802c37, type: 3}
+  m_Name: PumpkinFoodDefinition
+  m_EditorClassIdentifier: Assembly-CSharp::ShipiFoodDefinitionSO
+  _foodId: pumpkin
+  _wholePrefab: {fileID: 8378853129299968762, guid: 6f79d774c252bc04ea925c46428a094c, type: 3}
+  _verticalCutPrefab: {fileID: 5299078947958864503, guid: 787eeb4fbfa9ccf4aa50a9bb7b606095, type: 3}
+  _horizontalCutPrefab: {fileID: 7707104552161439330, guid: 9d49184a4b25c3a439dc59dbc46128d1, type: 3}

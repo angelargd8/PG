@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 25d03fad76fb8114bb3e1cbbf5802c37, type: 3}
+  m_Name: PineappleFoodDefinition
+  m_EditorClassIdentifier: Assembly-CSharp::ShipiFoodDefinitionSO
+  _foodId: pineapple
+  _wholePrefab: {fileID: 628555693929904429, guid: e737a7c0faaa95445b977f873735716d, type: 3}
+  _verticalCutPrefab: {fileID: 7579332069542032481, guid: 6a3110348a0384a4e88b40b9ed874fe5, type: 3}
+  _horizontalCutPrefab: {fileID: 8521802564689932719, guid: b5d6bfa148950c94dbedab4dfdf1fdd2, type: 3}

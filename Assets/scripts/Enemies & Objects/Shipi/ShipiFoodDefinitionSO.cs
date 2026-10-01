@@ -17,6 +17,8 @@ public sealed class ShipiFoodDefinitionSO : ScriptableObject
 
     public string FoodId => _foodId;
     public ShipiFood WholePrefab => _wholePrefab;
+    public GameObject VerticalCutPrefab => _verticalCutPrefab;
+    public GameObject HorizontalCutPrefab => _horizontalCutPrefab;
 
 
     public GameObject GetCutPrefab(ShipiCutDirection direction)

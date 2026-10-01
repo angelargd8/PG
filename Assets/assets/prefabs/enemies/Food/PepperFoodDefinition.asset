@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 25d03fad76fb8114bb3e1cbbf5802c37, type: 3}
+  m_Name: PepperFoodDefinition
+  m_EditorClassIdentifier: Assembly-CSharp::ShipiFoodDefinitionSO
+  _foodId: pepper
+  _wholePrefab: {fileID: 7695325826802301023, guid: 38b53b523a61b0a48b73fa45aa86ab91, type: 3}
+  _verticalCutPrefab: {fileID: 8273807130661769913, guid: 932aeb3b78f742a4a93fad5575583a3e, type: 3}
+  _horizontalCutPrefab: {fileID: 8198735556087330785, guid: 2afe46c43c4357649aadf45479bc695f, type: 3}

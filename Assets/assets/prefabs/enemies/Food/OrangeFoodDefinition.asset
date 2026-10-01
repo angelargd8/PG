@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 25d03fad76fb8114bb3e1cbbf5802c37, type: 3}
+  m_Name: OrangeFoodDefinition
+  m_EditorClassIdentifier: Assembly-CSharp::ShipiFoodDefinitionSO
+  _foodId: orange
+  _wholePrefab: {fileID: 5679246474817955807, guid: 7f45c335b1785f24385a9a8bfc88ed68, type: 3}
+  _verticalCutPrefab: {fileID: 7768047988692421794, guid: f2495ab3f65876342bb862dc00e3bc15, type: 3}
+  _horizontalCutPrefab: {fileID: 2801967959262677360, guid: e88538a296d413a48b7c5fec7a147532, type: 3}

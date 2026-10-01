@@ -1414,6 +1414,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ShipiFoodPool
   _foodDefinitions:
   - {fileID: 11400000, guid: da08786119d72fa4aa93550102887fa6, type: 2}
+  - {fileID: 11400000, guid: b1174103966393d4aa54156a57928cfa, type: 2}
+  - {fileID: 11400000, guid: 5fb336f83f3c8e74a98c56c0d2f52d24, type: 2}
+  - {fileID: 11400000, guid: 7360f79588d060c4392537ecd4929ef9, type: 2}
+  - {fileID: 11400000, guid: 9be1f09abe9a72444a9e4b0186ef08c8, type: 2}
+  - {fileID: 11400000, guid: 5d5c8aa683944a444b839029e5df7c6d, type: 2}
   _maxActiveFoods: 6
   _prewarmPerFood: 1
 --- !u!1 &916587192
