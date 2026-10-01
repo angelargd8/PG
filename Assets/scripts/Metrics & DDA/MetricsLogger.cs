@@ -9,6 +9,11 @@ public sealed class MetricsLogger : MonoBehaviour
 
 
     private string _filePath;
+    private bool _isFinalized;
+
+
+    public string FilePath => _filePath;
+    public bool IsFinalized => _isFinalized;
 
 
     private void Awake()
@@ -65,26 +70,6 @@ public sealed class MetricsLogger : MonoBehaviour
         File.AppendAllText(_filePath, line + Environment.NewLine);
     }
 
-
-    public void LogSummary(MetricsSystem metrics)
-    {
-        string summary =
-            Environment.NewLine +
-            "===== SESSION SUMMARY =====" + Environment.NewLine +
-            $"Total Interactions: {metrics.TotalInteractions}" + Environment.NewLine +
-            $"Successful: {metrics.SuccessfulInteractions}" + Environment.NewLine +
-            $"Failed: {metrics.FailedInteractions}" + Environment.NewLine +
-            $"Missed: {metrics.MissedInteractions}" + Environment.NewLine +
-            $"Success Rate: {metrics.SuccessRate:F4}" + Environment.NewLine +
-            $"Average Timing Error: {metrics.AverageTimingError:F4}" + Environment.NewLine +
-            $"Average Reaction Time: {metrics.AverageReactionTime:F4}" + Environment.NewLine +
-            $"Average Spatial Accuracy: {metrics.AverageSpatialAccuracy:F4}" + Environment.NewLine +
-            $"Average Direction Accuracy: {metrics.AverageDirectionAccuracy:F4}" + Environment.NewLine +
-            "===========================" + Environment.NewLine;
-
-        File.AppendAllText(_filePath, summary);
-    }
-
     public void LogPlayerState(PlayerState state)
     {
         string line =
@@ -110,12 +95,18 @@ public sealed class MetricsLogger : MonoBehaviour
     private void CreateLogFile()
     {
         string timestamp = DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss");
-        string fileName = $"{_filePrefix}_{timestamp}.txt";
+        string participantId = ParticipantSession.ParticipantId;
+
+        string fileName =
+            $"{_filePrefix}_" +
+            $"{participantId}_" +
+            $"{timestamp}.txt";
 
         _filePath = Path.Combine(Application.persistentDataPath, fileName);
 
         string header =
             "VR Metrics Log" + Environment.NewLine +
+            $"Participant: {ParticipantSession.ParticipantId}" + Environment.NewLine +
             $"Session Start: {DateTime.Now:yyyy-MM-dd HH:mm:ss}" + Environment.NewLine +
             $"File: {fileName}" + Environment.NewLine +
             Environment.NewLine;
@@ -123,5 +114,53 @@ public sealed class MetricsLogger : MonoBehaviour
         File.WriteAllText(_filePath, header);
 
         Debug.Log($"Metrics log created at: {_filePath}", this);
+    }
+
+    public void FinalizeLog(MetricsSystem metrics)
+    {
+        if (_isFinalized)
+        {
+            return;
+        }
+
+        if (metrics == null)
+        {
+            Debug.LogError(
+                "[MetricsLogger] " +
+                "MetricsSystem es null.",
+                this
+            );
+
+            return;
+        }
+
+        string summary =
+            Environment.NewLine + Environment.NewLine +
+            "===== SESSION SUMMARY =====" + Environment.NewLine +
+            $"Participant: {ParticipantSession.ParticipantId}" + Environment.NewLine +
+            $"Total Interactions: {metrics.TotalInteractions}" + Environment.NewLine +
+            $"Successful: {metrics.SuccessfulInteractions}" + Environment.NewLine +
+            $"Failed: {metrics.FailedInteractions}" + Environment.NewLine +
+            $"Missed: {metrics.MissedInteractions}" + Environment.NewLine +
+            $"Success Rate: {metrics.SuccessRate:F4}" + Environment.NewLine +
+            $"Average Timing Error: {metrics.AverageTimingError:F4}" + Environment.NewLine +
+            $"Average Reaction Time: {metrics.AverageReactionTime:F4}" + Environment.NewLine +
+            $"Average Spatial Accuracy: {metrics.AverageSpatialAccuracy:F4}" + Environment.NewLine +
+            $"Average Direction Accuracy: {metrics.AverageDirectionAccuracy:F4}" + Environment.NewLine +
+            "===========================" + Environment.NewLine +
+            "===== END OF SESSION =====" + Environment.NewLine;
+
+        File.AppendAllText(
+            _filePath,
+            summary
+        );
+
+        _isFinalized = true;
+
+        Debug.Log(
+            $"[MetricsLogger] Log finalizado: " +
+            $"{_filePath}",
+            this
+        );
     }
 }
