@@ -106,7 +106,7 @@ public sealed class ShipiFoodSpawner :
         int direction =
             Random.Range(
                 (int) ShipiCutDirection.LeftToRight,
-                (int) ShipiCutDirection.TopToBottom
+                (int) ShipiCutDirection.TopToBottom + 1
             );
 
         return (ShipiCutDirection) direction;

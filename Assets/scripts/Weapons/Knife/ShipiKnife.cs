@@ -5,26 +5,23 @@ public sealed class ShipiKnife :
     MonoBehaviour
 {
     [Header("References")]
-    [SerializeField]
-    private ShipiHitEvaluator _hitEvaluator;
+    [SerializeField] private ShipiHitEvaluator _hitEvaluator;
+    [SerializeField] private Collider _cutCollider;
 
     [Header("Cut Detection")]
     [Min(0f)]
-    [SerializeField]
-    private float _minimumCutSpeed = 0.5f;
+    [SerializeField] private float _minimumCutSpeed = 0.5f;
 
-
-    private Vector3 _previousPosition;
+ 
+    private Vector3 _previousCutPosition;
     private Vector3 _velocity;
 
 
     private void OnEnable()
     {
-        _previousPosition =
-            transform.position;
+        _previousCutPosition = GetCutPosition();
 
-        _velocity =
-            Vector3.zero;
+        _velocity = Vector3.zero;
     }
 
 
@@ -35,13 +32,25 @@ public sealed class ShipiKnife :
             return;
         }
 
+        Vector3 currentPosition = GetCutPosition();
+
         _velocity =
-            (transform.position -
-             _previousPosition) /
+            (currentPosition -
+             _previousCutPosition) /
             Time.deltaTime;
 
-        _previousPosition =
-            transform.position;
+        _previousCutPosition = currentPosition;
+    }
+
+
+    private Vector3 GetCutPosition()
+    {
+        if (_cutCollider != null)
+        {
+            return _cutCollider.bounds.center;
+        }
+
+        return transform.position;
     }
 
 
@@ -79,5 +88,5 @@ public sealed class ShipiKnife :
             _velocity,
             feedbackPosition
         );
-            }
+    }
 }

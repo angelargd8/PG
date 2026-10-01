@@ -1648,6 +1648,10 @@ PrefabInstance:
       value: ShipyCuchillo
       objectReference: {fileID: 0}
     - target: {fileID: 1794783686098639133, guid: 0684fecbd850e2b43b013ebbd84d326c, type: 3}
+      propertyPath: _cutCollider
+      value: 
+      objectReference: {fileID: 955590621}
+    - target: {fileID: 1794783686098639133, guid: 0684fecbd850e2b43b013ebbd84d326c, type: 3}
       propertyPath: _hitEvaluator
       value: 
       objectReference: {fileID: 1320932657}
@@ -1711,6 +1715,11 @@ PrefabInstance:
 --- !u!4 &955590620 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6132807868284928708, guid: 0684fecbd850e2b43b013ebbd84d326c, type: 3}
+  m_PrefabInstance: {fileID: 955590619}
+  m_PrefabAsset: {fileID: 0}
+--- !u!65 &955590621 stripped
+BoxCollider:
+  m_CorrespondingSourceObject: {fileID: 8315280738147793687, guid: 0684fecbd850e2b43b013ebbd84d326c, type: 3}
   m_PrefabInstance: {fileID: 955590619}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &981257272
@@ -2385,7 +2394,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ShipiHitEvaluator
   _conveyDirector: {fileID: 1782954690}
-  _directionReference: {fileID: 0}
+  _directionReference: {fileID: 2134698733}
   _interactionRegistered: {fileID: 11400000, guid: 188abd6f30130bb42b4877604a6ce24f, type: 2}
 --- !u!1 &1378156323
 GameObject:

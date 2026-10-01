@@ -5,6 +5,15 @@ public sealed class ShipiHitEvaluator :
     MonoBehaviour,
     IExperienceRuntime
 {
+    private enum DetectedCutDirection
+    {
+        LeftToRight,
+        RightToLeft,
+        TopToBottom,
+        BottomToTop
+    }
+
+
     [Header("References")]
     [SerializeField]
     private ShipiConveyDirector _conveyDirector;
@@ -77,10 +86,7 @@ public sealed class ShipiHitEvaluator :
     }
 
 
-    public void EvaluateCut(
-        ShipiFood food,
-        Vector3 cutVelocity,
-        Vector3? feedbackPosition = null)
+    public void EvaluateCut(ShipiFood food, Vector3 cutVelocity, Vector3? feedbackPosition = null)
     {
         if (!_isRunning ||
             food == null ||
@@ -110,15 +116,16 @@ public sealed class ShipiHitEvaluator :
             return;
         }
 
-        bool isHorizontal =
-            IsHorizontalCut(
+        DetectedCutDirection actualDirection =
+            GetActualDirection(
                 cutVelocity
             );
 
         GameObject cutPrefab =
-            isHorizontal
-                ? definition.HorizontalCutPrefab
-                : definition.VerticalCutPrefab;
+            GetCutPrefab(
+                definition,
+                actualDirection
+            );
 
         if (cutPrefab == null)
         {
@@ -143,13 +150,26 @@ public sealed class ShipiHitEvaluator :
             !shouldNotCut &&
             IsCorrectDirection(
                 expectedDirection,
-                cutVelocity
+                actualDirection
             );
 
         InteractionOutcome outcome =
             correctDirection
                 ? InteractionOutcome.Success
                 : InteractionOutcome.Failed;
+
+
+        string foodName =
+            definition.FoodId;
+
+        Debug.Log(
+            $"[ShipiCut] " +
+            $"Food: {foodName} | " +
+            $"Expected: {expectedDirection} | " +
+            $"Received: {actualDirection} | " +
+            $"Result: {outcome}",
+            this
+        );
 
 
         double expectedTime =
@@ -179,19 +199,19 @@ public sealed class ShipiHitEvaluator :
                     ? 1f
                     : 0f;
 
+
         InteractionResult result =
             new InteractionResult(
                 minigameId: "Shipi",
                 interactionType:
                     InteractionType.FoodCut,
-                outcome: outcome,
+                outcome:
+                    outcome,
                 difficulty:
                     food.Difficulty,
                 expectedTime:
                     expectedTime,
 
-                // Una X no tiene un momento
-                // correcto de corte.
                 actualTime:
                     shouldNotCut
                         ? null
@@ -239,6 +259,20 @@ public sealed class ShipiHitEvaluator :
                 ? InteractionOutcome.Success
                 : InteractionOutcome.Missed;
 
+        string foodName =
+            food.Definition != null
+                ? food.Definition.FoodId
+                : food.name;
+
+        Debug.Log(
+            $"[ShipiCut] " +
+            $"Food: {foodName} | " +
+            $"Expected: {food.ExpectedDirection} | " +
+            $"Received: None | " +
+            $"Result: {outcome}",
+            this
+        );
+
 
         food.MarkResolved();
 
@@ -262,22 +296,34 @@ public sealed class ShipiHitEvaluator :
     }
 
 
-    private bool IsCorrectDirection(
-        ShipiCutDirection expectedDirection,
-        Vector3 velocity)
+    private bool IsCorrectDirection(ShipiCutDirection expectedDirection, DetectedCutDirection actualDirection)
     {
-        Vector3 normalizedVelocity =
-            velocity.normalized;
+        return expectedDirection switch
+        {
+            ShipiCutDirection.LeftToRight =>
+                actualDirection ==
+                DetectedCutDirection.LeftToRight,
 
-        Vector3 right =
-            _directionReference != null
-                ? _directionReference.right
-                : Vector3.right;
+            ShipiCutDirection.RightToLeft =>
+                actualDirection ==
+                DetectedCutDirection.RightToLeft,
 
-        Vector3 up =
-            _directionReference != null
-                ? _directionReference.up
-                : Vector3.up;
+            ShipiCutDirection.TopToBottom =>
+                actualDirection ==
+                DetectedCutDirection.TopToBottom,
+
+            _ => false
+        };
+    }
+
+
+    private DetectedCutDirection GetActualDirection(Vector3 velocity)
+    {
+        Vector3 normalizedVelocity = velocity.normalized;
+
+          Vector3 right = _directionReference.right;
+
+        Vector3 up = _directionReference.up;
 
         float horizontal =
             Vector3.Dot(
@@ -295,56 +341,30 @@ public sealed class ShipiHitEvaluator :
             Mathf.Abs(horizontal) >
             Mathf.Abs(vertical);
 
-        return expectedDirection switch
+        if (horizontalDominant)
         {
-            ShipiCutDirection.LeftToRight =>
-                horizontalDominant &&
-                horizontal > 0f,
+            return horizontal > 0f
+                ? DetectedCutDirection.LeftToRight
+                : DetectedCutDirection.RightToLeft;
+        }
 
-            ShipiCutDirection.RightToLeft =>
-                horizontalDominant &&
-                horizontal < 0f,
-
-            ShipiCutDirection.TopToBottom =>
-                !horizontalDominant &&
-                vertical < 0f,
-
-            _ => false
-        };
+        return vertical < 0f
+            ? DetectedCutDirection.TopToBottom
+            : DetectedCutDirection.BottomToTop;
     }
 
 
-    private bool IsHorizontalCut(
-        Vector3 velocity)
+    private GameObject GetCutPrefab(ShipiFoodDefinitionSO definition, DetectedCutDirection actualDirection)
     {
-        Vector3 normalizedVelocity =
-            velocity.normalized;
+        bool horizontal =
+            actualDirection ==
+                DetectedCutDirection.LeftToRight ||
+            actualDirection ==
+                DetectedCutDirection.RightToLeft;
 
-        Vector3 right =
-            _directionReference != null
-                ? _directionReference.right
-                : Vector3.right;
-
-        Vector3 up =
-            _directionReference != null
-                ? _directionReference.up
-                : Vector3.up;
-
-        float horizontal =
-            Vector3.Dot(
-                normalizedVelocity,
-                right
-            );
-
-        float vertical =
-            Vector3.Dot(
-                normalizedVelocity,
-                up
-            );
-
-        return
-            Mathf.Abs(horizontal) >
-            Mathf.Abs(vertical);
+        return horizontal
+            ? definition.HorizontalCutPrefab
+            : definition.VerticalCutPrefab;
     }
 
 
@@ -355,22 +375,12 @@ public sealed class ShipiHitEvaluator :
             return;
         }
 
-        Camera mainCamera =
-            Camera.main;
-
-        if (mainCamera == null)
-        {
-            Debug.LogError(
-                "[ShipiHitEvaluator] " +
-                "No se encontró Main Camera.",
-                this
-            );
-
-            return;
-        }
-
-        _directionReference =
-            mainCamera.transform;
+        Debug.LogError(
+            "[ShipiHitEvaluator] " +
+            "DirectionReference no está asignado. " +
+            "Asigna Frontal Objects.",
+            this
+        );
     }
 
 
