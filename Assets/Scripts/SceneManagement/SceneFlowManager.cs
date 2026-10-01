@@ -204,6 +204,19 @@ public class SceneFlowManager : MonoBehaviour
                 double until = Time.realtimeSinceStartupAsDouble + currentDefinition.CreditsVisibleSeconds;
                 while (!endingCancelled && Time.realtimeSinceStartupAsDouble < until) yield return null;
                 if (endingCancelled) yield break;
+                MetricsUploader metricsUploader = FindFirstObjectByType<MetricsUploader>();
+                if (metricsUploader != null)
+                {
+                    while (
+                        !endingCancelled &&
+                        !metricsUploader
+                            .CurrentSessionUploadFinished
+                    )
+                    {
+                        yield return null;
+                    }
+                }
+                if (endingCancelled) yield break;
                 yield return FadeCredits(transition, false);
             }
             if (endingCancelled) yield break;

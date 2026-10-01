@@ -10,20 +10,34 @@ public sealed class MetricsLogger : MonoBehaviour
 
     private string _filePath;
     private bool _isFinalized;
+    private bool _isLogging;
 
 
     public string FilePath => _filePath;
     public bool IsFinalized => _isFinalized;
+    public bool IsLogging => _isLogging;
 
 
     private void Awake()
     {
+        if (!ParticipantSession.HasParticipantId)
+        {
+            return;
+        }
+
+        _isLogging = true;
+
         CreateLogFile();
     }
 
 
     public void LogInteraction(InteractionResult result)
     {
+        if (!_isLogging)
+        {
+            return;
+        }
+
         string actualTime = result.ActualTime.HasValue
             ? result.ActualTime.Value.ToString("F4")
             : "N/A";
@@ -72,6 +86,11 @@ public sealed class MetricsLogger : MonoBehaviour
 
     public void LogPlayerState(PlayerState state)
     {
+        if (!_isLogging)
+        {
+            return;
+        }
+        
         string line =
             $"{DateTime.Now:yyyy-MM-dd HH:mm:ss.fff} | " +
             $"PlayerState: {state}";
@@ -84,6 +103,11 @@ public sealed class MetricsLogger : MonoBehaviour
         DifficultyLevel newDifficulty,
         string reason
     ){
+        if (!_isLogging)
+        {
+            return;
+        }
+        
         string line =
             $"{DateTime.Now:yyyy-MM-dd HH:mm:ss.fff} | " +
             $"DifficultyChanged: {previousDifficulty} -> {newDifficulty} | " +
@@ -94,6 +118,11 @@ public sealed class MetricsLogger : MonoBehaviour
 
     private void CreateLogFile()
     {
+        if (!_isLogging)
+        {
+            return;
+        }
+        
         string timestamp = DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss");
         string participantId = ParticipantSession.ParticipantId;
 
@@ -118,6 +147,11 @@ public sealed class MetricsLogger : MonoBehaviour
 
     public void FinalizeLog(MetricsSystem metrics)
     {
+        if (!_isLogging)
+        {
+            return;
+        }
+        
         if (_isFinalized)
         {
             return;

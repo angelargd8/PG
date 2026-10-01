@@ -20,8 +20,8 @@ public sealed class MetricsUploader :
 
     [Header("Events")]
     [SerializeField]
-    private RunResultEventChannelSO
-        _runResultReady;
+    private VoidEventChannelSO
+        _songFinished;
 
 
     [Header("Upload")]
@@ -31,6 +31,10 @@ public sealed class MetricsUploader :
     [SerializeField]
     private string _uploadToken;
 
+    [Min(1)]
+    [SerializeField]
+    private int _timeoutSeconds = 10;
+
 
     [Header("Optional UI")]
     [SerializeField]
@@ -38,24 +42,31 @@ public sealed class MetricsUploader :
 
 
     private bool _isUploading;
+    private bool _currentSessionHandled;
+    private bool _currentSessionUploadFinished;
+
+
+    public bool CurrentSessionUploadFinished =>
+        _currentSessionHandled &&
+        _currentSessionUploadFinished;
 
 
     private void OnEnable()
     {
-        if (_runResultReady != null)
+        if (_songFinished != null)
         {
-            _runResultReady.Raised +=
-                HandleRunResultReady;
+            _songFinished.Raised +=
+                HandleSongFinished;
         }
     }
 
 
     private void OnDisable()
     {
-        if (_runResultReady != null)
+        if (_songFinished != null)
         {
-            _runResultReady.Raised -=
-                HandleRunResultReady;
+            _songFinished.Raised -=
+                HandleSongFinished;
         }
     }
 
@@ -68,28 +79,42 @@ public sealed class MetricsUploader :
     }
 
 
-    private void HandleRunResultReady(
-        RunResult result)
+    private void HandleSongFinished()
     {
+        if (_currentSessionHandled)
+        {
+            return;
+        }
+
+        _currentSessionHandled = true;
+
+
         if (_metricsLogger == null ||
             _metricsSystem == null)
         {
-            Debug.LogError(
-                "[MetricsUploader] " +
-                "Faltan referencias.",
-                this
-            );
+            _currentSessionUploadFinished = true;
 
             return;
         }
+
+
+        if (!_metricsLogger.IsLogging)
+        {
+            _currentSessionUploadFinished = true;
+
+            return;
+        }
+
 
         _metricsLogger.FinalizeLog(
             _metricsSystem
         );
 
+
         SetStatus(
             "Métricas guardadas. Enviando..."
         );
+
 
         StartCoroutine(
             UploadCurrentLog()
@@ -99,9 +124,9 @@ public sealed class MetricsUploader :
 
     private IEnumerator UploadCurrentLog()
     {
-        if (_isUploading)
+        while (_isUploading)
         {
-            yield break;
+            yield return null;
         }
 
         string filePath =
@@ -110,12 +135,33 @@ public sealed class MetricsUploader :
         if (string.IsNullOrEmpty(filePath) ||
             !File.Exists(filePath))
         {
+            _currentSessionUploadFinished = true;
+
             yield break;
         }
 
+        bool success = false;
+
         yield return UploadFile(
-            filePath
+            filePath,
+            result => success = result
         );
+
+        _currentSessionUploadFinished = true;
+
+        if (success)
+        {
+            SetStatus(
+                "✓ Métricas enviadas"
+            );
+        }
+        else
+        {
+            SetStatus(
+                "⚠ Guardadas localmente. " +
+                "Pendientes de envío."
+            );
+        }
     }
 
 
@@ -174,8 +220,7 @@ public sealed class MetricsUploader :
     }
 
 
-    private IEnumerator UploadFile(
-        string filePath)
+    private IEnumerator UploadFile(string filePath, Action<bool> completed = null)
     {
         if (_isUploading)
         {
@@ -190,6 +235,8 @@ public sealed class MetricsUploader :
                 "Upload URL no configurada.",
                 this
             );
+
+            completed?.Invoke(false);
 
             yield break;
         }
@@ -213,6 +260,8 @@ public sealed class MetricsUploader :
             );
 
             _isUploading = false;
+
+            completed?.Invoke(false);
 
             yield break;
         }
@@ -275,6 +324,8 @@ public sealed class MetricsUploader :
             "application/json"
         );
 
+        request.timeout = _timeoutSeconds;
+
 
         yield return
             request.SendWebRequest();
@@ -297,10 +348,6 @@ public sealed class MetricsUploader :
                 $"{Path.GetFileName(filePath)}",
                 this
             );
-
-            SetStatus(
-                "✓ Métricas enviadas"
-            );
         }
         else
         {
@@ -311,15 +358,12 @@ public sealed class MetricsUploader :
                 $"Error: {request.error}",
                 this
             );
-
-            SetStatus(
-                "⚠ Guardadas localmente. " +
-                "Pendientes de envío."
-            );
         }
 
 
         _isUploading = false;
+
+        completed?.Invoke(success);
     }
 
 

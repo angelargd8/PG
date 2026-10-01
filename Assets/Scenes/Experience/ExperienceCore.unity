@@ -385,9 +385,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MetricsUploader
   _metricsLogger: {fileID: 128679736}
   _metricsSystem: {fileID: 128679737}
-  _runResultReady: {fileID: 11400000, guid: ba6bafbdfb92fe245a344373a1a49418, type: 2}
+  _songFinished: {fileID: 11400000, guid: 106b3861a04b42a0b7c97f2b2e7dcb07, type: 2}
   _uploadUrl: https://script.google.com/macros/s/AKfycbzGt908sECUuvxsRP0GfBH91ktzGr5VAOKOsJNxR-yl_9S_ok-62HIv-plirXPbuyfymw/exec
   _uploadToken: PUNKO_METRICS_2026_f83Kp91Lm72xQ
+  _timeoutSeconds: 10
   _statusText: {fileID: 0}
 --- !u!1 &234874539
 GameObject:
