@@ -35,6 +35,8 @@ public sealed class JuanAndresTool : MonoBehaviour
     private bool _hasPreviousRadial;
     private bool _gestureSubmitted;
     private bool _gestureStarted;
+    private Vector3 _gestureRight;
+    private Vector3 _gestureUp;
 
 
     public JuanAndresToolType ToolType => _toolType;
@@ -132,6 +134,10 @@ public sealed class JuanAndresTool : MonoBehaviour
     private void BeginTracking(JuanAndresTarget target)
     {
         _activeTarget = target;
+
+        _gestureRight = target.transform.right.normalized;
+
+        _gestureUp = target.transform.up.normalized;
 
         _accumulatedAngle = 0f;
 
