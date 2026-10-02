@@ -11,7 +11,7 @@ public sealed class JuanAndresTool : MonoBehaviour
 
     [Header("Gesture Detection")]
     [Min(1f)]
-    [SerializeField] private float _minimumGestureAngle = 75f;
+    [SerializeField] private float _minimumGestureAngle = 270f;
 
     [Min(0.001f)]
     [SerializeField] private float _minimumRadius = 0.04f;
@@ -30,8 +30,7 @@ public sealed class JuanAndresTool : MonoBehaviour
 
 
     private JuanAndresTarget _activeTarget;
-    private Vector3 _gesturePlaneNormal;
-    private Vector3 _previousRadial;
+    private Vector2 _previousRadial;
     private float _accumulatedAngle;
     private bool _hasPreviousRadial;
     private bool _gestureSubmitted;
@@ -85,16 +84,24 @@ public sealed class JuanAndresTool : MonoBehaviour
 
     private void OnTriggerStay(Collider other)
     {
-        if (_activeTarget == null ||
-            _gestureSubmitted)
+        JuanAndresTarget target =
+            other.GetComponentInParent<
+                JuanAndresTarget
+            >();
+
+        if (target == null ||
+            target.IsResolved)
         {
             return;
         }
 
-        JuanAndresTarget target =
-            other.GetComponentInParent<JuanAndresTarget>();
+        if (_activeTarget == null)
+        {
+            BeginTracking(target);
+        }
 
-        if (target != _activeTarget)
+        if (target != _activeTarget ||
+            _gestureSubmitted)
         {
             return;
         }
@@ -126,8 +133,6 @@ public sealed class JuanAndresTool : MonoBehaviour
     {
         _activeTarget = target;
 
-        _gesturePlaneNormal = target.transform.forward.normalized;
-
         _accumulatedAngle = 0f;
 
         _hasPreviousRadial = false;
@@ -145,36 +150,53 @@ public sealed class JuanAndresTool : MonoBehaviour
 
     private void TrackGesture()
     {
-        if (!TryGetRadial(out Vector3 currentRadial))
+        if (!TryGetRadial(
+            out Vector2 currentRadial))
         {
-            _hasPreviousRadial = false;
+            ResetGestureProgress();
+
             return;
         }
 
         if (!_hasPreviousRadial)
         {
-            _previousRadial = currentRadial;
+            _previousRadial =
+                currentRadial;
+
             _hasPreviousRadial = true;
+
             return;
         }
 
         float angleDelta =
-            Vector3.SignedAngle(
+            Vector2.SignedAngle(
                 _previousRadial,
-                currentRadial,
-                _gesturePlaneNormal
+                currentRadial
             );
-
-        _previousRadial = currentRadial;
 
         float absoluteDelta =
             Mathf.Abs(angleDelta);
 
-        if (absoluteDelta < _minimumStepAngle ||
-            absoluteDelta > _maximumStepAngle)
+        _previousRadial =
+            currentRadial;
+
+
+        if (absoluteDelta <
+            _minimumStepAngle)
         {
             return;
         }
+
+        if (absoluteDelta >
+            _maximumStepAngle)
+        {
+            ResetGestureProgress(
+                currentRadial
+            );
+
+            return;
+        }
+
 
         if (!_gestureStarted)
         {
@@ -186,15 +208,43 @@ public sealed class JuanAndresTool : MonoBehaviour
             );
         }
 
-        _accumulatedAngle += angleDelta;
 
-        if (Mathf.Abs(_accumulatedAngle) <
+        _accumulatedAngle +=
+            angleDelta;
+
+
+        if (Mathf.Abs(
+            _accumulatedAngle) <
             _minimumGestureAngle)
         {
             return;
         }
 
+
         SubmitGesture();
+    }
+
+
+    private void ResetGestureProgress()
+    {
+        _accumulatedAngle = 0f;
+
+        _hasPreviousRadial = false;
+
+        _gestureStarted = false;
+    }
+
+
+    private void ResetGestureProgress(Vector2 currentRadial)
+    {
+        _accumulatedAngle = 0f;
+
+        _previousRadial =
+            currentRadial;
+
+        _hasPreviousRadial = true;
+
+        _gestureStarted = false;
     }
 
 
@@ -231,22 +281,35 @@ public sealed class JuanAndresTool : MonoBehaviour
     }
 
 
-    private bool TryGetRadial(out Vector3 radial)
+    private bool TryGetRadial(out Vector2 radial)
     {
         Vector3 offset =
             InteractionPosition -
             _activeTarget.transform.position;
 
-        radial =
-            Vector3.ProjectOnPlane(
+        float horizontal =
+            Vector3.Dot(
                 offset,
-                _gesturePlaneNormal
+                _activeTarget.transform.right
+            );
+
+        float vertical =
+            Vector3.Dot(
+                offset,
+                _activeTarget.transform.up
+            );
+
+        radial =
+            new Vector2(
+                horizontal,
+                vertical
             );
 
         if (radial.magnitude <
             _minimumRadius)
         {
-            radial = Vector3.zero;
+            radial = Vector2.zero;
+
             return false;
         }
 
@@ -258,7 +321,7 @@ public sealed class JuanAndresTool : MonoBehaviour
 
     private void TrySetInitialRadial()
     {
-        if (!TryGetRadial(out Vector3 radial))
+        if (!TryGetRadial(out Vector2 radial))
         {
             return;
         }
