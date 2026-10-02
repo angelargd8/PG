@@ -88,6 +88,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: shipi
       objectReference: {fileID: 0}
+    - target: {fileID: 5866666021909216657, guid: 65f23f614f2116849bf13351083b5f40, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: f95bf15b61a9efc4ebca2d5a90db6a26, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

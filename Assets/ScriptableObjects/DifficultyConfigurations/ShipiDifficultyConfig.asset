@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: ShipiDifficultyConfig
   m_EditorClassIdentifier: Assembly-CSharp::ShipiDifficultyConfigSO
   _easy:
-    _moveEveryNBeats: 4
+    _moveEveryNBeats: 5
   _normal:
-    _moveEveryNBeats: 3
+    _moveEveryNBeats: 4
   _hard:
-    _moveEveryNBeats: 2
+    _moveEveryNBeats: 3
