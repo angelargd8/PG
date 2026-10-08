@@ -83,7 +83,8 @@ public sealed class JoaquinDifficultyController :
             profile.NormalEnemiesPerSpawn,
             profile.StrongEnemiesPerSpawn,
             profile.IntroductionMaxActiveEnemies,
-            profile.MaxActiveEnemies
+            profile.MaxActiveEnemies,
+            profile.EnemyHealth
         );
 
         _interactionController.SetHitsPerFailure(
@@ -97,6 +98,7 @@ public sealed class JoaquinDifficultyController :
             $"Strong Spawn: {profile.StrongEnemiesPerSpawn} | " +
             $"Intro Max: {profile.IntroductionMaxActiveEnemies} | " +
             $"Max Active: {profile.MaxActiveEnemies} | " +
+            $"Enemy Health: {profile.EnemyHealth} | " +
             $"Hits Per Failure: {profile.HitsPerFailure}",
             this
         );

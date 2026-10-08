@@ -60,6 +60,7 @@ public sealed class EnemyWaveSpawner : MonoBehaviour, IExperienceRuntime
     private int nextSpawnPointIndex;
     private int nextPoolIndex;
     private int lastBeatIndex = -1;
+    private int? enemyHealthOverride;
 
     public bool IsRunning { get; private set; }
     public int SpawnedCount { get; private set; }
@@ -220,7 +221,7 @@ public sealed class EnemyWaveSpawner : MonoBehaviour, IExperienceRuntime
 
             usedSpawnPoints.Add(spawnPoint);
             Transform parent = activeEnemiesRoot != null ? activeEnemiesRoot : transform;
-            GameObject enemy = enemyPool.GetEnemy(parent, spawnPoint.position, spawnPoint.rotation);
+            GameObject enemy = enemyPool.GetEnemy(parent, spawnPoint.position, spawnPoint.rotation, enemyHealthOverride);
             if (enemy == null)
             {
                 continue;
@@ -259,8 +260,11 @@ public sealed class EnemyWaveSpawner : MonoBehaviour, IExperienceRuntime
         int normalEnemiesPerSpawn,
         int strongEnemiesPerSpawn,
         int introductionMaxActiveEnemies,
-        int maxActiveEnemies)
+        int maxActiveEnemies,
+        int? enemyHealth = null)
     {
+        // Existing enemies keep their remaining life; the new profile applies on spawn.
+        enemyHealthOverride = enemyHealth.HasValue ? Mathf.Max(1, enemyHealth.Value) : (int?)null;
         normalEnemiesPerSpawn =
             Mathf.Max(1, normalEnemiesPerSpawn);
 

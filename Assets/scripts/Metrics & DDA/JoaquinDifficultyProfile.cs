@@ -3,6 +3,11 @@ using UnityEngine;
 [System.Serializable]
 public sealed class JoaquinDifficultyProfile
 {
+    [Header("Enemy Health")]
+    [Tooltip("Vida inicial de EnemyJoaquinn y EnemyJoaquincho al aparecer.")]
+    [Min(1)]
+    [SerializeField] private int _enemyHealth = 1;
+
     [Header("Enemy Spawning")]
     [Min(1)]
     [SerializeField] private int _normalEnemiesPerSpawn = 1;
@@ -26,4 +31,5 @@ public sealed class JoaquinDifficultyProfile
     public int IntroductionMaxActiveEnemies => _introductionMaxActiveEnemies;
     public int MaxActiveEnemies => _maxActiveEnemies;
     public int HitsPerFailure => _hitsPerFailure;
+    public int EnemyHealth => Mathf.Max(1, _enemyHealth);
 }

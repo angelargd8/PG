@@ -9,6 +9,7 @@ public sealed class EnemyController : MonoBehaviour
 
 
     private int currentHealth;
+    private int? spawnHealthOverride;
 
     private bool isDead;
 
@@ -17,15 +18,14 @@ public sealed class EnemyController : MonoBehaviour
 
     private EnemyPool enemyPool;
 
-    // OP
-    // Solo se utiliza en escenas con segmentos.
+    // Solo se utiliza en escenas con segmentos
     private SegmentContent segmentContent;
 
 
     private void OnEnable()
     {
         SpawnVersion++;
-        currentHealth = maxHealth;
+        currentHealth = Mathf.Max(1, spawnHealthOverride ?? maxHealth);
 
         isDead = false;
 
@@ -37,6 +37,11 @@ public sealed class EnemyController : MonoBehaviour
     )
     {
         enemyPool = pool;
+    }
+
+    public void SetSpawnHealth(int? health)
+    {
+        spawnHealthOverride = health.HasValue ? Mathf.Max(1, health.Value) : (int?)null;
     }
 
 

@@ -13,18 +13,21 @@ MonoBehaviour:
   m_Name: JoaquinDifficultyConfig
   m_EditorClassIdentifier: Assembly-CSharp::JoaquinDifficultyConfigSO
   _easy:
+    _enemyHealth: 1
     _normalEnemiesPerSpawn: 1
     _strongEnemiesPerSpawn: 1
     _introductionMaxActiveEnemies: 2
     _maxActiveEnemies: 3
     _hitsPerFailure: 4
   _normal:
+    _enemyHealth: 3
     _normalEnemiesPerSpawn: 1
     _strongEnemiesPerSpawn: 2
     _introductionMaxActiveEnemies: 3
     _maxActiveEnemies: 4
     _hitsPerFailure: 3
   _hard:
+    _enemyHealth: 5
     _normalEnemiesPerSpawn: 2
     _strongEnemiesPerSpawn: 3
     _introductionMaxActiveEnemies: 4

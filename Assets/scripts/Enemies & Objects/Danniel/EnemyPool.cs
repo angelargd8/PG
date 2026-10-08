@@ -322,7 +322,8 @@ public class EnemyPool :
     public GameObject GetEnemy(
         Transform parent,
         Vector3 position,
-        Quaternion rotation
+        Quaternion rotation,
+        int? healthOverride = null
     )
     {
         using (GetMarker.Auto())
@@ -359,6 +360,10 @@ public class EnemyPool :
 
             Transform enemyTransform =
                 enemy.transform;
+
+
+            if (enemy.TryGetComponent<EnemyController>(out var health))
+                health.SetSpawnHealth(healthOverride);
 
             enemyTransform.SetParent(
                 parent,
