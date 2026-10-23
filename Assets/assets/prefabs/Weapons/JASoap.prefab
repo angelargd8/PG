@@ -116,9 +116,9 @@ MonoBehaviour:
   _toolType: 0
   _hand: 1
   _interactionPoint: {fileID: 8220091658595217917}
-  _minimumGestureAngle: 75
+  _minimumGestureAngle: 100
   _minimumRadius: 0.04
-  _minimumStepAngle: 0.5
+  _minimumStepAngle: 1
   _maximumStepAngle: 35
   _logDetectedGestures: 1
   _bubbleController: {fileID: 2863310076407420213}

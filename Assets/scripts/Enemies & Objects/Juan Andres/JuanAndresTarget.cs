@@ -50,12 +50,6 @@ public sealed class JuanAndresTarget : MonoBehaviour
     }
 
 
-    private void LateUpdate()
-    {
-        FacePlayer();
-    }
-
-
     public void Initialize(
         JuanAndresTargetPool pool,
         JuanAndresSpawnPoint spawnPoint,

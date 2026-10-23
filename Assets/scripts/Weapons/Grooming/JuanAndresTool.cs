@@ -17,7 +17,7 @@ public sealed class JuanAndresTool : MonoBehaviour
     [SerializeField] private float _minimumRadius = 0.04f;
 
     [Min(0f)]
-    [SerializeField] private float _minimumStepAngle = 0.5f;
+    [SerializeField] private float _minimumStepAngle = 1f;
 
     [Min(1f)]
     [SerializeField] private float _maximumStepAngle = 35f;
@@ -293,17 +293,8 @@ public sealed class JuanAndresTool : MonoBehaviour
             InteractionPosition -
             _activeTarget.transform.position;
 
-        float horizontal =
-            Vector3.Dot(
-                offset,
-                _activeTarget.transform.right
-            );
-
-        float vertical =
-            Vector3.Dot(
-                offset,
-                _activeTarget.transform.up
-            );
+        float horizontal = Vector3.Dot(offset, _gestureRight);
+        float vertical = Vector3.Dot(offset, _gestureUp);
 
         radial =
             new Vector2(
