@@ -120,6 +120,7 @@ MonoBehaviour:
   _minimumRadius: 0.04
   _minimumStepAngle: 1
   _maximumStepAngle: 35
+  _contactGraceSeconds: 0.2
   _logDetectedGestures: 1
   _bubbleController: {fileID: 2863310076407420213}
 --- !u!114 &2863310076407420213
@@ -334,5 +335,5 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.126072, y: 0.04451265, z: 0.01725039}
-  m_Center: {x: 0.02803617, y: 1.42751e-16, z: 0.003207903}
+  m_Size: {x: 0.17228536, y: 0.04451265, z: 0.01725039}
+  m_Center: {x: 0.051142953, y: 1.9793868e-16, z: 0.0032079034}

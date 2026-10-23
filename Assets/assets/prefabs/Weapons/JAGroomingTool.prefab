@@ -120,6 +120,7 @@ MonoBehaviour:
   _minimumRadius: 0.04
   _minimumStepAngle: 1
   _maximumStepAngle: 35
+  _contactGraceSeconds: 0.2
   _logDetectedGestures: 1
   _bubbleController: {fileID: 3039531363791962756}
 --- !u!114 &3039531363791962756
