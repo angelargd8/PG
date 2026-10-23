@@ -1276,6 +1276,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2a4db7a114972834c8e4117be1d82ba3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &460924501 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6283110561029435272, guid: 3405290cc9a00c34bbd425b05c494f62, type: 3}
+  m_PrefabInstance: {fileID: 460924498}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1359384401}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7b743370ac3e4ec2a1668f5455a8ef8a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &654378947
 GameObject:
   m_ObjectHideFlags: 0
@@ -2386,6 +2397,7 @@ MonoBehaviour:
   joaquinScene: {fileID: 11400000, guid: 302f0ff70018b014ca70342dc5193736, type: 2}
   alexScene: {fileID: 11400000, guid: 5f404783ddaa915438a34c9912bf5064, type: 2}
   shipiScene: {fileID: 11400000, guid: 3b988eed9380762408821fddd601db22, type: 2}
+  _sceneDropdown: {fileID: 460924501}
 --- !u!1 &1466801342
 GameObject:
   m_ObjectHideFlags: 0

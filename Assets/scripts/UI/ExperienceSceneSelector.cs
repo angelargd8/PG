@@ -1,31 +1,24 @@
+
 using System;
+using TMPro;
 using UnityEngine;
 
 public sealed class ExperienceSceneSelector : MonoBehaviour
 {
     [Header("Experience Scenes")]
+    [SerializeField] private ExperienceSceneDefinitionSO dannielScene;
+    [SerializeField] private ExperienceSceneDefinitionSO jeremyScene;
+    [SerializeField] private ExperienceSceneDefinitionSO juanAndresScene;
+    [SerializeField] private ExperienceSceneDefinitionSO joaquinScene;
+    [SerializeField] private ExperienceSceneDefinitionSO alexScene;
+    [SerializeField] private ExperienceSceneDefinitionSO shipiScene;
 
-    [SerializeField]
-    private ExperienceSceneDefinitionSO dannielScene;
+    [Header("UI")]
+    [SerializeField] private TMP_Dropdown _sceneDropdown;
 
-    [SerializeField]
-    private ExperienceSceneDefinitionSO jeremyScene;
-
-    [SerializeField]
-    private ExperienceSceneDefinitionSO juanAndresScene;
-
-    [SerializeField]
-    private ExperienceSceneDefinitionSO joaquinScene;
-
-    [SerializeField]
-    private ExperienceSceneDefinitionSO alexScene;
-
-    [SerializeField]
-    private ExperienceSceneDefinitionSO shipiScene;
-
+    private static int _lastSelectedOption = 0;
 
     public event Action SelectionChanged;
-
 
     public ExperienceSceneDefinitionSO SelectedScene
     {
@@ -33,21 +26,44 @@ public sealed class ExperienceSceneSelector : MonoBehaviour
         private set;
     }
 
-
     public bool PlayFullSequence
     {
         get;
         private set;
     } = true;
 
+    [RuntimeInitializeOnLoadMethod(
+        RuntimeInitializeLoadType.SubsystemRegistration)]
+    private static void ResetSavedSelection()
+    {
+        _lastSelectedOption = 0;
+    }
+
+    private void Awake()
+    {
+        OnStartSceneChanged(_lastSelectedOption);
+    }
+
+    private void Start()
+    {
+        if (_sceneDropdown == null)
+        {
+            Debug.LogError(
+                "Scene Dropdown no está asignado.",
+                this
+            );
+            return;
+        }
+
+        _sceneDropdown.SetValueWithoutNotify(
+            _lastSelectedOption
+        );
+
+        _sceneDropdown.RefreshShownValue();
+    }
 
     public void OnStartSceneChanged(int option)
     {
-        Debug.Log(
-            $"Dropdown changed. Option: {option}",
-            this
-        );
-        
         switch (option)
         {
             case 0:
@@ -55,27 +71,27 @@ public sealed class ExperienceSceneSelector : MonoBehaviour
                 break;
 
             case 1:
-                SelectScene(dannielScene);
+                SelectScene(dannielScene, option);
                 break;
 
             case 2:
-                SelectScene(jeremyScene);
+                SelectScene(jeremyScene, option);
                 break;
 
             case 3:
-                SelectScene(juanAndresScene);
+                SelectScene(juanAndresScene, option);
                 break;
 
             case 4:
-                SelectScene(joaquinScene);
+                SelectScene(joaquinScene, option);
                 break;
 
             case 5:
-                SelectScene(alexScene);
+                SelectScene(alexScene, option);
                 break;
 
             case 6:
-                SelectScene(shipiScene);
+                SelectScene(shipiScene, option);
                 break;
 
             default:
@@ -87,22 +103,21 @@ public sealed class ExperienceSceneSelector : MonoBehaviour
         }
     }
 
-
     private void SelectFullExperience()
     {
         SelectedScene = null;
         PlayFullSequence = true;
 
-        Debug.Log(
-            "Selected: Full Experience",
-            this
-        );
+        _lastSelectedOption = 0;
+
+        Debug.Log("Selected: Full Experience", this);
 
         SelectionChanged?.Invoke();
     }
 
-
-    private void SelectScene(ExperienceSceneDefinitionSO scene)
+    private void SelectScene(
+        ExperienceSceneDefinitionSO scene,
+        int option)
     {
         if (scene == null)
         {
@@ -110,12 +125,14 @@ public sealed class ExperienceSceneSelector : MonoBehaviour
                 "La escena seleccionada no está asignada.",
                 this
             );
-
             return;
         }
 
         SelectedScene = scene;
         PlayFullSequence = false;
+
+        // Save selection for the next MainMenu instance.
+        _lastSelectedOption = option;
 
         Debug.Log(
             $"Selected scene: {scene.DisplayName}",
