@@ -16,6 +16,11 @@ public sealed class JuanAndresTarget : MonoBehaviour
     [SerializeField] private Sprite _brushSprite;
 
 
+    [Header("Direction Animation")]
+    [SerializeField] private float _rotationSpeed = 90f;
+    [SerializeField] private bool _invertRotation = false;
+
+
     private JuanAndresTargetPool _pool;
     private JuanAndresSpawnPoint _spawnPoint;
     private ExperienceMusicClock _musicClock;
@@ -24,6 +29,8 @@ public sealed class JuanAndresTarget : MonoBehaviour
     private Vector3 _lifetimeBaseScale;
     private bool _isResolved;
     private bool _visualStateInitialized;
+    private Quaternion _directionBaseRotation;
+    private float _currentRotation;
 
 
     public JuanAndresActionDirection ExpectedDirection { get; private set; }
@@ -40,12 +47,12 @@ public sealed class JuanAndresTarget : MonoBehaviour
 
     private void Update()
     {
-        if (_isResolved ||
-            _musicClock == null)
+        if (_isResolved || _musicClock == null)
         {
             return;
         }
 
+        AnimateDirection();
         UpdateLifetime();
     }
 
@@ -105,8 +112,8 @@ public sealed class JuanAndresTarget : MonoBehaviour
 
         if (_directionRing != null)
         {
-            _directionBaseScale =
-                _directionRing.localScale;
+            _directionBaseScale = _directionRing.localScale;
+            _directionBaseRotation = _directionRing.localRotation;
         }
 
         if (_lifetimeFill != null)
@@ -225,11 +232,9 @@ public sealed class JuanAndresTarget : MonoBehaviour
             return;
         }
 
-        Vector3 scale =
-            _directionBaseScale;
+        Vector3 scale = _directionBaseScale;
 
-        float absoluteX =
-            Mathf.Abs(scale.x);
+        float absoluteX = Mathf.Abs(scale.x);
 
         scale.x =
             ExpectedDirection ==
@@ -237,8 +242,9 @@ public sealed class JuanAndresTarget : MonoBehaviour
                 ? absoluteX
                 : -absoluteX;
 
-        _directionRing.localScale =
-            scale;
+        _directionRing.localScale = scale;
+        _currentRotation = 0f;
+        _directionRing.localRotation = _directionBaseRotation;
     }
 
 
@@ -271,8 +277,9 @@ public sealed class JuanAndresTarget : MonoBehaviour
     {
         if (_directionRing != null)
         {
-            _directionRing.localScale =
-                _directionBaseScale;
+            _directionRing.localScale = _directionBaseScale;
+            _directionRing.localRotation = _directionBaseRotation;
+            _currentRotation = 0f;
         }
 
         if (_lifetimeFill != null)
@@ -325,5 +332,30 @@ public sealed class JuanAndresTarget : MonoBehaviour
             Quaternion.LookRotation(
                 direction.normalized
             );
+    }
+
+
+    private void AnimateDirection()
+    {
+        if (_directionRing == null)
+            return;
+
+        float direction =
+            ExpectedDirection == JuanAndresActionDirection.Clockwise
+                ? -1f
+                : 1f;
+
+        if (_invertRotation)
+            direction *= -1f;
+
+        _currentRotation = Mathf.Repeat(
+            _currentRotation +
+            direction * _rotationSpeed * Time.deltaTime,
+            360f
+        );
+
+        _directionRing.localRotation =
+            _directionBaseRotation *
+            Quaternion.Euler(0f, 0f, _currentRotation);
     }
 }
