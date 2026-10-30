@@ -231,7 +231,7 @@ public sealed class ShipiHitEvaluator :
 
         _interactionRegistered.RaiseEvent(
             result
-        );
+        , this);
     }
 
 
@@ -292,7 +292,7 @@ public sealed class ShipiHitEvaluator :
 
         _interactionRegistered.RaiseEvent(
             result
-        );
+        , this);
     }
 
 

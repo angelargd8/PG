@@ -19,9 +19,18 @@ public sealed class DifficultyLevelEventChannelSO : ScriptableObject
     }
 
 
-    public void RaiseEvent(DifficultyLevel difficulty)
+    public void RaiseEvent(DifficultyLevel difficulty) => RaiseEventInternal(difficulty, null);
+
+    public void RaiseEvent(DifficultyLevel difficulty, UnityEngine.Object publisher) => RaiseEventInternal(difficulty, publisher);
+
+    private void RaiseEventInternal(DifficultyLevel difficulty, UnityEngine.Object publisher)
     {
         CurrentDifficulty = difficulty;
-        Raised?.Invoke(difficulty);
+        if (!ExperienceDiagnostics.IsEnabled(ExperienceDiagnosticLevel.Flow))
+        {
+            Raised?.Invoke(difficulty);
+            return;
+        }
+        ExperienceDiagnostics.Publish(this, Raised, difficulty, publisher, "difficulty=" + difficulty);
     }
 }

@@ -120,6 +120,12 @@ public sealed class ExperienceLaunchButton : MonoBehaviour
                 requestedFullSequence
             );
 
+        ExperienceDiagnostics.BeginRun(experience.DisplayName, requestedFullSequence);
+        ExperienceDiagnostics.Log(ExperienceDiagnosticLevel.Flow, "FLOW", "experience_request_created", this, null,
+            "start_index=" + startIndex + " start_scene=" +
+            ExperienceDiagnostics.Field("scene", requestedStartScene != null ? requestedStartScene.SceneName : "first") +
+            " experience_id=" + ExperienceDiagnostics.Field("experience_id", experience.ExperienceId));
+
         if (_scoreRunStarted != null)
         {
             ScoreRunContext scoreContext = ScoreRunContext.Create(
@@ -128,11 +134,12 @@ public sealed class ExperienceLaunchButton : MonoBehaviour
                 requestedFullSequence
             );
 
-            _scoreRunStarted.RaiseEvent(scoreContext);
+            _scoreRunStarted.RaiseEvent(scoreContext, this);
     }
 
         experienceRequested.RaiseEvent(
-            request
+            request,
+            this
         );
     }
 }

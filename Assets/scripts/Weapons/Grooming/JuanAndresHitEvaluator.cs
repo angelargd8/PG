@@ -92,7 +92,7 @@ public sealed class JuanAndresHitEvaluator :
 
         _scoreProfileChanged.RaiseEvent(
             _scoreProfile
-        );
+        , this);
 
         _pairSuccesses.Clear();
 
@@ -243,7 +243,7 @@ public sealed class JuanAndresHitEvaluator :
 
         _interactionRegistered.RaiseEvent(
             result
-        );
+        , this);
 
         HandlePairResult(
             pairId,
@@ -275,7 +275,7 @@ public sealed class JuanAndresHitEvaluator :
 
         _interactionRegistered.RaiseEvent(
             result
-        );
+        , this);
 
         if (pairId >= 0)
         {
@@ -418,7 +418,7 @@ public sealed class JuanAndresHitEvaluator :
 
         _scoreBonusAwarded.RaiseEvent(
             bonus
-        );
+        , this);
     }
 
 

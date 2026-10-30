@@ -9,8 +9,17 @@ public sealed class BoolEventChannelSO : ScriptableObject
 {
     public event Action<bool> Raised;
 
-    public void RaiseEvent(bool value)
+    public void RaiseEvent(bool value) => RaiseEventInternal(value, null);
+
+    public void RaiseEvent(bool value, UnityEngine.Object publisher) => RaiseEventInternal(value, publisher);
+
+    private void RaiseEventInternal(bool value, UnityEngine.Object publisher)
     {
-        Raised?.Invoke(value);
+        if (!ExperienceDiagnostics.IsEnabled(ExperienceDiagnosticLevel.Flow))
+        {
+            Raised?.Invoke(value);
+            return;
+        }
+        ExperienceDiagnostics.Publish(this, Raised, value, publisher, "value=" + value);
     }
 }

@@ -23,7 +23,7 @@ public sealed class BeatLightController : MonoBehaviour
         0xFF
     );
 
-    [Tooltip("Color base utilizado únicamente en la escena Danniel.")]
+    [Tooltip("Color base utilizado Ãºnicamente en la escena Danniel.")]
     [SerializeField]
     private Color _dannielBaseColor = new Color32(
         0xBF,
@@ -127,7 +127,9 @@ public sealed class BeatLightController : MonoBehaviour
         _beatPlayer = GetComponent<ExperienceBeatPlayer>();
 
         _beatPlayer.BeatReached += HandleBeat;
+        ExperienceDiagnostics.LogSubscription("added", this, _beatPlayer);
         _beatPlayer.PlaybackReset += HandlePlaybackReset;
+        ExperienceDiagnostics.LogSubscription("added", this, _beatPlayer);
 
         SceneManager.activeSceneChanged +=
             HandleActiveSceneChanged;
@@ -145,7 +147,9 @@ public sealed class BeatLightController : MonoBehaviour
         if (_beatPlayer != null)
         {
             _beatPlayer.BeatReached -= HandleBeat;
+            ExperienceDiagnostics.LogSubscription("removed", this, _beatPlayer);
             _beatPlayer.PlaybackReset -= HandlePlaybackReset;
+            ExperienceDiagnostics.LogSubscription("removed", this, _beatPlayer);
         }
 
         SceneManager.activeSceneChanged -=
@@ -211,6 +215,12 @@ public sealed class BeatLightController : MonoBehaviour
             _palette == null ||
             _palette.Length == 0)
         {
+            ExperienceDiagnostics.RecordFrequentEvent("BeatLightController", "beat_discarded", this);
+            if (ExperienceDiagnostics.Level == ExperienceDiagnosticLevel.Detailed)
+                ExperienceDiagnostics.Log(ExperienceDiagnosticLevel.Detailed, "BEAT", "consumer_discarded_beat", this, null,
+                    "consumer=BeatLightController reason=below_intensity_or_empty_palette beat_index=" + beatIndex +
+                    " intensity=" + beat.Intensity.ToString("F4", System.Globalization.CultureInfo.InvariantCulture) +
+                    " minimum_intensity=" + _minimumIntensity.ToString("F4", System.Globalization.CultureInfo.InvariantCulture));
             return;
         }
 
@@ -232,6 +242,11 @@ public sealed class BeatLightController : MonoBehaviour
 
                 _warnedMissingLight = true;
             }
+
+            ExperienceDiagnostics.RecordFrequentEvent("BeatLightController", "beat_discarded_no_light", this);
+            if (ExperienceDiagnostics.Level == ExperienceDiagnosticLevel.Detailed)
+                ExperienceDiagnostics.Log(ExperienceDiagnosticLevel.Detailed, "BEAT", "consumer_discarded_beat", this, null,
+                    "consumer=BeatLightController reason=no_usable_active_scene_light beat_index=" + beatIndex);
 
             return;
         }
@@ -261,6 +276,13 @@ public sealed class BeatLightController : MonoBehaviour
             beat.Time;
 
         _pulseActive = true;
+
+        ExperienceDiagnostics.RecordFrequentEvent("BeatLightController", "light_color_pulse", this);
+        if (ExperienceDiagnostics.Level == ExperienceDiagnosticLevel.Detailed)
+            ExperienceDiagnostics.Log(ExperienceDiagnosticLevel.Detailed, "BEAT", "consumer_action", this, null,
+                "consumer=BeatLightController action=light_color_pulse beat_index=" + beatIndex +
+                " intensity=" + beat.Intensity.ToString("F4", System.Globalization.CultureInfo.InvariantCulture) +
+                " target_scene=" + ExperienceDiagnostics.Field("name", _targetLight.gameObject.scene.name));
 
         ApplyPulse(
             _beatPlayer.SongTime
@@ -327,6 +349,9 @@ public sealed class BeatLightController : MonoBehaviour
 
     private void HandlePlaybackReset()
     {
+        if (ExperienceDiagnostics.Level == ExperienceDiagnosticLevel.Detailed)
+            ExperienceDiagnostics.Log(ExperienceDiagnosticLevel.Detailed, "BEAT", "consumer_action", this, null,
+                "consumer=BeatLightController action=reset_light_pulse");
         ResetPulse();
         _nextColorIndex = 0;
     }

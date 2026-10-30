@@ -101,7 +101,7 @@ public sealed class DannielInteractionController :
 
         _scoreProfileChanged.RaiseEvent(
             _scoreProfile
-        );
+        , this);
 
         _isRunning = true;
     }
@@ -271,7 +271,7 @@ public sealed class DannielInteractionController :
 
         _interactionRegistered.RaiseEvent(
             result
-        );
+        , this);
 
         Debug.Log(
             $"[DannielInteractionController] " +
@@ -307,7 +307,7 @@ public sealed class DannielInteractionController :
 
         _interactionRegistered.RaiseEvent(
             result
-        );
+        , this);
     }
 
 
@@ -367,7 +367,7 @@ public sealed class DannielInteractionController :
 
         _interactionRegistered.RaiseEvent(
             result
-        );
+        , this);
     }
 
 
@@ -396,7 +396,7 @@ public sealed class DannielInteractionController :
 
             _interactionRegistered.RaiseEvent(
                 result
-            );
+            , this);
         }
     }
 
@@ -424,7 +424,7 @@ public sealed class DannielInteractionController :
                 feedbackPosition
             );
 
-        _scoreBonusAwarded.RaiseEvent(bonus);
+        _scoreBonusAwarded.RaiseEvent(bonus, this);
 
         Debug.Log(
             $"[DannielInteractionController] " +

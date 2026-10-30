@@ -42,6 +42,7 @@ public class SequenceDirector : MonoBehaviour
         }
 
         experienceReady.Raised += HandleExperienceReady;
+        ExperienceDiagnostics.LogSubscription("added", this, experienceReady);
 
         Debug.Log(
             $"SequenceDirector suscrito a '{experienceReady.name}' ",
@@ -55,19 +56,26 @@ public class SequenceDirector : MonoBehaviour
         if (experienceReady != null)
         {
             experienceReady.Raised -= HandleExperienceReady;
+            ExperienceDiagnostics.LogSubscription("removed", this, experienceReady);
 
         }
     }
 
     private void HandleExperienceReady()
     {
+        ExperienceDiagnostics.Log(ExperienceDiagnosticLevel.Flow, "FLOW", "experience_ready_received", this, null,
+            "channel=" + ExperienceDiagnostics.Field("name", experienceReady != null ? experienceReady.name : "none"));
         if (sequenceStarted)
         {
+            ExperienceDiagnostics.Log(ExperienceDiagnosticLevel.Flow, "FLOW", "playback_start_ignored", this, null,
+                "reason=already_started");
             return;
         }
 
         if (playableDirector == null)
         {
+            ExperienceDiagnostics.Log(ExperienceDiagnosticLevel.Flow, "FLOW", "playback_start_failed", this, null,
+                "reason=playable_director_missing");
             Debug.LogError(
                 "PlayableDirector no esta asignado",
                 this);
@@ -78,6 +86,8 @@ public class SequenceDirector : MonoBehaviour
         appStateMachine = FindFirstObjectByType<AppStateMachine>();
         if (appStateMachine == null)
         {
+            ExperienceDiagnostics.Log(ExperienceDiagnosticLevel.Flow, "FLOW", "completion_monitor_unavailable", this, null,
+                "reason=app_state_machine_missing");
             Debug.LogWarning(
                 "[SequenceDirector] Inicia desde Bootstrap para poder volver al MainMenu al terminar.",
                 this);
@@ -86,6 +96,8 @@ public class SequenceDirector : MonoBehaviour
         musicEndTime = ResolveMusicEndTime();
         if (double.IsNaN(musicEndTime) || double.IsInfinity(musicEndTime) || musicEndTime <= 0)
         {
+            ExperienceDiagnostics.Log(ExperienceDiagnosticLevel.Flow, "FLOW", "playback_start_failed", this, null,
+                "reason=invalid_music_end_time " + ExperienceDiagnostics.Field("music_end_time", musicEndTime.ToString("R", System.Globalization.CultureInfo.InvariantCulture)));
             Debug.LogError("[SequenceDirector] El Timeline necesita una duracion finita mayor que cero.", this);
             return;
         }
@@ -99,7 +111,15 @@ public class SequenceDirector : MonoBehaviour
         playableDirector.extrapolationMode = DirectorWrapMode.Hold;
         playableDirector.time = 0;
         playableDirector.Evaluate();
+        ExperienceDiagnostics.Log(ExperienceDiagnosticLevel.Flow, "FLOW", "play_request", this, null,
+            "requested_time_s=0 " + ExperienceDiagnostics.Field("director_state_before_play", playableDirector.state.ToString()) +
+            " wrap_mode=" + ExperienceDiagnostics.Field("wrap_mode", playableDirector.extrapolationMode.ToString()) +
+            " music_end_time_s=" + musicEndTime.ToString("F6", System.Globalization.CultureInfo.InvariantCulture));
         playableDirector.Play();
+        ExperienceDiagnostics.Log(ExperienceDiagnosticLevel.Flow, "FLOW", "play_state_observed", this, null,
+            ExperienceDiagnostics.Field("director_state", playableDirector.state.ToString()) +
+            " is_playing=" + (playableDirector.state == PlayState.Playing) +
+            " music_end_time_s=" + musicEndTime.ToString("F6", System.Globalization.CultureInfo.InvariantCulture));
 
         Debug.Log(
             "La secuencia musical comenzo",
@@ -124,9 +144,12 @@ public class SequenceDirector : MonoBehaviour
         // Publicar una sola vez aunque Hold conserve el ultimo frame
         menuReturnRequested = true;
         playableDirector.Pause();
+        ExperienceDiagnostics.Log(ExperienceDiagnosticLevel.Flow, "FLOW", "playback_finished", this, null,
+            "music_time_s=" + playableDirector.time.ToString("F6", System.Globalization.CultureInfo.InvariantCulture) +
+            " music_end_time_s=" + musicEndTime.ToString("F6", System.Globalization.CultureInfo.InvariantCulture));
 
-        if (songFinished != null) songFinished.RaiseEvent();
-        else experienceCompleted?.RaiseEvent();
+        if (songFinished != null) songFinished.RaiseEvent(this);
+        else experienceCompleted?.RaiseEvent(this);
 
         Debug.Log(
             "[SequenceDirector] Cancion terminada. Iniciando cierre de la experiencia.",

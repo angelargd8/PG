@@ -66,26 +66,31 @@ public sealed class PlayerStateSystem : MonoBehaviour
         if (_interactionRegistered != null)
         {
             _interactionRegistered.Raised += HandleInteraction;
+            ExperienceDiagnostics.LogSubscription("added", this, _interactionRegistered);
         }
 
         if (_gameplayPauseChanged != null)
         {
             _gameplayPauseChanged.Raised += HandlePauseChanged;
+            ExperienceDiagnostics.LogSubscription("added", this, _gameplayPauseChanged);
         }
 
         if (_experienceReady != null)
         {
             _experienceReady.Raised += HandleExperienceReady;
+            ExperienceDiagnostics.LogSubscription("added", this, _experienceReady);
         }
 
         if (_mainMenuRequested != null)
         {
             _mainMenuRequested.Raised += HandleMainMenuRequested;
+            ExperienceDiagnostics.LogSubscription("added", this, _mainMenuRequested);
         }
 
         if (_difficultyChanged != null)
         {
             _difficultyChanged.Raised += HandleDifficultyChanged;
+            ExperienceDiagnostics.LogSubscription("added", this, _difficultyChanged);
             _currentDifficulty = _difficultyChanged.CurrentDifficulty;
         }
     }
@@ -96,26 +101,31 @@ public sealed class PlayerStateSystem : MonoBehaviour
         if (_interactionRegistered != null)
         {
             _interactionRegistered.Raised -= HandleInteraction;
+            ExperienceDiagnostics.LogSubscription("removed", this, _interactionRegistered);
         }
 
         if (_gameplayPauseChanged != null)
         {
             _gameplayPauseChanged.Raised -= HandlePauseChanged;
+            ExperienceDiagnostics.LogSubscription("removed", this, _gameplayPauseChanged);
         }
 
         if (_experienceReady != null)
         {
             _experienceReady.Raised -= HandleExperienceReady;
+            ExperienceDiagnostics.LogSubscription("removed", this, _experienceReady);
         }
 
         if (_mainMenuRequested != null)
         {
             _mainMenuRequested.Raised -= HandleMainMenuRequested;
+            ExperienceDiagnostics.LogSubscription("removed", this, _mainMenuRequested);
         }
 
         if (_difficultyChanged != null)
         {
             _difficultyChanged.Raised -= HandleDifficultyChanged;
+            ExperienceDiagnostics.LogSubscription("removed", this, _difficultyChanged);
         }
     }
 
@@ -455,7 +465,7 @@ public sealed class PlayerStateSystem : MonoBehaviour
 
         if (_playerStateChanged != null)
         {
-            _playerStateChanged.RaiseEvent(CurrentState);
+            _playerStateChanged.RaiseEvent(CurrentState, this);
         }
 
         Debug.Log($"[PlayerStateSystem] State changed to {CurrentState}.", this);

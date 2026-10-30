@@ -140,7 +140,11 @@ public sealed class EnemyWaveSpawner : MonoBehaviour, IExperienceRuntime
         RemoveInactiveEnemies();
         subscribedBeatPlayer = beatPlayer;
         subscribedBeatPlayer.BeatReached += HandleBeatReached;
+        ExperienceDiagnostics.LogSubscription("added", this, subscribedBeatPlayer);
         IsRunning = true;
+        ExperienceDiagnostics.Log(ExperienceDiagnosticLevel.Flow, "FLOW", "enemy_wave_started", this, null,
+            "amount=" + amountOfEnemies + " beats_per_spawn=" + beatsPerSpawn +
+            " active_limit=" + maxActiveEnemies);
     }
 
     public void StopWave()
@@ -148,6 +152,7 @@ public sealed class EnemyWaveSpawner : MonoBehaviour, IExperienceRuntime
         if (subscribedBeatPlayer != null)
         {
             subscribedBeatPlayer.BeatReached -= HandleBeatReached;
+            ExperienceDiagnostics.LogSubscription("removed", this, subscribedBeatPlayer);
         }
 
         subscribedBeatPlayer = null;
@@ -159,12 +164,18 @@ public sealed class EnemyWaveSpawner : MonoBehaviour, IExperienceRuntime
         if (!IsRunning || subscribedBeatPlayer == null || !subscribedBeatPlayer.IsPlaying ||
             beatIndex < 0 || beatIndex == lastBeatIndex)
         {
+            if (ExperienceDiagnostics.Level == ExperienceDiagnosticLevel.Detailed)
+                ExperienceDiagnostics.Log(ExperienceDiagnosticLevel.Detailed, "BEAT", "consumer_discarded_beat", this, null,
+                    "consumer=EnemyWaveSpawner reason=not_running_player_unavailable_or_duplicate beat_index=" + beatIndex);
             return;
         }
 
         BeatMapSO map = subscribedBeatPlayer.BeatMap;
         if (map == null || beatIndex >= map.Beats.Count)
         {
+            if (ExperienceDiagnostics.Level == ExperienceDiagnosticLevel.Detailed)
+                ExperienceDiagnostics.Log(ExperienceDiagnosticLevel.Detailed, "BEAT", "consumer_discarded_beat", this, null,
+                    "consumer=EnemyWaveSpawner reason=beat_map_unavailable_or_index_out_of_range beat_index=" + beatIndex);
             return;
         }
 
@@ -182,6 +193,12 @@ public sealed class EnemyWaveSpawner : MonoBehaviour, IExperienceRuntime
             int amount = Mathf.Min(requested, Mathf.Min(available, amountOfEnemies - SpawnedCount));
             int spawned = SpawnGroup(amount);
 
+            if (ExperienceDiagnostics.Level == ExperienceDiagnosticLevel.Detailed)
+                ExperienceDiagnostics.Log(ExperienceDiagnosticLevel.Detailed, "BEAT", "consumer_action", this, null,
+                    "consumer=EnemyWaveSpawner action=spawn_wave beat_index=" + beatIndex +
+                    " recent_intensity=" + RecentIntensity.ToString("F4", System.Globalization.CultureInfo.InvariantCulture) +
+                    " requested=" + requested + " spawned=" + spawned + " active=" + ActiveEnemyCount);
+
             if (logWaves)
             {
                 Debug.Log($"[EnemyWaveSpawner] Beat {beatIndex + 1} | Intensidad media: {RecentIntensity:F2} | Nuevos: {spawned}/{requested} | Activos: {ActiveEnemyCount}/{activeLimit} | Total: {SpawnedCount}/{amountOfEnemies}", this);
@@ -190,6 +207,9 @@ public sealed class EnemyWaveSpawner : MonoBehaviour, IExperienceRuntime
 
         if (SpawnedCount >= amountOfEnemies || beatIndex == map.Beats.Count - 1)
         {
+            ExperienceDiagnostics.Log(ExperienceDiagnosticLevel.Flow, "FLOW", "enemy_wave_finished", this, null,
+                "reason=" + (SpawnedCount >= amountOfEnemies ? "spawn_limit_reached" : "beat_map_ended") +
+                " spawned_total=" + SpawnedCount);
             StopWave();
         }
     }

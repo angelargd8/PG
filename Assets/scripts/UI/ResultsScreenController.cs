@@ -36,20 +36,22 @@ public sealed class ResultsScreenController : MonoBehaviour
 
     private void OnEnable()
     {
-        if (_songFinished != null) _songFinished.Raised += HandleSongFinished;
+        if (_songFinished != null) { _songFinished.Raised += HandleSongFinished; ExperienceDiagnostics.LogSubscription("added", this, _songFinished); }
         if (_runResultReady != null)
         {
             _runResultReady.Raised += HandleRunResultReady;
+            ExperienceDiagnostics.LogSubscription("added", this, _runResultReady);
         }
     }
 
 
     private void OnDisable()
     {
-        if (_songFinished != null) _songFinished.Raised -= HandleSongFinished;
+        if (_songFinished != null) { _songFinished.Raised -= HandleSongFinished; ExperienceDiagnostics.LogSubscription("removed", this, _songFinished); }
         if (_runResultReady != null)
         {
             _runResultReady.Raised -= HandleRunResultReady;
+            ExperienceDiagnostics.LogSubscription("removed", this, _runResultReady);
         }
 
         RestoreGameplay();
@@ -65,8 +67,13 @@ public sealed class ResultsScreenController : MonoBehaviour
     {
         if (_isShowing)
         {
+            ExperienceDiagnostics.Log(ExperienceDiagnosticLevel.Flow, "RESULT", "results_ignored", this, null,
+                "reason=already_showing");
             return;
         }
+
+        ExperienceDiagnostics.Log(ExperienceDiagnosticLevel.Flow, "RESULT", "results_received", this, null,
+            "final_score=" + result.FinalScore + " high_score=" + result.HighScore + " new_high_score=" + result.IsNewHighScore);
 
         _isShowing = true;
 
@@ -138,7 +145,7 @@ public sealed class ResultsScreenController : MonoBehaviour
             return;
         }
 
-        _mainMenuRequested.RaiseEvent();
+        _mainMenuRequested.RaiseEvent(this);
     }
 
 
@@ -149,7 +156,7 @@ public sealed class ResultsScreenController : MonoBehaviour
 
         if (_gameplayPauseChanged != null)
         {
-            _gameplayPauseChanged.RaiseEvent(true);
+            _gameplayPauseChanged.RaiseEvent(true, this);
         }
     }
 
@@ -166,7 +173,7 @@ public sealed class ResultsScreenController : MonoBehaviour
 
         if (_gameplayPauseChanged != null)
         {
-            _gameplayPauseChanged.RaiseEvent(false);
+            _gameplayPauseChanged.RaiseEvent(false, this);
         }
 
         if (_resultsPanel != null)

@@ -41,11 +41,13 @@ public sealed class HighScoreSystem : MonoBehaviour
         if (_scoreRunStarted != null)
         {
             _scoreRunStarted.Raised += HandleScoreRunStarted;
+            ExperienceDiagnostics.LogSubscription("added", this, _scoreRunStarted);
         }
 
         if (_finalScoreSubmitted != null)
         {
             _finalScoreSubmitted.Raised += HandleFinalScoreSubmitted;
+            ExperienceDiagnostics.LogSubscription("added", this, _finalScoreSubmitted);
         }
     }
 
@@ -55,11 +57,13 @@ public sealed class HighScoreSystem : MonoBehaviour
         if (_scoreRunStarted != null)
         {
             _scoreRunStarted.Raised -= HandleScoreRunStarted;
+            ExperienceDiagnostics.LogSubscription("removed", this, _scoreRunStarted);
         }
 
         if (_finalScoreSubmitted != null)
         {
             _finalScoreSubmitted.Raised -= HandleFinalScoreSubmitted;
+            ExperienceDiagnostics.LogSubscription("removed", this, _finalScoreSubmitted);
         }
     }
 
@@ -98,6 +102,8 @@ public sealed class HighScoreSystem : MonoBehaviour
     private void HandleScoreRunStarted(ScoreRunContext context)
     {
         _currentRun = context;
+        ExperienceDiagnostics.Log(ExperienceDiagnosticLevel.Flow, "SCORE", "score_context_received", this, null,
+            "score_id=" + ExperienceDiagnostics.Field("id", context.ScoreId) + " full=" + context.IsFullExperience);
 
         // Debug.Log(
         //     $"[HighScoreSystem] Run started | " +
@@ -117,6 +123,8 @@ public sealed class HighScoreSystem : MonoBehaviour
                 "[HighScoreSystem] Final score received without active run.",
                 this
             );
+            ExperienceDiagnostics.Log(ExperienceDiagnosticLevel.Flow, "SCORE", "final_score_ignored", this, null,
+                "reason=no_score_run_context score=" + finalScore);
 
             return;
         }
@@ -160,7 +168,9 @@ public sealed class HighScoreSystem : MonoBehaviour
 
         if (_runResultReady != null)
         {
-            _runResultReady.RaiseEvent(result);
+            ExperienceDiagnostics.Log(ExperienceDiagnosticLevel.Flow, "SCORE", "run_result_published", this, null,
+                "final_score=" + finalScore + " high_score=" + highScore + " is_new_high_score=" + isNewHighScore);
+            _runResultReady.RaiseEvent(result, this);
         }
     }
 }

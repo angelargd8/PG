@@ -64,11 +64,13 @@ public sealed class MetricsSystem : MonoBehaviour
         if (_gameplayPauseChanged != null)
         {
             _gameplayPauseChanged.Raised += HandlePauseChanged;
+            ExperienceDiagnostics.LogSubscription("added", this, _gameplayPauseChanged);
         }
 
         if (_interactionRegistered != null)
         {
             _interactionRegistered.Raised += RegisterInteraction;
+            ExperienceDiagnostics.LogSubscription("added", this, _interactionRegistered);
         }
     }
 
@@ -78,11 +80,13 @@ public sealed class MetricsSystem : MonoBehaviour
         if (_gameplayPauseChanged != null)
         {
             _gameplayPauseChanged.Raised -= HandlePauseChanged;
+            ExperienceDiagnostics.LogSubscription("removed", this, _gameplayPauseChanged);
         }
 
         if (_interactionRegistered != null)
         {
             _interactionRegistered.Raised -= RegisterInteraction;
+            ExperienceDiagnostics.LogSubscription("removed", this, _interactionRegistered);
         }
     }
 
@@ -91,6 +95,8 @@ public sealed class MetricsSystem : MonoBehaviour
     {
         if (_isPaused)
         {
+            ExperienceDiagnostics.Log(ExperienceDiagnosticLevel.Detailed, "METRICS", "interaction_ignored", this, null,
+                "reason=gameplay_paused");
             return;
         }
 
@@ -106,6 +112,12 @@ public sealed class MetricsSystem : MonoBehaviour
         {
             _metricsLogger.LogInteraction(result);
         }
+        if (ExperienceDiagnostics.Level == ExperienceDiagnosticLevel.Detailed)
+            ExperienceDiagnostics.Log(ExperienceDiagnosticLevel.Detailed, "METRICS", "interaction_recorded", this, null,
+                "minigame=" + ExperienceDiagnostics.Field("name", result.MinigameId) +
+                " outcome=" + result.Outcome + " total=" + _totalInteractions +
+                " success_rate=" + SuccessRate.ToString("F4", System.Globalization.CultureInfo.InvariantCulture) +
+                " timing_error_s=" + (result.TimingError.HasValue ? result.TimingError.Value.ToString("F6", System.Globalization.CultureInfo.InvariantCulture) : "unavailable"));
     }
 
 

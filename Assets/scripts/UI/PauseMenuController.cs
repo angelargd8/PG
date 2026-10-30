@@ -38,6 +38,7 @@ public sealed class PauseMenuController : MonoBehaviour
             _subscribedAction = _pauseAction.action;
             _subscribedAction.performed += HandlePausePerformed;
             _subscribedAction.Enable();
+            ExperienceDiagnostics.LogSubscription("added", this, _pauseAction);
         }
         else
         {
@@ -51,6 +52,7 @@ public sealed class PauseMenuController : MonoBehaviour
         if (_subscribedAction != null)
         {
             _subscribedAction.performed -= HandlePausePerformed;
+            ExperienceDiagnostics.LogSubscription("removed", this, _pauseAction);
             _subscribedAction.Disable();
             _subscribedAction = null;
         }
@@ -86,6 +88,8 @@ public sealed class PauseMenuController : MonoBehaviour
         }
 
         _isPaused = true;
+        ExperienceDiagnostics.Log(ExperienceDiagnosticLevel.Flow, "FLOW", "pause_started", this, null,
+            "time_scale_before=" + Time.timeScale);
 
         Time.timeScale = 0f;
         AudioListener.pause = true;
@@ -102,7 +106,7 @@ public sealed class PauseMenuController : MonoBehaviour
 
         if (_gameplayPauseChanged != null)
         {
-            _gameplayPauseChanged.RaiseEvent(true);
+            _gameplayPauseChanged.RaiseEvent(true, this);
         }
 
         Debug.Log("Experience paused.", this);
@@ -117,6 +121,8 @@ public sealed class PauseMenuController : MonoBehaviour
         }
 
         _isPaused = false;
+        ExperienceDiagnostics.Log(ExperienceDiagnosticLevel.Flow, "FLOW", "pause_ended", this, null,
+            "time_scale_restored=1");
 
         Time.timeScale = 1f;
         AudioListener.pause = false;
@@ -128,7 +134,7 @@ public sealed class PauseMenuController : MonoBehaviour
 
         if (_gameplayPauseChanged != null)
         {
-            _gameplayPauseChanged.RaiseEvent(false);
+            _gameplayPauseChanged.RaiseEvent(false, this);
         }
 
         Debug.Log("Experience resumed.", this);
@@ -143,7 +149,8 @@ public sealed class PauseMenuController : MonoBehaviour
             return;
         }
 
-        _mainMenuRequested.RaiseEvent();
+        _mainMenuRequested.RaiseEvent(this);
+        ExperienceDiagnostics.Log(ExperienceDiagnosticLevel.Flow, "FLOW", "pause_menu_return_requested", this, null);
     }
 
 
@@ -160,7 +167,7 @@ public sealed class PauseMenuController : MonoBehaviour
 
         if (_gameplayPauseChanged != null)
         {
-            _gameplayPauseChanged.RaiseEvent(false);
+            _gameplayPauseChanged.RaiseEvent(false, this);
         }
     }
 }

@@ -25,70 +25,82 @@ public sealed class ScoreSystem : MonoBehaviour
 
     private void OnEnable()
     {
-        if (_songFinished != null) _songFinished.Raised += HandleSongFinished;
+        if (_songFinished != null) { _songFinished.Raised += HandleSongFinished; ExperienceDiagnostics.LogSubscription("added", this, _songFinished); }
         if (_interactionRegistered != null)
         {
             _interactionRegistered.Raised += HandleInteraction;
+            ExperienceDiagnostics.LogSubscription("added", this, _interactionRegistered);
         }
 
         if (_scoreProfileChanged != null)
         {
             _scoreProfileChanged.Raised += HandleScoreProfileChanged;
+            ExperienceDiagnostics.LogSubscription("added", this, _scoreProfileChanged);
         }
 
         if (_experienceReady != null)
         {
             _experienceReady.Raised += HandleExperienceReady;
+            ExperienceDiagnostics.LogSubscription("added", this, _experienceReady);
         }
 
         if (_mainMenuRequested != null)
         {
             _mainMenuRequested.Raised += HandleMainMenuRequested;
+            ExperienceDiagnostics.LogSubscription("added", this, _mainMenuRequested);
         }
 
         if (_experienceCompleted != null)
         {
             _experienceCompleted.Raised += HandleExperienceCompleted;
+            ExperienceDiagnostics.LogSubscription("added", this, _experienceCompleted);
         }
 
         if (_scoreBonusAwarded != null)
         {
             _scoreBonusAwarded.Raised += HandleScoreBonus;
+            ExperienceDiagnostics.LogSubscription("added", this, _scoreBonusAwarded);
         }
     }
 
 
     private void OnDisable()
     {
-        if (_songFinished != null) _songFinished.Raised -= HandleSongFinished;
+        if (_songFinished != null) { _songFinished.Raised -= HandleSongFinished; ExperienceDiagnostics.LogSubscription("removed", this, _songFinished); }
         if (_interactionRegistered != null)
         {
             _interactionRegistered.Raised -= HandleInteraction;
+            ExperienceDiagnostics.LogSubscription("removed", this, _interactionRegistered);
         }
 
         if (_scoreProfileChanged != null)
         {
             _scoreProfileChanged.Raised -= HandleScoreProfileChanged;
+            ExperienceDiagnostics.LogSubscription("removed", this, _scoreProfileChanged);
         }
 
         if (_experienceReady != null)
         {
             _experienceReady.Raised -= HandleExperienceReady;
+            ExperienceDiagnostics.LogSubscription("removed", this, _experienceReady);
         }
 
         if (_mainMenuRequested != null)
         {
             _mainMenuRequested.Raised -= HandleMainMenuRequested;
+            ExperienceDiagnostics.LogSubscription("removed", this, _mainMenuRequested);
         }
 
         if (_experienceCompleted != null)
         {
             _experienceCompleted.Raised -= HandleExperienceCompleted;
+            ExperienceDiagnostics.LogSubscription("removed", this, _experienceCompleted);
         }
 
         if (_scoreBonusAwarded != null)
         {
             _scoreBonusAwarded.Raised -= HandleScoreBonus;
+            ExperienceDiagnostics.LogSubscription("removed", this, _scoreBonusAwarded);
         }
     }
 
@@ -97,15 +109,26 @@ public sealed class ScoreSystem : MonoBehaviour
     {
         if (!_isExperienceActive || _songHasFinished)
         {
+            ExperienceDiagnostics.Log(ExperienceDiagnosticLevel.Detailed, "SCORE", "interaction_ignored", this, null,
+                "reason=" + (!_isExperienceActive ? "experience_inactive" : "song_finished"));
             return;
         }
 
         if (_currentProfile == null)
         {
+            ExperienceDiagnostics.Log(ExperienceDiagnosticLevel.Detailed, "SCORE", "interaction_ignored", this, null,
+                "reason=score_profile_missing");
             return;
         }
 
         ScoreEvaluation evaluation = _currentProfile.Evaluate(result);
+
+        if (ExperienceDiagnostics.Level == ExperienceDiagnosticLevel.Detailed)
+            ExperienceDiagnostics.Log(ExperienceDiagnosticLevel.Detailed, "SCORE", "interaction_evaluated", this, null,
+                "minigame=" + ExperienceDiagnostics.Field("name", result.MinigameId) +
+                " outcome=" + result.Outcome + " timing_error_s=" +
+                (result.TimingError.HasValue ? result.TimingError.Value.ToString("F6", System.Globalization.CultureInfo.InvariantCulture) : "unavailable") +
+                " score_delta=" + evaluation.ScoreDelta);
 
         ApplyScore(evaluation, result.FeedbackPosition);
     }
@@ -132,7 +155,7 @@ public sealed class ScoreSystem : MonoBehaviour
 
         if (_scoreChanged != null)
         {
-            _scoreChanged.RaiseEvent(scoreChange);
+            _scoreChanged.RaiseEvent(scoreChange, this);
         }
     }
     
@@ -163,7 +186,7 @@ public sealed class ScoreSystem : MonoBehaviour
 
         if (_scoreChanged != null)
         {
-            _scoreChanged.RaiseEvent(scoreChange);
+            _scoreChanged.RaiseEvent(scoreChange, this);
         }
     }
 
@@ -176,6 +199,8 @@ public sealed class ScoreSystem : MonoBehaviour
 
     private void HandleExperienceReady()
     {
+        ExperienceDiagnostics.Log(ExperienceDiagnosticLevel.Flow, "SCORE", "score_run_started", this, null,
+            "reason=ExperienceReady");
         _songHasFinished = false;
         _isExperienceActive = true;
         ResetScore();
@@ -203,7 +228,7 @@ public sealed class ScoreSystem : MonoBehaviour
 
         if (_scoreChanged != null)
         {
-            _scoreChanged.RaiseEvent(scoreChange);
+            _scoreChanged.RaiseEvent(scoreChange, this);
         }
     }
 
@@ -215,6 +240,8 @@ public sealed class ScoreSystem : MonoBehaviour
         }
 
         _isExperienceActive = false;
+        ExperienceDiagnostics.Log(ExperienceDiagnosticLevel.Flow, "SCORE", "score_run_completed", this, null,
+            "final_score=" + CurrentScore);
 
         Debug.Log(
             $"[ScoreSystem] Run completed | Final Score: {CurrentScore}",
@@ -223,7 +250,7 @@ public sealed class ScoreSystem : MonoBehaviour
 
         if (_finalScoreSubmitted != null)
         {
-            _finalScoreSubmitted.RaiseEvent(CurrentScore);
+            _finalScoreSubmitted.RaiseEvent(CurrentScore, this);
         }
     }
 

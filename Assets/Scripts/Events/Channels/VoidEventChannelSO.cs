@@ -20,8 +20,17 @@ public sealed class VoidEventChannelSO : ScriptableObject
 
 
     // publica el evento y notifica a todos los consumidores
-    public void RaiseEvent()
+    public void RaiseEvent() => RaiseEventInternal(null);
+
+    public void RaiseEvent(UnityEngine.Object publisher) => RaiseEventInternal(publisher);
+
+    private void RaiseEventInternal(UnityEngine.Object publisher)
     {
-        Raised?.Invoke();
+        if (!ExperienceDiagnostics.IsEnabled(ExperienceDiagnosticLevel.Flow))
+        {
+            Raised?.Invoke();
+            return;
+        }
+        ExperienceDiagnostics.PublishVoid(this, Raised, publisher);
     }
 }

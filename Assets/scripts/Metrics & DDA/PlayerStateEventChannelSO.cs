@@ -10,8 +10,17 @@ public sealed class PlayerStateEventChannelSO : ScriptableObject
     public event Action<PlayerState> Raised;
 
 
-    public void RaiseEvent(PlayerState state)
+    public void RaiseEvent(PlayerState state) => RaiseEventInternal(state, null);
+
+    public void RaiseEvent(PlayerState state, UnityEngine.Object publisher) => RaiseEventInternal(state, publisher);
+
+    private void RaiseEventInternal(PlayerState state, UnityEngine.Object publisher)
     {
-        Raised?.Invoke(state);
+		if (!ExperienceDiagnostics.IsEnabled(ExperienceDiagnosticLevel.Flow))
+		{
+			Raised?.Invoke(state);
+			return;
+		}
+		ExperienceDiagnostics.Publish(this, Raised, state, publisher, "player_state=" + state);
     }
 }

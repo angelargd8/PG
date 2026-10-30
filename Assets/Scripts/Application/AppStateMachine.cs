@@ -49,11 +49,13 @@ public sealed class AppStateMachine : MonoBehaviour
         {
             experienceRequested.Raised +=
                 HandleExperienceRequested;
+            ExperienceDiagnostics.LogSubscription("added", this, experienceRequested);
         }
 
         if (_mainMenuRequested != null)
         {
             _mainMenuRequested.Raised += HandleMainMenuRequested;
+            ExperienceDiagnostics.LogSubscription("added", this, _mainMenuRequested);
         }
     }
 
@@ -64,11 +66,13 @@ public sealed class AppStateMachine : MonoBehaviour
         {
             experienceRequested.Raised -=
                 HandleExperienceRequested;
+            ExperienceDiagnostics.LogSubscription("removed", this, experienceRequested);
         }
 
         if (_mainMenuRequested != null)
         {
             _mainMenuRequested.Raised -= HandleMainMenuRequested;
+            ExperienceDiagnostics.LogSubscription("removed", this, _mainMenuRequested);
         }
     }
 
@@ -87,6 +91,8 @@ public sealed class AppStateMachine : MonoBehaviour
 
         CurrentState =
             AppState.MainMenu;
+        ExperienceDiagnostics.Log(ExperienceDiagnosticLevel.Flow, "FLOW", "state_changed", this, null,
+            "state=MainMenu reason=initial_menu_loaded");
 
 
         if (_mainMenuEntered != null)
@@ -96,7 +102,7 @@ public sealed class AppStateMachine : MonoBehaviour
                 this
             );
 
-            _mainMenuEntered.RaiseEvent();
+            _mainMenuEntered.RaiseEvent(this);
         }
         else
         {
@@ -113,9 +119,15 @@ public sealed class AppStateMachine : MonoBehaviour
         ExperienceRequest request
     )
     {
+        ExperienceDiagnostics.Log(ExperienceDiagnosticLevel.Flow, "FLOW", "experience_request_received", this, null,
+            "experience=" + ExperienceDiagnostics.Field("name", request.Experience != null ? request.Experience.DisplayName : "null") +
+            " mode=" + (request.PlayFullSequence ? "full" : "individual") + " start_index=" + request.StartSceneIndex);
         if (!_sceneFlowManager.ValidateRequest(request, out string error))
         {
+            ExperienceDiagnostics.Log(ExperienceDiagnosticLevel.Flow, "FLOW", "experience_request_rejected", this, null,
+                ExperienceDiagnostics.Field("reason", error));
             Debug.LogError(error, this);
+            ExperienceDiagnostics.EndRun("request_rejected");
             return;
         }
         Debug.Log(
@@ -129,6 +141,8 @@ public sealed class AppStateMachine : MonoBehaviour
 
         if (CurrentState != AppState.MainMenu)
         {
+            ExperienceDiagnostics.Log(ExperienceDiagnosticLevel.Flow, "FLOW", "experience_request_ignored", this, null,
+                "reason=state_not_main_menu " + ExperienceDiagnostics.Field("state", CurrentState.ToString()));
             Debug.LogWarning(
                 $"No se puede iniciar experiencia. " +
                 $"Estado actual: {CurrentState}",
@@ -141,6 +155,8 @@ public sealed class AppStateMachine : MonoBehaviour
 
         if (_isTransitioning)
         {
+            ExperienceDiagnostics.Log(ExperienceDiagnosticLevel.Flow, "FLOW", "experience_request_ignored", this, null,
+                "reason=transition_in_progress");
             return;
         }
 
@@ -164,13 +180,15 @@ public sealed class AppStateMachine : MonoBehaviour
 
         CurrentExperience =
             request.Experience;
+        ExperienceDiagnostics.Log(ExperienceDiagnosticLevel.Flow, "FLOW", "state_changed", this, null,
+            "state=Loading reason=experience_request");
 
 
 
 
         if (experienceTransitionStarted != null)
         {
-            experienceTransitionStarted.RaiseEvent();
+            experienceTransitionStarted.RaiseEvent(this);
         }
 
 
@@ -185,12 +203,16 @@ public sealed class AppStateMachine : MonoBehaviour
 
         if (!_sceneFlowManager.TransitionSucceeded)
         {
+            ExperienceDiagnostics.Log(ExperienceDiagnosticLevel.Flow, "FLOW", "experience_start_failed", this, null,
+                "reason=scene_flow_transition_failed");
             yield return ReturnToMainMenuRoutine();
             yield break;
         }
 
         CurrentState =
             AppState.Experience;
+        ExperienceDiagnostics.Log(ExperienceDiagnosticLevel.Flow, "FLOW", "state_changed", this, null,
+            "state=Experience reason=scene_flow_prepared");
 
 
         if (experienceReady != null)
@@ -201,7 +223,7 @@ public sealed class AppStateMachine : MonoBehaviour
                 this
             );
 
-            experienceReady.RaiseEvent();
+            experienceReady.RaiseEvent(this);
         }
 
 
@@ -212,13 +234,15 @@ public sealed class AppStateMachine : MonoBehaviour
     {
         if (!isActiveAndEnabled || CurrentState != AppState.Experience || _isTransitioning)
         {
+            ExperienceDiagnostics.Log(ExperienceDiagnosticLevel.Flow, "FLOW", "main_menu_request_ignored", this, null,
+                "active=" + isActiveAndEnabled + " state=" + CurrentState + " transitioning=" + _isTransitioning);
             return false;
         }
 
         // usar el mismo canal como el pause menu para que el equipo tmb reciba el evento de salida
         if (_mainMenuRequested != null)
         {
-            _mainMenuRequested.RaiseEvent();
+            _mainMenuRequested.RaiseEvent(this);
         }
         else
         {
@@ -232,11 +256,15 @@ public sealed class AppStateMachine : MonoBehaviour
     {
         if (CurrentState != AppState.Experience)
         {
+            ExperienceDiagnostics.Log(ExperienceDiagnosticLevel.Flow, "FLOW", "main_menu_request_ignored", this, null,
+                "reason=state_not_experience state=" + CurrentState);
             return;
         }
 
         if (_isTransitioning)
         {
+            ExperienceDiagnostics.Log(ExperienceDiagnosticLevel.Flow, "FLOW", "main_menu_request_ignored", this, null,
+                "reason=transition_in_progress");
             return;
         }
 
@@ -248,6 +276,8 @@ public sealed class AppStateMachine : MonoBehaviour
         _isTransitioning = true;
 
         CurrentState = AppState.Loading;
+        ExperienceDiagnostics.Log(ExperienceDiagnosticLevel.Flow, "FLOW", "state_changed", this, null,
+            "state=Loading reason=return_to_menu");
 
         yield return _sceneFlowManager.TransitionToMainMenu();
 
@@ -256,12 +286,15 @@ public sealed class AppStateMachine : MonoBehaviour
 
         CurrentExperience = null;
         CurrentState = AppState.MainMenu;
+        ExperienceDiagnostics.Log(ExperienceDiagnosticLevel.Flow, "FLOW", "state_changed", this, null,
+            "state=MainMenu reason=return_complete");
 
         if (_mainMenuEntered != null)
         {
-            _mainMenuEntered.RaiseEvent();
+            _mainMenuEntered.RaiseEvent(this);
         }
 
         _isTransitioning = false;
+        ExperienceDiagnostics.EndRun("returned_to_menu");
     }
 }

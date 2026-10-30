@@ -127,7 +127,9 @@ public sealed class PlayerBeatVFXController : MonoBehaviour
         if (_subscribedBeatPlayer != null)
         {
             _subscribedBeatPlayer.BeatReached += HandleBeat;
-            _subscribedBeatPlayer.PlaybackReset += ClearParticles;
+            ExperienceDiagnostics.LogSubscription("added", this, _subscribedBeatPlayer);
+            _subscribedBeatPlayer.PlaybackReset += HandlePlaybackReset;
+            ExperienceDiagnostics.LogSubscription("added", this, _subscribedBeatPlayer);
         }
     }
 
@@ -137,7 +139,9 @@ public sealed class PlayerBeatVFXController : MonoBehaviour
         if (_subscribedBeatPlayer != null)
         {
             _subscribedBeatPlayer.BeatReached -= HandleBeat;
-            _subscribedBeatPlayer.PlaybackReset -= ClearParticles;
+            ExperienceDiagnostics.LogSubscription("removed", this, _subscribedBeatPlayer);
+            _subscribedBeatPlayer.PlaybackReset -= HandlePlaybackReset;
+            ExperienceDiagnostics.LogSubscription("removed", this, _subscribedBeatPlayer);
         }
 
         _subscribedBeatPlayer = null;
@@ -197,6 +201,10 @@ public sealed class PlayerBeatVFXController : MonoBehaviour
             float.IsNaN(beat.Intensity) || beat.Intensity < _minimumIntensity ||
             beat.Time == _lastBeatTime || !FollowPlayer())
         {
+            ExperienceDiagnostics.RecordFrequentEvent("PlayerBeatVFXController", "beat_discarded", this);
+            if (ExperienceDiagnostics.Level == ExperienceDiagnosticLevel.Detailed)
+                ExperienceDiagnostics.Log(ExperienceDiagnosticLevel.Detailed, "BEAT", "consumer_discarded_beat", this, null,
+                    "consumer=PlayerBeatVFXController reason=inactive_dependency_paused_low_intensity_duplicate_or_no_player_head beat_index=" + beatIndex);
             return;
         }
 
@@ -233,10 +241,23 @@ public sealed class PlayerBeatVFXController : MonoBehaviour
 
         _lastBeatTime = beat.Time;
         _hasEmitted |= emittedCount > 0;
+        ExperienceDiagnostics.RecordFrequentEvent("PlayerBeatVFXController", "particles_emitted", this);
+        if (ExperienceDiagnostics.Level == ExperienceDiagnosticLevel.Detailed)
+            ExperienceDiagnostics.Log(ExperienceDiagnosticLevel.Detailed, "BEAT", "consumer_action", this, null,
+                "consumer=PlayerBeatVFXController action=emit_particles beat_index=" + beatIndex +
+                " emitted_count=" + emittedCount + " requested_count=" + requestedCount);
         if (_logPulses && emittedCount > 0)
         {
             Debug.Log($"[PlayerBeatVFXController] Beat {beatIndex + 1} | Intensidad: {beat.Intensity:F2} | Particulas: {emittedCount}", this);
         }
+    }
+
+    private void HandlePlaybackReset()
+    {
+        if (ExperienceDiagnostics.Level == ExperienceDiagnosticLevel.Detailed)
+            ExperienceDiagnostics.Log(ExperienceDiagnosticLevel.Detailed, "BEAT", "consumer_action", this, null,
+                "consumer=PlayerBeatVFXController action=clear_particles");
+        ClearParticles();
     }
 
 

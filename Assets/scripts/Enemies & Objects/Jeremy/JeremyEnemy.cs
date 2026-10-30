@@ -141,7 +141,7 @@ public sealed class JeremyEnemy : MonoBehaviour
 
         if (_interactionRegistered != null)
         {
-            _interactionRegistered.RaiseEvent(result);
+            _interactionRegistered.RaiseEvent(result, this);
         }
 
         if (_pool != null)

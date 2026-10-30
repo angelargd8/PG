@@ -10,8 +10,17 @@ public sealed class ScoreBonusEventChannelSO : ScriptableObject
     public event Action<ScoreBonus> Raised;
 
 
-    public void RaiseEvent(ScoreBonus bonus)
+    public void RaiseEvent(ScoreBonus bonus) => RaiseEventInternal(bonus, null);
+
+    public void RaiseEvent(ScoreBonus bonus, UnityEngine.Object publisher) => RaiseEventInternal(bonus, publisher);
+
+    private void RaiseEventInternal(ScoreBonus bonus, UnityEngine.Object publisher)
     {
-        Raised?.Invoke(bonus);
+		if (!ExperienceDiagnostics.IsEnabled(ExperienceDiagnosticLevel.Flow))
+		{
+			Raised?.Invoke(bonus);
+			return;
+		}
+		ExperienceDiagnostics.Publish(this, Raised, bonus, publisher, "points=" + bonus.Points);
     }
 }

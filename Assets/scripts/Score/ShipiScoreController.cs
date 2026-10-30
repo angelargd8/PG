@@ -40,7 +40,7 @@ public sealed class ShipiScoreController :
 
         _scoreProfileChanged.RaiseEvent(
             _scoreProfile
-        );
+        , this);
 
         Debug.Log(
             "[ShipiScoreController] " +

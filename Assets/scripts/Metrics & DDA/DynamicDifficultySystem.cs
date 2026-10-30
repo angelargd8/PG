@@ -80,21 +80,25 @@ public sealed class DynamicDifficultySystem : MonoBehaviour
         if (_interactionRegistered != null)
         {
             _interactionRegistered.Raised += HandleInteraction;
+            ExperienceDiagnostics.LogSubscription("added", this, _interactionRegistered);
         }
 
         if (_playerStateChanged != null)
         {
             _playerStateChanged.Raised += HandlePlayerStateChanged;
+            ExperienceDiagnostics.LogSubscription("added", this, _playerStateChanged);
         }
 
         if (_experienceReady != null)
         {
             _experienceReady.Raised += HandleExperienceReady;
+            ExperienceDiagnostics.LogSubscription("added", this, _experienceReady);
         }
 
         if (_mainMenuRequested != null)
         {
             _mainMenuRequested.Raised += HandleMainMenuRequested;
+            ExperienceDiagnostics.LogSubscription("added", this, _mainMenuRequested);
         }
     }
 
@@ -104,21 +108,25 @@ public sealed class DynamicDifficultySystem : MonoBehaviour
         if (_interactionRegistered != null)
         {
             _interactionRegistered.Raised -= HandleInteraction;
+            ExperienceDiagnostics.LogSubscription("removed", this, _interactionRegistered);
         }
 
         if (_playerStateChanged != null)
         {
             _playerStateChanged.Raised -= HandlePlayerStateChanged;
+            ExperienceDiagnostics.LogSubscription("removed", this, _playerStateChanged);
         }
 
         if (_experienceReady != null)
         {
             _experienceReady.Raised -= HandleExperienceReady;
+            ExperienceDiagnostics.LogSubscription("removed", this, _experienceReady);
         }
 
         if (_mainMenuRequested != null)
         {
             _mainMenuRequested.Raised -= HandleMainMenuRequested;
+            ExperienceDiagnostics.LogSubscription("removed", this, _mainMenuRequested);
         }
     }
 
@@ -330,7 +338,7 @@ public sealed class DynamicDifficultySystem : MonoBehaviour
 
         if (_difficultyChanged != null)
         {
-            _difficultyChanged.RaiseEvent(CurrentDifficulty);
+            _difficultyChanged.RaiseEvent(CurrentDifficulty, this);
         }
 
         if (_metricsLogger != null)
@@ -371,7 +379,7 @@ public sealed class DynamicDifficultySystem : MonoBehaviour
 
         if (_difficultyChanged != null)
         {
-            _difficultyChanged.RaiseEvent(CurrentDifficulty);
+            _difficultyChanged.RaiseEvent(CurrentDifficulty, this);
         }
     }
 

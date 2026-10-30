@@ -31,7 +31,7 @@ public sealed class JeremyScoreController :
             return;
         }
 
-        _scoreProfileChanged.RaiseEvent(_scoreProfile);
+        _scoreProfileChanged.RaiseEvent(_scoreProfile, this);
     }
 
 

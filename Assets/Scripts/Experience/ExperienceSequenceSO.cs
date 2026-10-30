@@ -26,6 +26,7 @@ public sealed class ExperienceSequenceSO : ScriptableObject
     public int Count => segments?.Length ?? 0;
     public float PreloadLeadSeconds => preloadLeadSeconds;
     public bool ReleaseUnusedAssets => releaseUnusedAssets;
+    public bool HoldLastSceneUntilSongEnds => holdLastSceneUntilSongEnds;
     public Segment GetSegment(int index) => index >= 0 && index < Count ? segments[index] : null;
 
     public bool RetainStartupPreload(string sceneName, double songTime)

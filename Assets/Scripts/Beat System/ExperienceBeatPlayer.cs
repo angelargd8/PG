@@ -49,6 +49,11 @@ public sealed class ExperienceBeatPlayer : MonoBehaviour
         _nextBeatIndex = 0;
         _hasSongTime = false;
         _wasPlaying = false;
+        ExperienceDiagnostics.Log(ExperienceDiagnosticLevel.Flow, "FLOW", "beat_player_enabled", this, null,
+            "beat_map=" + ExperienceDiagnostics.Field("name", _beatMap != null ? _beatMap.name : "missing") +
+            " beat_count=" + (_beatMap != null ? _beatMap.Beats.Count : 0) +
+            " estimated_bpm=" + (_beatMap != null ? _beatMap.EstimatedBpm : 0).ToString("F3", System.Globalization.CultureInfo.InvariantCulture) +
+            " max_beat_lateness_s=" + _maxBeatLateness.ToString("F6", System.Globalization.CultureInfo.InvariantCulture));
     }
 
 
@@ -69,7 +74,7 @@ public sealed class ExperienceBeatPlayer : MonoBehaviour
     private void OnDisable()
     {
         _wasPlaying = false;
-        PlaybackReset?.Invoke();
+        PublishReset("component_disabled", _lastSongTime, SongTime);
     }
 
 
@@ -83,10 +88,11 @@ public sealed class ExperienceBeatPlayer : MonoBehaviour
     {
         if (_observedBeatMap != _beatMap)
         {
+            string previousMap = _observedBeatMap != null ? _observedBeatMap.name : "none";
             _observedBeatMap = _beatMap;
             _nextBeatIndex = 0;
             _hasSongTime = false;
-            PlaybackReset?.Invoke();
+            PublishReset("beat_map_changed:" + previousMap, _lastSongTime, SongTime);
         }
 
         if (!IsPlaying)
@@ -94,7 +100,10 @@ public sealed class ExperienceBeatPlayer : MonoBehaviour
             if (_wasPlaying)
             {
                 _wasPlaying = false;
-                PlaybackReset?.Invoke();
+                string condition = Time.timeScale <= 0f ? "time_scale_paused" :
+                    AudioListener.pause ? "audio_listener_paused" :
+                    _musicClock == null || !_musicClock.IsPlaying ? "timeline_not_playing" : "beat_map_unavailable";
+                PublishReset(condition, _lastSongTime, SongTime);
             }
 
             // Keep the cursor so resuming a pause does not publish the same beat twice.
@@ -108,9 +117,10 @@ public sealed class ExperienceBeatPlayer : MonoBehaviour
         if (_hasSongTime && songTime < _lastSongTime)
         {
             _nextBeatIndex = nextIndex;
-            PlaybackReset?.Invoke();
+            PublishReset("timeline_time_reversed", _lastSongTime, songTime);
         }
 
+        double previousSongTime = _lastSongTime;
         _lastSongTime = songTime;
         _hasSongTime = true;
 
@@ -121,7 +131,16 @@ public sealed class ExperienceBeatPlayer : MonoBehaviour
 
         if (nextIndex - _nextBeatIndex > 1)
         {
-            PlaybackReset?.Invoke();
+            int skippedCount = nextIndex - _nextBeatIndex - 1;
+            ExperienceDiagnostics.RecordFrequentEvent("BeatReached", "historical_skipped", skippedCount, this);
+            if (ExperienceDiagnostics.Level == ExperienceDiagnosticLevel.Detailed)
+                ExperienceDiagnostics.Log(ExperienceDiagnosticLevel.Detailed, "BEAT", "beats_skipped_by_player_rule", this, null,
+                    "reason=timeline_advanced_past_multiple_beats first_skipped_index=" + _nextBeatIndex +
+                    " last_skipped_index=" + (nextIndex - 2) + " skipped_count=" + skippedCount +
+                    " previous_time_s=" + previousSongTime.ToString("F6", System.Globalization.CultureInfo.InvariantCulture) +
+                    " current_time_s=" + songTime.ToString("F6", System.Globalization.CultureInfo.InvariantCulture));
+            PublishReset("multiple_beats_skipped", previousSongTime, songTime,
+                "skipped_count=" + skippedCount);
         }
 
         _nextBeatIndex = nextIndex;
@@ -131,7 +150,33 @@ public sealed class ExperienceBeatPlayer : MonoBehaviour
         // Only publish the latest beat, never a burst of historical events after a seek.
         if (songTime - beat.Time <= _maxBeatLateness)
         {
-            BeatReached?.Invoke(beat, beatIndex);
+            if (ExperienceDiagnostics.Level == ExperienceDiagnosticLevel.Detailed)
+            {
+                string payload = "beat_map=" + ExperienceDiagnostics.Field("name", _beatMap.name) +
+                    " beat_index=" + beatIndex +
+                    " scheduled_time_s=" + beat.Time.ToString("F6", System.Globalization.CultureInfo.InvariantCulture) +
+                    " observed_time_s=" + songTime.ToString("F6", System.Globalization.CultureInfo.InvariantCulture) +
+                    " publication_delay_s=" + (songTime - beat.Time).ToString("F6", System.Globalization.CultureInfo.InvariantCulture) +
+                    " max_beat_lateness_s=" + _maxBeatLateness.ToString("F6", System.Globalization.CultureInfo.InvariantCulture) +
+                    " intensity=" + beat.Intensity.ToString("F4", System.Globalization.CultureInfo.InvariantCulture) +
+                    " active_scene=" + ExperienceDiagnostics.Field("name", UnityEngine.SceneManagement.SceneManager.GetActiveScene().name);
+                ExperienceDiagnostics.PublishBeat(this, beat, beatIndex, BeatReached, payload);
+            }
+            else if (ExperienceDiagnostics.Level == ExperienceDiagnosticLevel.Flow)
+                ExperienceDiagnostics.PublishBeat(this, beat, beatIndex, BeatReached, null);
+            else BeatReached?.Invoke(beat, beatIndex);
+        }
+        else
+        {
+            ExperienceDiagnostics.RecordFrequentEvent("BeatReached", "omitted_late", this);
+            if (ExperienceDiagnostics.Level == ExperienceDiagnosticLevel.Detailed)
+                ExperienceDiagnostics.Log(ExperienceDiagnosticLevel.Detailed, "BEAT", "beat_omitted", this, null,
+                    "reason=exceeded_max_lateness beat_map=" + ExperienceDiagnostics.Field("name", _beatMap.name) +
+                    " beat_index=" + beatIndex +
+                    " scheduled_time_s=" + beat.Time.ToString("F6", System.Globalization.CultureInfo.InvariantCulture) +
+                    " observed_time_s=" + songTime.ToString("F6", System.Globalization.CultureInfo.InvariantCulture) +
+                    " publication_delay_s=" + (songTime - beat.Time).ToString("F6", System.Globalization.CultureInfo.InvariantCulture) +
+                    " max_beat_lateness_s=" + _maxBeatLateness.ToString("F6", System.Globalization.CultureInfo.InvariantCulture));
         }
     }
 
@@ -154,5 +199,19 @@ public sealed class ExperienceBeatPlayer : MonoBehaviour
         }
 
         return low;
+    }
+
+    private void PublishReset(string condition, double previousTime, double currentTime, string extra = null)
+    {
+        if (!ExperienceDiagnostics.IsEnabled(ExperienceDiagnosticLevel.Flow))
+        {
+            PlaybackReset?.Invoke();
+            return;
+        }
+        string times = "previous_time_s=" + previousTime.ToString("F6", System.Globalization.CultureInfo.InvariantCulture) +
+            " current_time_s=" + currentTime.ToString("F6", System.Globalization.CultureInfo.InvariantCulture) +
+            " segment_index=" + ExperienceDiagnostics.CurrentSegmentIndex +
+            (string.IsNullOrEmpty(extra) ? string.Empty : " " + extra);
+        ExperienceDiagnostics.PublishPlaybackReset(this, PlaybackReset, condition, times);
     }
 }

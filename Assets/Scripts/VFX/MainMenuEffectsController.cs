@@ -30,13 +30,14 @@ public sealed class MainMenuEffectsController : MonoBehaviour
         if (mainMenuEntered == null)
         {
             Debug.LogError(
-                "MainMenuEntered no est· asignado",
+                "MainMenuEntered no est√° asignado",
                 this);
 
             return;
         }
 
         mainMenuEntered.Raised += HandleMenuEntered;
+        ExperienceDiagnostics.LogSubscription("added", this, mainMenuEntered);
 
         Debug.Log(
             $"MainMenuEffectsController suscrito a '{mainMenuEntered.name}' ",
@@ -51,12 +52,13 @@ public sealed class MainMenuEffectsController : MonoBehaviour
         }
 
         mainMenuEntered.Raised -= HandleMenuEntered;
+        ExperienceDiagnostics.LogSubscription("removed", this, mainMenuEntered);
     }
 
     private void HandleMenuEntered()
     {
         Debug.Log(
-            "MainMenuEffectsController recibiÛ MainMenuEntered",
+            "MainMenuEffectsController recibi√≥ MainMenuEntered",
             this);
 
         ActivateObjects();
@@ -93,7 +95,7 @@ public sealed class MainMenuEffectsController : MonoBehaviour
             if (!particles.gameObject.activeInHierarchy)
             {
                 Debug.LogWarning(
-                    $"El sistema '{particles.name}' est· dentro de un objeto inactivo ",
+                    $"El sistema '{particles.name}' est√° dentro de un objeto inactivo ",
                     particles);
 
                 continue;
@@ -106,7 +108,7 @@ public sealed class MainMenuEffectsController : MonoBehaviour
             particles.Play(true);
 
             Debug.Log(
-                $"PartÌculas reproducidas: {particles.name} ",
+                $"Part√≠culas reproducidas: {particles.name} ",
                 particles);
         }
     }
@@ -123,7 +125,7 @@ public sealed class MainMenuEffectsController : MonoBehaviour
             animator.SetTrigger(ShowTrigger);
 
             Debug.Log(
-                $"AnimaciÛn activada: {animator.name} ",
+                $"Animaci√≥n activada: {animator.name} ",
                 animator);
         }
     }

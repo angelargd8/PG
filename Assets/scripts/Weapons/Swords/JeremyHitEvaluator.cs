@@ -87,7 +87,7 @@ public sealed class JeremyHitEvaluator : MonoBehaviour
 
         if (_interactionRegistered != null)
         {
-            _interactionRegistered.RaiseEvent(result);
+            _interactionRegistered.RaiseEvent(result, this);
         }
     }
 

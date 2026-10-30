@@ -10,8 +10,17 @@ public sealed class FinalScoreEventChannelSO : ScriptableObject
     public event Action<int> Raised;
 
 
-    public void RaiseEvent(int score)
+    public void RaiseEvent(int score) => RaiseEventInternal(score, null);
+
+    public void RaiseEvent(int score, UnityEngine.Object publisher) => RaiseEventInternal(score, publisher);
+
+    private void RaiseEventInternal(int score, UnityEngine.Object publisher)
     {
-        Raised?.Invoke(score);
+		if (!ExperienceDiagnostics.IsEnabled(ExperienceDiagnosticLevel.Flow))
+		{
+			Raised?.Invoke(score);
+			return;
+		}
+		ExperienceDiagnostics.Publish(this, Raised, score, publisher, "final_score=" + score);
     }
 }

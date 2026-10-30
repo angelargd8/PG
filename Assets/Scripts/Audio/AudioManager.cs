@@ -49,6 +49,8 @@ public sealed class AudioManager : MonoBehaviour
 
     private void HandleExperienceTransitionStarted()
     {
+        ExperienceDiagnostics.Log(ExperienceDiagnosticLevel.Flow, "AUDIO", "menu_music_fade_out_requested", this, null,
+            "fade_duration_s=" + musicFadeDuration.ToString("F3", System.Globalization.CultureInfo.InvariantCulture));
         Debug.Log(
         "AudioManager recibio ExperienceTransitionStarted ",
         this);
@@ -61,12 +63,14 @@ public sealed class AudioManager : MonoBehaviour
         if (mainMenuEntered != null)
         {
             mainMenuEntered.Raised += HandleMainMenuEntered;
+            ExperienceDiagnostics.LogSubscription("added", this, mainMenuEntered);
         }
 
         if (experienceTransitionStarted != null)
         {
             experienceTransitionStarted.Raised +=
                 HandleExperienceTransitionStarted;
+            ExperienceDiagnostics.LogSubscription("added", this, experienceTransitionStarted);
 
         }
     }
@@ -78,12 +82,14 @@ public sealed class AudioManager : MonoBehaviour
         if (mainMenuEntered != null)
         {
             mainMenuEntered.Raised -= HandleMainMenuEntered;
+            ExperienceDiagnostics.LogSubscription("removed", this, mainMenuEntered);
         }
 
         if (experienceTransitionStarted != null)
         {
             experienceTransitionStarted.Raised -=
                 HandleExperienceTransitionStarted;
+            ExperienceDiagnostics.LogSubscription("removed", this, experienceTransitionStarted);
 
         }
 
@@ -91,6 +97,8 @@ public sealed class AudioManager : MonoBehaviour
 
     private void HandleMainMenuEntered()
     {
+        ExperienceDiagnostics.Log(ExperienceDiagnosticLevel.Flow, "AUDIO", "menu_music_requested", this, null,
+            "clip=" + ExperienceDiagnostics.Field("name", mainMenuMusic != null ? mainMenuMusic.name : "missing"));
         Debug.Log("AudioManager recibio MainMenuEntered ", this);
         PlayMenuMusic();
 

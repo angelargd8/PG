@@ -99,7 +99,7 @@ public sealed class JoaquinInteractionController :
 
         _scoreProfileChanged.RaiseEvent(
             _scoreProfile
-        );
+        , this);
 
         _isRunning = true;
     }
@@ -218,7 +218,7 @@ public sealed class JoaquinInteractionController :
 
         _interactionRegistered.RaiseEvent(
             result
-        );
+        , this);
     }
 
 
@@ -247,7 +247,7 @@ public sealed class JoaquinInteractionController :
 
         _scoreBonusAwarded.RaiseEvent(
             bonus
-        );
+        , this);
 
         Debug.Log(
             $"[JoaquinInteractionController] " +
@@ -377,7 +377,7 @@ public sealed class JoaquinInteractionController :
 
         _interactionRegistered.RaiseEvent(
             result
-        );
+        , this);
 
         Debug.Log(
             $"[JoaquinInteractionController] " +

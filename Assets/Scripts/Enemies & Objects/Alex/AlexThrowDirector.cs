@@ -324,7 +324,7 @@ public sealed class AlexThrowDirector : MonoBehaviour, IExperienceRuntime
         _runtimeScoreProfile.name = _scoreProfile.name + " (Alex Runtime)";
         _appliedMissPenalty = 0;
         UpdateMissPenalty();
-        _scoreProfileChanged.RaiseEvent(_runtimeScoreProfile);
+        _scoreProfileChanged.RaiseEvent(_runtimeScoreProfile, this);
 
 
         _throwCount = 0;
@@ -336,11 +336,13 @@ public sealed class AlexThrowDirector : MonoBehaviour, IExperienceRuntime
         _running = true;
 
         _difficultyChanged.Raised += HandleDifficultyChanged;
+        ExperienceDiagnostics.LogSubscription("added", this, _difficultyChanged);
         HandleDifficultyChanged(_difficultyChanged.CurrentDifficulty);
 
 
         _beatPlayer.BeatReached += OnBeat;
         _beatPlayer.PlaybackReset += ResetPlayback;
+        ExperienceDiagnostics.LogSubscription("added", this, _beatPlayer);
     }
 
 
@@ -351,6 +353,7 @@ public sealed class AlexThrowDirector : MonoBehaviour, IExperienceRuntime
         if (_difficultyChanged != null)
         {
             _difficultyChanged.Raised -= HandleDifficultyChanged;
+            ExperienceDiagnostics.LogSubscription("removed", this, _difficultyChanged);
         }
 
         _pendingBeatIndex = -1;
@@ -367,6 +370,7 @@ public sealed class AlexThrowDirector : MonoBehaviour, IExperienceRuntime
         {
             _beatPlayer.BeatReached -= OnBeat;
             _beatPlayer.PlaybackReset -= ResetPlayback;
+            ExperienceDiagnostics.LogSubscription("removed", this, _beatPlayer);
         }
 
 
@@ -378,7 +382,7 @@ public sealed class AlexThrowDirector : MonoBehaviour, IExperienceRuntime
         if (_runtimeScoreProfile != null)
         {
             if (_scoreProfileChanged != null)
-                _scoreProfileChanged.RaiseEvent(_scoreProfile);
+                _scoreProfileChanged.RaiseEvent(_scoreProfile, this);
             Destroy(_runtimeScoreProfile);
             _runtimeScoreProfile = null;
         }
@@ -393,6 +397,8 @@ public sealed class AlexThrowDirector : MonoBehaviour, IExperienceRuntime
 
     private void ResetPlayback()
     {
+        ExperienceDiagnostics.Log(ExperienceDiagnosticLevel.Flow, "BEAT", "playback_reset_received", this, null,
+            "consumer=AlexThrowDirector");
         if (_pool != null)
         {
             _pool.ReleaseAll();
@@ -470,6 +476,9 @@ public sealed class AlexThrowDirector : MonoBehaviour, IExperienceRuntime
     {
         if (!IsPlaying)
         {
+            if (ExperienceDiagnostics.Level == ExperienceDiagnosticLevel.Detailed)
+                ExperienceDiagnostics.Log(ExperienceDiagnosticLevel.Detailed, "BEAT", "consumer_discarded_beat", this, null,
+                    "consumer=AlexThrowDirector reason=not_playing beat_index=" + index);
             return;
         }
 
@@ -491,6 +500,10 @@ public sealed class AlexThrowDirector : MonoBehaviour, IExperienceRuntime
 
         if (index % throwEveryBeats != 0)
         {
+            if (ExperienceDiagnostics.Level == ExperienceDiagnosticLevel.Detailed)
+                ExperienceDiagnostics.Log(ExperienceDiagnosticLevel.Detailed, "BEAT", "consumer_discarded_beat", this, null,
+                    "consumer=AlexThrowDirector reason=beat_interval_filter beat_index=" + index +
+                    " throw_every_beats=" + throwEveryBeats);
             return;
         }
 
@@ -500,6 +513,12 @@ public sealed class AlexThrowDirector : MonoBehaviour, IExperienceRuntime
 
         _pendingIntenseBeat =
             intense;
+
+        if (ExperienceDiagnostics.Level == ExperienceDiagnosticLevel.Detailed)
+            ExperienceDiagnostics.Log(ExperienceDiagnosticLevel.Detailed, "BEAT", "consumer_action", this, null,
+                "consumer=AlexThrowDirector action=queue_throw beat_index=" + index +
+                " beat_time=" + beat.Time.ToString("F4", System.Globalization.CultureInfo.InvariantCulture) +
+                " intense=" + intense + " throw_every_beats=" + throwEveryBeats);
     }
 
     private void LateUpdate()
@@ -515,9 +534,16 @@ public sealed class AlexThrowDirector : MonoBehaviour, IExperienceRuntime
         _pendingIntenseBeat = false;
 
 
-        if (!IsPlaying ||
-            index < 0)
+        if (index < 0)
         {
+            return;
+        }
+
+        if (!IsPlaying)
+        {
+            if (ExperienceDiagnostics.Level == ExperienceDiagnosticLevel.Detailed)
+                ExperienceDiagnostics.Log(ExperienceDiagnosticLevel.Detailed, "BEAT", "consumer_discarded_pending_action", this, null,
+                    "consumer=AlexThrowDirector reason=playback_stopped beat_index=" + index);
             return;
         }
 
@@ -536,6 +562,10 @@ public sealed class AlexThrowDirector : MonoBehaviour, IExperienceRuntime
 
         if (arrivalIndex >= beats.Count)
         {
+            if (ExperienceDiagnostics.Level == ExperienceDiagnosticLevel.Detailed)
+                ExperienceDiagnostics.Log(ExperienceDiagnosticLevel.Detailed, "BEAT", "consumer_discarded_pending_action", this, null,
+                    "consumer=AlexThrowDirector reason=arrival_beat_out_of_range beat_index=" + index +
+                    " arrival_index=" + arrivalIndex);
             return;
         }
 
@@ -546,6 +576,10 @@ public sealed class AlexThrowDirector : MonoBehaviour, IExperienceRuntime
 
         if (arrival <= SongTime)
         {
+            if (ExperienceDiagnostics.Level == ExperienceDiagnosticLevel.Detailed)
+                ExperienceDiagnostics.Log(ExperienceDiagnosticLevel.Detailed, "BEAT", "consumer_discarded_pending_action", this, null,
+                    "consumer=AlexThrowDirector reason=arrival_not_in_future beat_index=" + index +
+                    " arrival_index=" + arrivalIndex + " arrival_song_time=" + arrival.ToString("F4", System.Globalization.CultureInfo.InvariantCulture));
             return;
         }
 
@@ -556,6 +590,9 @@ public sealed class AlexThrowDirector : MonoBehaviour, IExperienceRuntime
 
         if (target == null)
         {
+            if (ExperienceDiagnostics.Level == ExperienceDiagnosticLevel.Detailed)
+                ExperienceDiagnostics.Log(ExperienceDiagnosticLevel.Detailed, "BEAT", "consumer_discarded_pending_action", this, null,
+                    "consumer=AlexThrowDirector reason=hit_target_unavailable beat_index=" + index);
             return;
         }
 
@@ -630,6 +667,13 @@ public sealed class AlexThrowDirector : MonoBehaviour, IExperienceRuntime
             _throwCount += 2;
             _patternIndex++;
         }
+
+        if (ExperienceDiagnostics.Level == ExperienceDiagnosticLevel.Detailed)
+            ExperienceDiagnostics.Log(ExperienceDiagnosticLevel.Detailed, "BEAT", "consumer_action", this, null,
+                "consumer=AlexThrowDirector action=launch_throw_pair beat_index=" + index +
+                " arrival_index=" + arrivalIndex + " arrival_song_time=" + arrival.ToString("F4", System.Globalization.CultureInfo.InvariantCulture) +
+                " left_launched=" + launchedLeft + " right_launched=" + launchedRight +
+                " throw_count=" + _throwCount);
     }
 
 
@@ -999,7 +1043,7 @@ public sealed class AlexThrowDirector : MonoBehaviour, IExperienceRuntime
                 feedbackPosition:
                     position
             )
-        );
+        , this);
 
 
         return success;
@@ -1027,7 +1071,7 @@ public sealed class AlexThrowDirector : MonoBehaviour, IExperienceRuntime
                 feedbackPosition:
                     item.transform.position
             )
-        );
+        , this);
     }
 
 
