@@ -1,0 +1,71 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9620f8c34305754d8cc9a7e49e852d9, type: 3}
+  m_Name: MyLocTable_es
+  m_EditorClassIdentifier: Unity.Localization::UnityEngine.Localization.Tables.StringTable
+  m_LocaleId:
+    m_Code: es
+  m_SharedData: {fileID: 11400000, guid: d2e8b1bd8bcdb674290bf13326265880, type: 2}
+  m_Metadata:
+    m_Items: []
+  m_TableData:
+  - m_Id: 8856537628672
+    m_Localized: Iniciar
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12162118942720
+    m_Localized: "Mejor Puntuaci\xF3n"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12511374442496
+    m_Localized: "Configuraci\xF3n"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12741612371968
+    m_Localized: Volumen
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12857752649728
+    m_Localized: Minijuego
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13094110068736
+    m_Localized: "Cr\xE9ditos: \nM\xFAsica: "
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13299853262848
+    m_Localized: "Programaci\xF3n:\n- Diego Garc\xEDa\n- Angela Garc\xEDa"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13486252326912
+    m_Localized: RESULTADOS
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13963576705024
+    m_Localized: 'Puntaje Actual:'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 14113976057856
+    m_Localized: 'Mejor Puntaje:'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 14229449441280
+    m_Localized: "\xA1NUEVO RECORD!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 14512221028352
+    m_Localized: Regresar al menu
+    m_Metadata:
+      m_Items: []
+  references:
+    version: 2
+    RefIds: []
