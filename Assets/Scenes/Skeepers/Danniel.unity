@@ -880,7 +880,7 @@ MonoBehaviour:
   enemyPool: {fileID: 613208085}
   usePlatformEnemyCount: 1
   desktopEnemiesPerSegment: 6
-  androidEnemiesPerSegment: 4
+  androidEnemiesPerSegment: 3
   enemiesPerSegment: 3
   runtimeMaxEnemiesPerSegment: -1
 --- !u!1 &1463065915
