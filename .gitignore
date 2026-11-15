@@ -105,7 +105,6 @@ InitTestScene*.unity*
 
 # Auto-generated scenes by play mode tests
 /[Aa]ssets/[Ii]nit[Tt]est[Ss]cene*.unity*
-/DEMO
 DEMO.zip
 
 # Visual Studio Code
@@ -115,3 +114,7 @@ DEMO.zip
 DEMO-PCVR.zip
 /DEMO-PCVR-ALPHA
 *.keystore
+/DEMO/demo_BackUpThisFolder_ButDontShipItWithYourGame/il2cppOutput
+/DEMO/demo_BackUpThisFolder_ButDontShipItWithYourGame
+/DEMO/PG_BurstDebugInformation_DoNotShip
+/DEMO/PUNKO VR_BurstDebugInformation_DoNotShip
