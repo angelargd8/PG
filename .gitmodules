@@ -1,0 +1,3 @@
+[submodule "src/PG-analisis-resultados"]
+	path = src/PG-analisis-resultados
+	url = https://github.com/angelargd8/PG-analisis-resultados.git
