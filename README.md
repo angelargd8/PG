@@ -107,7 +107,7 @@ El video demostrativo está en [`/demo/demo.mp4`](DEMO/demo.mp4).
 ## Estructura del Repositorio
 
 ```text
-capturas/                       Capturas del sistema (mínimo 10)
+capturas/                       Capturas del sistema
 demo/
   demo.mp4                       Video demostrativo
 docs/
