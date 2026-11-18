@@ -119,3 +119,26 @@ DEMO-PCVR.zip
 /DEMO/PG_BurstDebugInformation_DoNotShip
 /DEMO/PUNKO VR_BurstDebugInformation_DoNotShip
 /DEMO
+
+
+/src/unity/[Ll]ibrary/
+/src/unity/[Tt]emp/
+/src/unity/[Oo]bj/
+/src/unity/[Bb]uild/
+/src/unity/[Bb]uilds/
+/src/unity/[Ll]ogs/
+/src/unity/[Uu]ser[Ss]ettings/
+/src/unity/[Mm]emoryCaptures/
+/src/unity/[Rr]ecordings/
+
+/src/unity/[Aa]ssets/Plugins/Editor/JetBrains*
+/src/unity/ServerData
+/src/unity/[Aa]ssets/StreamingAssets/aa*
+/src/unity/[Aa]ssets/AddressableAssetsData/link.xml*
+/src/unity/[Aa]ssets/Addressables_Temp*
+/src/unity/[Aa]ssets/AddressableAssetsData/*/*.bin*
+/src/unity/[Aa]ssets/Unity.VisualScripting.Generated/VisualScripting.Flow/UnitOptions.db
+/src/unity/[Aa]ssets/Unity.VisualScripting.Generated/VisualScripting.Flow/UnitOptions.db.meta
+/src/unity/[Aa]ssets/Unity.VisualScripting.Generated/VisualScripting.Core/Property Providers
+/src/unity/[Aa]ssets/Unity.VisualScripting.Generated/VisualScripting.Core/Property Providers.meta
+/src/unity/[Aa]ssets/[Ii]nit[Tt]est[Ss]cene*.unity*
