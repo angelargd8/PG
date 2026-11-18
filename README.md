@@ -97,7 +97,7 @@ Las capturas del sistema están en [`/capturas`](capturas/). La entrega debe inc
 
 ## Demo
 
-El video demostrativo está en [`/demo/demo.mp4`](demo/demo.mp4).
+El video demostrativo está en [`/demo/demo.mp4`](DEMO/demo.mp4).
 
 ## Documentación
 
@@ -122,4 +122,4 @@ src/
 README.md
 ```
 
-No incluir credenciales, claves privadas ni keystores de firma en el repositorio.
+No se incluyeron credenciales, claves privadas ni keystores de firma en el repositorio.
