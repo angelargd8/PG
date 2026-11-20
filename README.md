@@ -2,13 +2,15 @@
 
 ## Implementación de un sistema de secuenciación usando la Arquitectura Dirigida por Eventos en un videoclip musical en realidad virtual para analizar la percepción de presencia mediante el I-Group Presence Questionnaire
 
-## [Agregar el título del otro proyecto de graduación]
+## IMPLEMENTACIÓN DE UN SISTEMA ADAPTATIVO DE INTERACCIÓN Y AJUSTE DE DIFICULTAD DINÁMICO PARA UNA EXPERIENCIA DE VIDEOCLIP GAMIFICADO EN REALIDAD VIRTUAL
 
 **PUNKO VR**
 
 ## Descripción
 
 El propósito del proyecto es desarrollar un videoclip musical interactivo en realidad virtual que sincronice escenas, sonidos e interacciones con los momentos de una canción, usando una arquitectura dirigida por eventos. Luego, se evalúa cómo esa experiencia influye en la sensación de presencia de los usuarios mediante el cuestionario IPQ (I-Group Presence Questionnaire).
+
+Una dificultad fija puede ser demasiado fácil para algunas personas y frustrante para otras, además de hacer que la música pase a segundo plano. Este proyecto adapta los retos de los minijuegos según cómo juega cada persona, mientras continúa el videoclip, para mantener una experiencia equilibrada y disfrutable.
 
 El submódulo [`PG-analisis-resultados`](src/PG-analisis-resultados/) contiene los análisis de trazabilidad de eventos, respuestas del IPQ y rendimiento técnico. El análisis de rendimiento se realizó con el build utilizado durante las pruebas. Las ejecuciones de PC mediante Quest Link y las del APK en Meta Quest 3S se analizan por separado porque usan herramientas, dispositivos y frecuencias de muestreo diferentes. Este submódulo documenta y analiza resultados; no contiene el código fuente completo de la aplicación VR. Las respuestas del IPQ no están vinculadas con las capturas de rendimiento.
 
